@@ -1,0 +1,29 @@
+Zadatak 1
+- raspon brojeva 1 - 20 (ne uključuje 0 iako je 0! ispravno)
+- brojevi izvan raspona ispisuju poruku i nastavljaju dalje
+- program ispisuje faktorijel broja
+- 20! = 2.43e18, ne stane u int (2^32) ali stane u long (2^64)
+- rad programa se prekida kada na ulaz dođe 'kraj'
+- složenost izračuna nebitna
+- dobro handlati ulaz (ne crashati program)
+- pokreće se bez argumenata
+
+Zadatak 2
+- 2 načina pokretanja: 
+    2 argumenta (odmah izračun i ispis)
+    0 argumenata (čeka na unos ispravnih)
+- ispis opsega i površine
+- float/double brojevi (vjerojatno float)
+- ako je broj argumenata različit od 2, završi s radom
+- za unos BufferedReader / Scanner (vjerojatno Scanner)
+- zarez v točka
+
+Zadatak 3
+- bez argumenata
+- TreeNode (left, right, value (int))
+- dodavanje u uređeno binarno stablo
+- dodavanje samo ako vrijednost nije unesena
+- addNode(node, val), treeSize(node), containsValue(node, val)
+- glavni program od korisnika čita broj po broj u stablo
+- 'kraj' == kraj programa
+- nakon kraja ispisati brojeve soritrane (u oba smjera)
