@@ -10,6 +10,7 @@ public class Factorial {
 
 	/**
 	 * Invoked when the program is executed.
+	 * 
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
@@ -45,8 +46,8 @@ public class Factorial {
 	}
 
 	/**
-	 * Calculates the factorial of a given number.
-	 * x! = x * (x - 1) * ... * 2 * 1
+	 * Calculates the factorial of a given number. x! = x * (x - 1) * ... * 2 * 1
+	 * 
 	 * @param num given number
 	 * @return factorial of given number
 	 */

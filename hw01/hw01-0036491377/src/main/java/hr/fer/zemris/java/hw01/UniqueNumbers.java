@@ -8,6 +8,10 @@ import java.util.Scanner;
  */
 public class UniqueNumbers {
 
+	/**
+	 * Representation of a node in a binary search tree
+	 *
+	 */
 	static class TreeNode {
 		TreeNode left;
 		TreeNode right;
@@ -16,6 +20,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Invoked when the program is executed.
+	 * 
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
@@ -55,6 +60,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Inserts a node into the given binary search tree .
+	 * 
 	 * @param head head node of the binary search tree
 	 * @param value value to be inserted in the tree
 	 * @return head of the binary search tree
@@ -75,6 +81,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Calculates the size of the given binary search tree.
+	 * 
 	 * @param head head of the tree
 	 * @return size of the tree
 	 */
@@ -88,9 +95,10 @@ public class UniqueNumbers {
 
 	/**
 	 * Returns <code>true</code> if a given value is in the tree.
+	 * 
 	 * @param head head of the tree
 	 * @param value value to be found
-	 * @return <code>true</code> if value is in true, <code>false</code> otherwise
+	 * @return <code>true</code> if value is in tree, <code>false</code> otherwise
 	 */
 	private static boolean containsValue(TreeNode head, int value) {
 		if (head == null) {
@@ -108,28 +116,30 @@ public class UniqueNumbers {
 
 	/**
 	 * Prints binary search tree in ascending order.
-	 * @param node
+	 * 
+	 * @param head head of the tree to be printed
 	 */
-	private static void printAscending(TreeNode node) {
-		if (node == null) {
+	private static void printAscending(TreeNode head) {
+		if (head == null) {
 			return;
 		}
-		printAscending(node.left);
-		System.out.print(node.value + " ");
-		printAscending(node.right);
+		printAscending(head.left);
+		System.out.print(head.value + " ");
+		printAscending(head.right);
 	}
-	
+
 	/**
 	 * Prints binary search tree in descending order.
-	 * @param node
+	 * 
+	 * @param head head of the tree to be printed
 	 */
-	private static void printDescending(TreeNode node) {
-		if (node == null) {
+	private static void printDescending(TreeNode head) {
+		if (head == null) {
 			return;
 		}
-		printDescending(node.right);
-		System.out.print(node.value + " ");
-		printDescending(node.left);
+		printDescending(head.right);
+		System.out.print(head.value + " ");
+		printDescending(head.left);
 	}
 
 }
