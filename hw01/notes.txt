@@ -32,4 +32,4 @@ Pitanja za prof
 - testiranje privatnih metoda
 - test naming convention http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html
 - JPL pdf
-- 
+- sort ascending/descending vs generalize

@@ -30,6 +30,7 @@ public class UniqueNumbers {
 			System.out.print("Unesite broj > ");
 			String input = scanner.nextLine();
 
+			// Loop exit condition
 			if (input.equals("kraj")) {
 				break;
 			}
@@ -172,5 +173,4 @@ public class UniqueNumbers {
 		
 		return string;
 	}
-
 }

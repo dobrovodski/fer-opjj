@@ -1,7 +1,5 @@
 package hr.fer.zemris.java.hw01;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Scanner;
 
 /**
@@ -67,8 +65,8 @@ public class Rectangle {
 			String input = scanner.nextLine();
 
 			try {
-				num = DecimalFormat.getInstance().parse(input).doubleValue();
-			} catch (ParseException ex) {
+				num = Double.parseDouble(input);
+			} catch (NumberFormatException ex) {
 				System.out.format("'%s' se ne može protumačiti kao broj.\n", input);
 				continue;
 			}
