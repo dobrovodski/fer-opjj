@@ -3,10 +3,6 @@ package hr.fer.zemris.java.hw01;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * @author matej
- *
- */
 public class FactorialTest {
 
 	@Test

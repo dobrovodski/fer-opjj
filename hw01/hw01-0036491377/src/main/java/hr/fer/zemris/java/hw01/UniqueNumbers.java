@@ -130,7 +130,7 @@ public class UniqueNumbers {
 	 * @param string starting string to which the values will be appended to
 	 * @return string representation of the tree
 	 */
-	private static String sortAscending(TreeNode head, String string) {
+	public static String sortAscending(TreeNode head, String string) {
 		if (head == null) {
 			return string;
 		}
@@ -161,7 +161,7 @@ public class UniqueNumbers {
 	 * @param string starting string to which the values will be appended to
 	 * @return string representation of the tree
 	 */
-	private static String sortDescending(TreeNode head, String string) {
+	public static String sortDescending(TreeNode head, String string) {
 		if (head == null) {
 			return string;
 		}

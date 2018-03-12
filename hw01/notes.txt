@@ -27,3 +27,9 @@ Zadatak 3
 - glavni program od korisnika čita broj po broj u stablo
 - 'kraj' == kraj programa
 - nakon kraja ispisati brojeve soritrane (u oba smjera)
+
+Pitanja za prof
+- testiranje privatnih metoda
+- test naming convention http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html
+- JPL pdf
+- 
