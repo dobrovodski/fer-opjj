@@ -2,8 +2,16 @@ package hr.fer.zemris.java.hw01;
 
 import java.util.Scanner;
 
+/**
+ * @author matej
+ *
+ */
 public class Rectangle {
 
+	/**
+	 * Invoked when the program is executed.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		if (!(args.length == 0 || args.length == 2)) {
 			System.out.println("Program zahtijeva 0 ili 2 argumenta.");
@@ -31,8 +39,8 @@ public class Rectangle {
 
 		if (args.length == 0) {
 			Scanner scanner = new Scanner(System.in);
-			double width = parseInput(scanner, "Unesite širinu");
-			double height = parseInput(scanner, "Unesite visinu");
+			double width = queryInput(scanner, "Unesite širinu");
+			double height = queryInput(scanner, "Unesite visinu");
 
 			scanner.close();
 			printRectangle(width, height);
@@ -40,7 +48,13 @@ public class Rectangle {
 
 	}
 
-	private static double parseInput(Scanner scanner, String prompt) {
+	/**
+	 * Repeatedly asks the user for input until a valid number is given.
+	 * @param scanner scanner used to scan user input
+	 * @param prompt prompt provided to the user
+	 * @return non-negative number provided by the user
+	 */
+	private static double queryInput(Scanner scanner, String prompt) {
 		double num;
 
 		while (true) {
@@ -65,14 +79,31 @@ public class Rectangle {
 		return num;
 	}
 
+	/**
+	 * Calculates the area of a rectangle using its width and height.
+	 * @param width width of rectangle
+	 * @param height height of rectangle
+	 * @return area of rectangle
+	 */
 	private static double rectangleArea(double width, double height) {
 		return width * height;
 	}
 
+	/**
+	 * Calculates the perimeter of a rectangle using its width and height.
+	 * @param width width of rectangle
+	 * @param height height of rectangle
+	 * @return perimeter of rectangle
+	 */
 	private static double rectanglePerimeter(double width, double height) {
 		return 2 * (width + height);
 	}
 
+	/**
+	 * Prints information about a rectangle
+	 * @param width width of rectangle
+	 * @param height height of rectangle
+	 */
 	private static void printRectangle(double width, double height) {
 		double area = rectangleArea(width, height);
 		double perimeter = rectanglePerimeter(width, height);

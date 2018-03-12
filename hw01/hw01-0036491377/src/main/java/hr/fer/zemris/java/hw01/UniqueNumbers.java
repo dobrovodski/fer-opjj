@@ -2,6 +2,10 @@ package hr.fer.zemris.java.hw01;
 
 import java.util.Scanner;
 
+/**
+ * @author matej
+ *
+ */
 public class UniqueNumbers {
 
 	static class TreeNode {
@@ -10,6 +14,10 @@ public class UniqueNumbers {
 		int value;
 	}
 
+	/**
+	 * Invoked when the program is executed.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		TreeNode head = null;
 		Scanner scanner = new Scanner(System.in);
@@ -45,20 +53,31 @@ public class UniqueNumbers {
 		scanner.close();
 	}
 
-	private static TreeNode addNode(TreeNode node, int value) {
-		if (node == null) {
-			node = new TreeNode();
-			node.value = value;
-		} else if (node.value == value) {
+	/**
+	 * Inserts a node into the given binary search tree .
+	 * @param head head node of the binary search tree
+	 * @param value value to be inserted in the tree
+	 * @return head of the binary search tree
+	 */
+	private static TreeNode addNode(TreeNode head, int value) {
+		if (head == null) {
+			head = new TreeNode();
+			head.value = value;
+		} else if (head.value == value) {
 			System.out.println("Broj već postoji. Preskačem.");
-		} else if (value < node.value) {
-			node.left = addNode(node.left, value);
+		} else if (value < head.value) {
+			head.left = addNode(head.left, value);
 		} else {
-			node.right = addNode(node.right, value);
+			head.right = addNode(head.right, value);
 		}
-		return node;
+		return head;
 	}
 
+	/**
+	 * Calculates the size of the given binary search tree.
+	 * @param head head of the tree
+	 * @return size of the tree
+	 */
 	private static int treeSize(TreeNode head) {
 		if (head != null) {
 			return treeSize(head.left) + 1 + treeSize(head.right);
@@ -67,6 +86,12 @@ public class UniqueNumbers {
 		}
 	}
 
+	/**
+	 * Returns <code>true</code> if a given value is in the tree.
+	 * @param head head of the tree
+	 * @param value value to be found
+	 * @return <code>true</code> if value is in true, <code>false</code> otherwise
+	 */
 	private static boolean containsValue(TreeNode head, int value) {
 		if (head == null) {
 			return false;
@@ -81,6 +106,10 @@ public class UniqueNumbers {
 		return false;
 	}
 
+	/**
+	 * Prints binary search tree in ascending order.
+	 * @param node
+	 */
 	private static void printAscending(TreeNode node) {
 		if (node == null) {
 			return;
@@ -89,7 +118,11 @@ public class UniqueNumbers {
 		System.out.print(node.value + " ");
 		printAscending(node.right);
 	}
-
+	
+	/**
+	 * Prints binary search tree in descending order.
+	 * @param node
+	 */
 	private static void printDescending(TreeNode node) {
 		if (node == null) {
 			return;

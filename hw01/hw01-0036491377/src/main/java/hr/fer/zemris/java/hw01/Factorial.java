@@ -2,8 +2,16 @@ package hr.fer.zemris.java.hw01;
 
 import java.util.Scanner;
 
+/**
+ * @author matej
+ *
+ */
 public class Factorial {
 
+	/**
+	 * Invoked when the program is executed.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 
@@ -36,6 +44,12 @@ public class Factorial {
 		scanner.close();
 	}
 
+	/**
+	 * Calculates the factorial of a given number.
+	 * x! = x * (x - 1) * ... * 2 * 1
+	 * @param num given number
+	 * @return factorial of given number
+	 */
 	private static long factorial(int num) {
 		if (num == 0 || num == 1) {
 			return 1;
