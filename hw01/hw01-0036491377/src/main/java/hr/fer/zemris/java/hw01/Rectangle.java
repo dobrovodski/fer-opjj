@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw01;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Scanner;
 
 /**
@@ -20,7 +22,8 @@ public class Rectangle {
 		}
 
 		if (args.length == 2) {
-			double width, height;
+			double width;
+			double height;
 
 			try {
 				width = Double.parseDouble(args[0]);
@@ -40,8 +43,8 @@ public class Rectangle {
 
 		if (args.length == 0) {
 			Scanner scanner = new Scanner(System.in);
-			double width = queryInput(scanner, "Unesite širinu");
-			double height = queryInput(scanner, "Unesite visinu");
+			double width = queryInput(scanner, "Unesite širinu > ");
+			double height = queryInput(scanner, "Unesite visinu > ");
 
 			scanner.close();
 			printRectangle(width, height);
@@ -50,7 +53,7 @@ public class Rectangle {
 	}
 
 	/**
-	 * Repeatedly asks the user for input until a valid number is given.
+	 * Repeatedly asks the user for input until a non-negative number is given.
 	 * 
 	 * @param scanner scanner used to scan user input
 	 * @param prompt prompt provided to the user
@@ -60,12 +63,12 @@ public class Rectangle {
 		double num;
 
 		while (true) {
-			System.out.format("%s > ", prompt);
+			System.out.print(prompt);
 			String input = scanner.nextLine();
 
 			try {
-				num = Double.parseDouble(input);
-			} catch (NumberFormatException ex) {
+				num = DecimalFormat.getInstance().parse(input).doubleValue();
+			} catch (ParseException ex) {
 				System.out.format("'%s' se ne može protumačiti kao broj.\n", input);
 				continue;
 			}
@@ -104,7 +107,7 @@ public class Rectangle {
 	}
 
 	/**
-	 * Prints information about a rectangle
+	 * Prints information about a rectangle to the standard output.
 	 * 
 	 * @param width width of rectangle
 	 * @param height height of rectangle
@@ -113,7 +116,7 @@ public class Rectangle {
 		double area = rectangleArea(width, height);
 		double perimeter = rectanglePerimeter(width, height);
 
-		System.out.format("Pravokutnik širine %.1f i visine %.1f ima površinu %.1f te opseg %.1f.", width, height, area,
+		System.out.format("Pravokutnik širine %.2f i visine %.2f ima površinu %.2f te opseg %.2f.", width, height, area,
 				perimeter);
 	}
 

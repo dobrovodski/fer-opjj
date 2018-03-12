@@ -20,6 +20,7 @@ public class Factorial {
 			System.out.print("Unesite broj > ");
 			String input = scanner.nextLine();
 
+			// Loop exit condition
 			if (input.equals("kraj")) {
 				System.out.println("Doviđenja.");
 				break;
@@ -46,12 +47,17 @@ public class Factorial {
 	}
 
 	/**
-	 * Calculates the factorial of a given number. x! = x * (x - 1) * ... * 2 * 1
+	 * Calculates the factorial of a given number.
 	 * 
 	 * @param num given number
 	 * @return factorial of given number
+	 * @see <a href="https://en.wikipedia.org/wiki/Factorial">Factorial</a>
 	 */
 	private static long factorial(int num) {
+		if (num < 0) {
+			throw new IllegalArgumentException("Faktorijel nije definiran za negativne brojeve");
+		}
+
 		if (num == 0 || num == 1) {
 			return 1;
 		}
@@ -63,4 +69,5 @@ public class Factorial {
 
 		return result;
 	}
+
 }
