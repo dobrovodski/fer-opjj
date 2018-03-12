@@ -77,7 +77,7 @@ public class UniqueNumbersTest {
 		
 		String sorted = "8 21 56 105 6766";
 		
-		Assert.assertEquals(sorted, UniqueNumbers.sortAscending(head, "").trim());
+		Assert.assertEquals(sorted, UniqueNumbers.sort(head, "", true).trim());
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class UniqueNumbersTest {
 		
 		String sorted = "6766 105 56 21 8";
 		
-		Assert.assertEquals(sorted, UniqueNumbers.sortDescending(head, "").trim());
+		Assert.assertEquals(sorted, UniqueNumbers.sort(head, "", false).trim());
 	}
 
 }

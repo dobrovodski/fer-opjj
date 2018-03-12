@@ -33,3 +33,4 @@ Pitanja za prof
 - test naming convention http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html
 - JPL pdf
 - sort ascending/descending vs generalize
+- jezik pisanja? i.e. poruke korisniku, imena klasa
