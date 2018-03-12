@@ -91,7 +91,11 @@ public class Rectangle {
 	 * @param height height of rectangle
 	 * @return area of rectangle
 	 */
-	private static double rectangleArea(double width, double height) {
+	public static double rectangleArea(double width, double height) {
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException("Pravokutnik mora imati pozitivne stranice");
+		}
+		
 		return width * height;
 	}
 
@@ -102,7 +106,11 @@ public class Rectangle {
 	 * @param height height of rectangle
 	 * @return perimeter of rectangle
 	 */
-	private static double rectanglePerimeter(double width, double height) {
+	public static double rectanglePerimeter(double width, double height) {
+		if (width < 0 || height < 0) {
+			throw new IllegalArgumentException("Pravokutnik mora imati pozitivne stranice");
+		}
+		
 		return 2 * (width + height);
 	}
 

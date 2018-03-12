@@ -64,7 +64,7 @@ public class UniqueNumbers {
 	 * @param value value to be inserted in the tree
 	 * @return head of the binary search tree
 	 */
-	private static TreeNode addNode(TreeNode head, int value) {
+	public static TreeNode addNode(TreeNode head, int value) {
 		if (head == null) {
 			head = new TreeNode();
 			head.value = value;
@@ -83,7 +83,7 @@ public class UniqueNumbers {
 	 * @param head head of the tree
 	 * @return size of the tree
 	 */
-	private static int treeSize(TreeNode head) {
+	public static int treeSize(TreeNode head) {
 		if (head != null) {
 			return treeSize(head.left) + 1 + treeSize(head.right);
 		} else {
@@ -98,7 +98,7 @@ public class UniqueNumbers {
 	 * @param value value to be found
 	 * @return <code>true</code> if value is in tree, <code>false</code> otherwise
 	 */
-	private static boolean containsValue(TreeNode head, int value) {
+	public static boolean containsValue(TreeNode head, int value) {
 		if (head == null) {
 			return false;
 		} else if (head.value == value) {

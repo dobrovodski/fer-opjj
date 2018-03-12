@@ -53,7 +53,7 @@ public class Factorial {
 	 * @return factorial of given number
 	 * @see <a href="https://en.wikipedia.org/wiki/Factorial">Factorial</a>
 	 */
-	private static long factorial(int num) {
+	public static long factorial(int num) {
 		if (num < 0) {
 			throw new IllegalArgumentException("Faktorijel nije definiran za negativne brojeve");
 		}
