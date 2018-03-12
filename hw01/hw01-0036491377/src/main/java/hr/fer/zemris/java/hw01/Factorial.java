@@ -9,7 +9,7 @@ public class Factorial {
 
 		while (true) {
 			System.out.print("Unesite broj > ");
-			String input = scanner.next();
+			String input = scanner.nextLine();
 
 			if (input.equals("kraj")) {
 				System.out.println("Doviđenja.");
