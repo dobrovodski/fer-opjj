@@ -52,8 +52,11 @@ public class UniqueNumbers {
 
 		}
 
-		printSorted(head, false);
-		printSorted(head, true);
+		System.out.print("Ispis od najmanjeg: ");
+		printAscending(head);
+		
+		System.out.print("Ispis od najvećeg: ");
+		printDescending(head);
 
 		scanner.close();
 	}
@@ -114,33 +117,33 @@ public class UniqueNumbers {
 	}
 
 	/**
-	 * Prints binary search tree in a specified order.
+	 * Prints binary search tree in an ascending order.
 	 * 
 	 * @param head head of the tree to be printed
-	 * @param ascending specifies the direction to be sorted in
 	 */
-	private static void printSorted(TreeNode head, boolean ascending) {
-		String sorted = sort(head, "", ascending);
-		System.out.format("Ispis od %s: %s\n", ascending ? "najmanjeg" : "najvećeg", sorted);
-	}
-
-	/**
-	 * Returns a string representation of a binary search tree in a specified order.
-	 * 
-	 * @param head head of the binary search tree
-	 * @param string starting string to which the values will be appended to
-	 * @param ascending specifies the direction to be sorted in
-	 * @return string representation of the tree
-	 */
-	public static String sort(TreeNode head, String string, boolean ascending) {
+	private static void printAscending(TreeNode head) {
 		if (head == null) {
-			return string;
+			return;
 		}
 
-		string = sort(ascending ? head.left : head.right, string, ascending);
-		string += head.value + " ";
-		string = sort(ascending ? head.right : head.left, string, ascending);
-
-		return string;
+		printAscending(head.left);
+		System.out.print(head.value + " ");
+		printAscending(head.right);
 	}
+	
+	/**
+	 * Prints binary search tree in a descending order.
+	 * 
+	 * @param head head of the tree to be printed
+	 */
+	private static void printDescending(TreeNode head) {
+		if (head == null) {
+			return;
+		}
+
+		printDescending(head.right);
+		System.out.print(head.value + " ");
+		printDescending(head.left);
+	}
+	
 }

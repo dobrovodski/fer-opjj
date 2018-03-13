@@ -34,3 +34,5 @@ Pitanja za prof
 - JPL pdf
 - sort ascending/descending vs generalize
 - jezik pisanja? i.e. poruke korisniku, imena klasa
+- postoji li način da se pokrenu sve test klase
+- 
