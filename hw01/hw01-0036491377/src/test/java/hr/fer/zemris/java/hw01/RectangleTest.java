@@ -17,12 +17,12 @@ public class RectangleTest {
 	private static final double EPSILON = 1e-15;
 
 	@Test
-	public void RectangleArea_NormalParemeters_Calculated() {
+	public void RectangleArea_NormalParameters_Calculated() {
 		Assert.assertEquals(8.8, Rectangle.rectangleArea(4, 2.2), EPSILON);
 	}
 
 	@Test
-	public void RectanglePerimeterr_NormalParemeters_Calculated() {
+	public void RectanglePerimeter_NormalParameters_Calculated() {
 		Assert.assertEquals(12.4, Rectangle.rectanglePerimeter(4, 2.2), EPSILON);
 	}
 
@@ -37,12 +37,12 @@ public class RectangleTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void RectangleArea_NegativeValueParam_ExceptionThrown() {
+	public void RectangleArea_NegativeValueAsParameter_ExceptionThrown() {
 		Rectangle.rectangleArea(-6.3, 3);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void RectanglePerimeter_NegativeValueParam_ExceptionThrown() {
+	public void RectanglePerimeter_NegativeValueAsParameter_ExceptionThrown() {
 		Rectangle.rectanglePerimeter(-6.3, 3);
 	}
 }

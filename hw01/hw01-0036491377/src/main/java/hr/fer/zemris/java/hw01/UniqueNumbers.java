@@ -55,7 +55,7 @@ public class UniqueNumbers {
 		System.out.print("Ispis od najmanjeg: ");
 		printAscending(head);
 		
-		System.out.print("Ispis od najvećeg: ");
+		System.out.print("\nIspis od najvećeg: ");
 		printDescending(head);
 
 		scanner.close();
