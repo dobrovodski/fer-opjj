@@ -1,0 +1,5 @@
+Zadatak 1
+- razred Processor s jednom praznom metodom process(value)
+- razred Collection s *protected* default constructorom
+- list of public methods
+- no need to test Collection
