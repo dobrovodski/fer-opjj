@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 //TODO: doc
 //TODO: exception messages
+//TODO: complexity comments
 
 public class ArrayIndexedCollection extends Collection {
 	private int size;
@@ -48,7 +49,7 @@ public class ArrayIndexedCollection extends Collection {
 			elements = Arrays.copyOf(elements, capacity);
 		}
 
-		elements[size + 1] = value;
+		elements[size] = value;
 		size++;
 	}
 
@@ -136,11 +137,12 @@ public class ArrayIndexedCollection extends Collection {
 			elements = Arrays.copyOf(elements, capacity);
 		}
 
-		for (int i = size - 1; i > position; i--) {
+		for (int i = size - 1; i >= position; i--) {
 			elements[i + 1] = elements[i];
 		}
 		
 		elements[position] = value;
+		size++;
 
 	}
 
