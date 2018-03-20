@@ -40,13 +40,13 @@ public class Collection {
 				add(value);
 			}
 		}
-		
+
 		LocalProcessor processor = new LocalProcessor();
 		other.forEach(processor);
 	}
 
 	void clear() {
-		
+
 	}
 
 }

@@ -3,3 +3,12 @@ Zadatak 1
 - razred Collection s *protected* default constructorom
 - list of public methods
 - no need to test Collection
+
+Zadatak 2
+- duplicate elements allowed, null not allowed
+- 4 ctors:
+    default (set capacity to 16, preallocate elements to 16)
+    initialCapacity param, set capacity and preallocate to that
+    2 more similar but with other Collection to copy elements from (not allowed to be null)
+- ctors should be delegated
+- @Override methods from Collection
