@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit tests for ArrayIndexedCollection.
+ * JUnit tests for LinkedListIndexedCollection.
  * 
  * @see <a href=
  *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
@@ -14,7 +14,7 @@ import org.junit.Test;
  * @author matej
  *
  */
-public class ArrayIndexedCollectionTest {
+public class LinkedListIndexedCollectionTest {
 
 	@Test
 	public void Constructor_OtherCollectionProvided_CollectionAdded() {
@@ -25,7 +25,7 @@ public class ArrayIndexedCollectionTest {
 			other.add(value);
 		}
 
-		ArrayIndexedCollection collection = new ArrayIndexedCollection(other);
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection(other);
 
 		for (String value : values) {
 			assertEquals(true, collection.contains(value));
@@ -39,7 +39,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Add_AddedOneValue_ValueAtIndexZero() {
 		int value = 5;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		collection.add(value);
 		Assert.assertEquals(value, collection.get(0));
 	}
@@ -47,7 +47,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Add_AddedMultipleValues_ValuesAtCorrectIndices() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -60,14 +60,14 @@ public class ArrayIndexedCollectionTest {
 
 	@Test(expected = NullPointerException.class)
 	public void Add_AddNull_ExceptionThrown() {
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		collection.add(null);
 	}
 
 	@Test
 	public void Get_AddedValue_ValueRetrieved() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		int index = 2;
 
 		for (String value : values) {
@@ -80,7 +80,7 @@ public class ArrayIndexedCollectionTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void Get_IndexGreaterThanSize_ExceptionThrown() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		int index = values.length + 1;
 
 		for (String value : values) {
@@ -93,7 +93,7 @@ public class ArrayIndexedCollectionTest {
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void Get_IndexLessThanZero_ExceptionThrown() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		int index = -1;
 
 		for (String value : values) {
@@ -105,14 +105,14 @@ public class ArrayIndexedCollectionTest {
 
 	@Test
 	public void Size_NothingAdded_Zero() {
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		Assert.assertEquals(0, collection.size());
 	}
 
 	@Test
 	public void Size_SevenValuesAdded_Seven() {
 		double[] values = { 1.0, 2.354, 1.0, 3.0, 9999.0, -28.8, -1000.999 };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (double value : values) {
 			collection.add(value);
@@ -124,7 +124,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Contains_ExistentValue_True() {
 		char[] values = { 'a', 'b', 'z' };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (char value : values) {
 			collection.add(value);
@@ -136,7 +136,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Contains_NonExistentValue_False() {
 		char[] values = { 'a', 'b', 'z' };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (char value : values) {
 			collection.add(value);
@@ -147,14 +147,14 @@ public class ArrayIndexedCollectionTest {
 
 	@Test
 	public void Contains_ContainsNull_False() {
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		assertEquals(false, collection.contains(null));
 	}
 
 	@Test
 	public void Remove_ExistentValue_True() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -166,7 +166,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Remove_NonExistentValue_False() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -178,7 +178,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Remove_ExistentValue_SizeReducedByOne() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -194,7 +194,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Remove_NonExistentValue_SizeStaysSame() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -211,7 +211,7 @@ public class ArrayIndexedCollectionTest {
 	public void Remove_OneCopyOfValueInCollection_ContainsReturnsFalse() {
 		String[] values = { "A", "quick", "brown", "fox" };
 		int index = 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -226,7 +226,7 @@ public class ArrayIndexedCollectionTest {
 	public void Remove_ExistentValue_ValuesShiftedByOne() {
 		double[] values = { 1.0, 2.354, 1.0, 3.0, 9999.0, -28.8, -1000.999 };
 		int index = 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (double value : values) {
 			collection.add(value);
@@ -243,7 +243,7 @@ public class ArrayIndexedCollectionTest {
 	public void Remove_IndexGreaterThanSize_ExceptionThrown() {
 		double[] values = { 1.0, 2.354, 1.0, 3.0, 9999.0, -28.8, -1000.999 };
 		int index = values.length + 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (double value : values) {
 			collection.add(value);
@@ -256,7 +256,7 @@ public class ArrayIndexedCollectionTest {
 	public void Remove_IndexLessThanZero_ExceptionThrown() {
 		double[] values = { 1.0, 2.354, 1.0, 3.0, 9999.0, -28.8, -1000.999 };
 		int index = -1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (double value : values) {
 			collection.add(value);
@@ -268,7 +268,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void ToArray_ArrayOfIntegers_ArraysEqual() {
 		int[] values = { 1, 2, 3, 8, -1, 8, 99, 0 };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (int value : values) {
 			collection.add(value);
@@ -284,7 +284,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void Clear_ArrayOfValues_SizeZero() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -300,7 +300,7 @@ public class ArrayIndexedCollectionTest {
 		String[] values = { "A", "quick", "brown", "fox" };
 		String insertValue = "swift";
 		int index = 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -316,7 +316,7 @@ public class ArrayIndexedCollectionTest {
 		String[] values = { "A", "quick", "brown", "fox" };
 		String insertValue = "swift";
 		int index = 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -333,7 +333,7 @@ public class ArrayIndexedCollectionTest {
 	public void Insert_InsertMultipleValues_SizeIncreased() {
 		String[] startValues = { "A", "quick", "brown", "fox" };
 		String[] insertValues = { "jumps", "over", "the" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		int index = 2;
 
 		for (String value : startValues) {
@@ -354,7 +354,7 @@ public class ArrayIndexedCollectionTest {
 		String[] values = { "A", "quick", "brown", "fox" };
 		String insertValue = "swift";
 		int index = values.length + 1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -368,7 +368,7 @@ public class ArrayIndexedCollectionTest {
 		String[] values = { "A", "quick", "brown", "fox" };
 		String insertValue = "swift";
 		int index = -1;
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
@@ -380,7 +380,7 @@ public class ArrayIndexedCollectionTest {
 	@Test
 	public void IndexOf_ExistentValue_CorrectIndex() {
 		String[] values = { "A", "quick", "brown", "fox" };
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 		int index = 2;
 
 		for (String value : values) {
@@ -394,7 +394,7 @@ public class ArrayIndexedCollectionTest {
 	public void IndexOf_NonExistentValue_NegativeOne() {
 		String[] values = { "A", "quick", "brown", "fox" };
 		String valueNotAdded = "jumps";
-		ArrayIndexedCollection collection = new ArrayIndexedCollection();
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
 
 		for (String value : values) {
 			collection.add(value);
