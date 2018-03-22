@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.custom.collections.demo;
 
+import java.util.Arrays;
+
 import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.collections.ObjectStack;
 
@@ -13,8 +15,15 @@ import hr.fer.zemris.java.custom.collections.ObjectStack;
 public class StackDemo {
 
 	static ObjectStack stack;
+	static final String OPS[] = { "+", "-", "%", "*", "/" };
 
 	public static void main(String[] args) {
+		
+		if (args.length != 1) {
+			System.err.println("This program only accepts a single argument.");
+			return;
+		}
+		
 		String input = args[0];
 		String[] splitInput = input.split("\\s+");
 		stack = new ObjectStack();
@@ -23,7 +32,7 @@ public class StackDemo {
 		try {
 			result = StackDemo.calculate(splitInput);
 		} catch (IllegalArgumentException ex) {
-			System.err.format(ex.getMessage());
+			System.err.println(ex.getMessage());
 			return;
 		}
 
@@ -39,37 +48,43 @@ public class StackDemo {
 	 */
 	public static int calculate(String[] expression) {
 		for (String element : expression) {
-			if (StackDemo.isNumeric(element)) {
-				stack.push(Integer.parseInt(element));
+			if (!StackDemo.isOperator(element)) {
+				try {
+					int num = Integer.parseInt(element);
+					stack.push(num);
+				} catch (NumberFormatException ex) {
+					// Rethrow exception
+					throw new IllegalArgumentException(
+							"Could not parse symbol. Failed at: " + element);
+				}
 			} else {
 				try {
 					int result = StackDemo.evaluate((int) stack.pop(), (int) stack.pop(), element);
 					stack.push(result);
 				} catch (EmptyStackException ex) {
+					// Rethrow exception
 					throw new IllegalArgumentException(
-							"Could not parse as postfix expression. Input was: " + String.join(" ", expression));
+							"Could not parse expression because of operator/number mismatch. Input was: " + String.join(" ", expression));
 				}
 			}
 		}
 
 		if (stack.size() != 1) {
 			throw new IllegalArgumentException(
-					"Could not parse as postfix expression. Input was: " + String.join(" ", expression));
+					"Could not parse expression. Input was: " + String.join(" ", expression));
 		}
 
 		return (int) stack.pop();
 	}
 
 	/**
-	 * Returns {@code true} if the string represents an integer, {@code false} otherwise.
+	 * Returns {@code true} if the string represents a valid operator, {@code false} otherwise.
 	 * 
-	 * @param num string to check
-	 * @return {@code true} if the string represents an integer, {@code false} otherwise
+	 * @param op string to check
+	 * @return {@code true} if the string represents a valid operator, {@code false} otherwise
 	 */
-	public static boolean isNumeric(String num) {
-		// Not as fast as some other methods, but quite elegant
-		// Better than try-catch checking with parseInt
-		return num.matches("-?\\d+");
+	public static boolean isOperator(String op) {
+		return Arrays.asList(OPS).contains(op);
 	}
 
 	/**
@@ -95,7 +110,7 @@ public class StackDemo {
 		case "%":
 			return b % a;
 		default:
-			throw new IllegalArgumentException("Operator evaluate undefined for "+ op);
+			throw new IllegalArgumentException("Operator evaluation undefined for "+ op);
 		}
 	}
 
