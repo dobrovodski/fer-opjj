@@ -95,13 +95,13 @@ public class Collection {
 	 * @param other collection from which the elements are added
 	 */
 	void addAll(Collection other) {
-		class LocalProcessor extends Processor {
+		class Adder extends Processor {
 			public void process(Object value) {
 				add(value);
 			}
 		}
 
-		LocalProcessor processor = new LocalProcessor();
+		Adder processor = new Adder();
 		other.forEach(processor);
 	}
 
