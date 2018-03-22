@@ -10,6 +10,9 @@ import java.util.Arrays;
  *
  */
 public class ArrayIndexedCollection extends Collection {
+
+	private final static int DEFAULT_INITIAL_CAPACITY = 16;
+	
 	private int size;
 	private int capacity;
 	private Object[] elements;
@@ -19,7 +22,7 @@ public class ArrayIndexedCollection extends Collection {
 	 * the capacity to 16.
 	 */
 	public ArrayIndexedCollection() {
-		this(16);
+		this(DEFAULT_INITIAL_CAPACITY);
 	}
 
 	/**
@@ -27,8 +30,12 @@ public class ArrayIndexedCollection extends Collection {
 	 * capacity to the given value.
 	 * 
 	 * @param initialCapacity amount that the capacity of the collection should be set to
+	 * @throws IllegalArgumentException if initial capacity is less than 1
 	 */
 	public ArrayIndexedCollection(int initialCapacity) {
+		if (initialCapacity < 1) {
+			throw new IllegalArgumentException("Initial capacity cannot be less than 1.");
+		}
 		capacity = initialCapacity;
 		elements = new Object[initialCapacity];
 	}
@@ -41,7 +48,7 @@ public class ArrayIndexedCollection extends Collection {
 	 * @throws NullPointerException if the other collection is null
 	 */
 	public ArrayIndexedCollection(Collection other) {
-		this(other, 16);
+		this(other, DEFAULT_INITIAL_CAPACITY);
 	}
 
 	/**
@@ -52,10 +59,15 @@ public class ArrayIndexedCollection extends Collection {
 	 * @param other other collection whose elements to put into this collection
 	 * @param initialCapacity amount that the capacity should be initialized to
 	 * @throws NullPointerException if the other collection is null
+	 * @throws IllegalArgumentException if initial capacity is less than 1
 	 */
 	public ArrayIndexedCollection(Collection other, int initialCapacity) {
 		if (other == null) {
 			throw new NullPointerException("Cannot pass null as other collection.");
+		}
+		
+		if (initialCapacity < 1) {
+			throw new IllegalArgumentException("Initial capacity cannot be less than 1.");
 		}
 
 		// Set capacity to larger
