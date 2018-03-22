@@ -26,8 +26,7 @@ public class ArrayIndexedCollection extends Collection {
 	 * Creates an instance of {@code ArrayIndexedCollection} and initializes the
 	 * capacity to the given value.
 	 * 
-	 * @param initialCapacity
-	 *            amount that the capacity should be initialized to
+	 * @param initialCapacity amount that the capacity of the collection should be set to
 	 */
 	public ArrayIndexedCollection(int initialCapacity) {
 		capacity = initialCapacity;
@@ -38,10 +37,8 @@ public class ArrayIndexedCollection extends Collection {
 	 * Creates an instance of {@code ArrayIndexedCollection} using elements of
 	 * {@code other} collection and sets the initial capacity to 16.
 	 * 
-	 * @param other
-	 *            other collection whose elements to put into this collection
-	 * @throws NullPointerException
-	 *             if the other collection is null
+	 * @param other other collection whose elements to put into this collection
+	 * @throws NullPointerException if the other collection is null
 	 */
 	public ArrayIndexedCollection(Collection other) {
 		this(other, 16);
@@ -49,21 +46,19 @@ public class ArrayIndexedCollection extends Collection {
 
 	/**
 	 * Creates an instance of {@code ArrayIndexedCollection} using elements of
-	 * {@code other} collection and sets the initial capacity to
-	 * {@code initialCapacity}.
+	 * {@code other} collection and sets the initial capacity either to
+	 * {@code initialCapacity} or {@code other}'s capacity if it is higher.
 	 * 
-	 * @param other
-	 *            other collection whose elements to put into this collection
-	 * @param initialCapacity
-	 *            amount that the capacity should be initialized to
-	 * @throws NullPointerException
-	 *             if the other collection is null
+	 * @param other other collection whose elements to put into this collection
+	 * @param initialCapacity amount that the capacity should be initialized to
+	 * @throws NullPointerException if the other collection is null
 	 */
 	public ArrayIndexedCollection(Collection other, int initialCapacity) {
 		if (other == null) {
 			throw new NullPointerException("Cannot pass null as other collection.");
 		}
 
+		// Set capacity to larger
 		capacity = other.size() > initialCapacity ? other.size() : initialCapacity;
 		elements = new Object[capacity];
 		addAll(other);
@@ -72,8 +67,7 @@ public class ArrayIndexedCollection extends Collection {
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws NullPointerException
-	 *             if the value to add is null
+	 * @throws NullPointerException if the value to add is null
 	 */
 	@Override
 	public void add(Object value) {
@@ -95,15 +89,11 @@ public class ArrayIndexedCollection extends Collection {
 	/**
 	 * Inserts given object at specified position in the collection.
 	 * 
-	 * @param value
-	 *            element to insert into collection
-	 * @param position
-	 *            index at which it should be inserted
-	 * @throws NullPointerException
-	 *             if the value is null
-	 * @throws IndexOutOfBoundsException
-	 *             if the position is either negative or more than the size of the
-	 *             collection
+	 * @param value element to insert into collection
+	 * @param position index at which it should be inserted
+	 * @throws NullPointerException if the value is null
+	 * @throws IndexOutOfBoundsException if the position is either negative or 
+	 * 		   more than {@code size}
 	 */
 	public void insert(Object value, int position) {
 		if (position < 0 || position > size) {
@@ -116,7 +106,7 @@ public class ArrayIndexedCollection extends Collection {
 		}
 
 		// Average complexity is O(n) because n elements have to be shifted on average
-		if (size + 1 >= capacity) {
+		if (size + 1 > capacity) {
 			capacity *= 2;
 			elements = Arrays.copyOf(elements, capacity);
 		}
@@ -133,12 +123,10 @@ public class ArrayIndexedCollection extends Collection {
 	/**
 	 * Returns the object at given index in the collection.
 	 * 
-	 * @param index
-	 *            position of the object in the collection
+	 * @param index position of the object in the collection
 	 * @return object found at specified position
-	 * @throws IndexOutOfBoundsException
-	 *             if the position is either negative or more than the size of the
-	 *             collection
+	 * @throws IndexOutOfBoundsException if the position is either negative or more
+	 * 		   than {@code size - 1}
 	 */
 	public Object get(int index) {
 		if (index < 0 || index > size - 1) {
@@ -153,10 +141,8 @@ public class ArrayIndexedCollection extends Collection {
 	 * Removes element at {@code index} in the collection. Shifts all elements to
 	 * the right of {@code index} by one position to the left.
 	 * 
-	 * @param index
-	 *            position from which to remove element
-	 * @throws IndexOutOfBoundsException
-	 *             if the index is negative or more than size-1.
+	 * @param index position from which to remove element
+	 * @throws IndexOutOfBoundsException if the index is negative or more than size-1.
 	 */
 	public void remove(int index) {
 		if (index < 0 || index > size - 1) {
@@ -164,6 +150,7 @@ public class ArrayIndexedCollection extends Collection {
 					"Cannot remove element if index is negative or more than size-1. Index: " + index);
 		}
 
+		// Shift elements into the empty slot
 		for (int i = index; i < size; i++) {
 			elements[i] = elements[i + 1];
 		}
@@ -180,11 +167,13 @@ public class ArrayIndexedCollection extends Collection {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	@Override
 	public void clear() {
+		// Make eligible for GC
 		for (int i = 0; i < size; i++) {
 			elements[i] = null;
 		}
@@ -206,8 +195,7 @@ public class ArrayIndexedCollection extends Collection {
 	 * Finds the given element in the collection and returns its position if found,
 	 * -1 otherwise.
 	 * 
-	 * @param value
-	 *            element to be found
+	 * @param value element to be found
 	 * @return position of element in collection if found, -1 otherwise
 	 */
 	public int indexOf(Object value) {

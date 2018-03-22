@@ -40,8 +40,7 @@ public class ObjectStack {
 	/**
 	 * Pushes given value onto the stack.
 	 * 
-	 * @param value
-	 *            value to be put on top of the stack
+	 * @param value value to be put on top of the stack
 	 */
 	public void push(Object value) {
 		array.add(value);
@@ -51,8 +50,7 @@ public class ObjectStack {
 	 * Pops the value on top of the stack and removes it from the stack.
 	 * 
 	 * @return value on top of the stack
-	 * @throws EmptyStackException
-	 *             if the stack is empty
+	 * @throws EmptyStackException if the stack is empty
 	 */
 	public Object pop() {
 		if (isEmpty()) {
@@ -68,8 +66,7 @@ public class ObjectStack {
 	 * Returns the value on top of the stack without modifying it.
 	 * 
 	 * @return value on top of the stack
-	 * @throws EmptyStackException
-	 *             if the stack is empty
+	 * @throws EmptyStackException if the stack is empty
 	 */
 	public Object peek() {
 		if (isEmpty()) {

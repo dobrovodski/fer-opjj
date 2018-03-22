@@ -341,13 +341,14 @@ public class ComplexNumberTest {
 
 	@Test
 	public void Parse_IllegalString_ExceptionThrown() {
-		String[] definitelyNotComplexNumbers = { "hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii" };
+		String[] definitelyNotComplexNumbers = { "hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii", "", null };
 		int count = 0;
 
 		for (String garbage : definitelyNotComplexNumbers) {
 			try {
 				ComplexNumber.parse(garbage);
-			} catch (IllegalArgumentException ex) {
+			} catch (Exception ex) {
+				// Catch all exceptions, only need to know how many there were
 				count++;
 			}
 		}

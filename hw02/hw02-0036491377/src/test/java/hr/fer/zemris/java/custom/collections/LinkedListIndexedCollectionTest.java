@@ -416,6 +416,31 @@ public class LinkedListIndexedCollectionTest {
 		Assert.assertEquals(false, c.isEmpty());
 	}
 
-	// TODO foreach
+	@Test
+	public void ForEach_CreateStringFromCollection_CorrectString() {
+		// Dodgy and contrived test but hey, it works. 
+		// Gladly looking for a better way to test forEach.
+
+		String[] values = { "A", "quick", "brown", "fox" };
+		String str = String.join(" ", values);
+		LinkedListIndexedCollection collection = new LinkedListIndexedCollection();
+
+		for (String value : values) {
+			collection.add(value);
+		}
+
+		class P extends Processor {
+			public String valuesString = "";
+
+			public void process(Object o) {
+				valuesString += o.toString() + " ";
+			}
+		}
+
+		P p = new P();
+		collection.forEach(p);
+
+		Assert.assertEquals(str, p.valuesString.trim());
+	}
 
 }

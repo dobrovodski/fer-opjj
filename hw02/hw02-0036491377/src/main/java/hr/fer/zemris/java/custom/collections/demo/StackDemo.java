@@ -32,9 +32,9 @@ public class StackDemo {
 	/**
 	 * Calculates the result of a postfix expression.
 	 * 
-	 * @param expression
-	 *            string representation of postfix expression
+	 * @param expression string representation of postfix expression
 	 * @return integer result of evaluated expression
+	 * @throws IllegalArgumentException if unable to evaluate expression
 	 */
 	public static int calculate(String[] expression) {
 		for (String element : expression) {
@@ -57,8 +57,7 @@ public class StackDemo {
 	/**
 	 * Returns {@code true} if the string is an integer, {@code false} otherwise.
 	 * 
-	 * @param num
-	 *            string to check
+	 * @param num string to check
 	 * @return {@code true} if the string is an integer, {@code false} otherwise
 	 */
 	public static boolean isNumeric(String num) {
@@ -75,13 +74,11 @@ public class StackDemo {
 	 * Returns the result of the mathematical operation defined by {@code op} with
 	 * parameters {@code a} and {@code b}.
 	 * 
-	 * @param a
-	 *            first parameter
-	 * @param b
-	 *            second parameter
-	 * @param op
-	 *            mathematical operator to perform
+	 * @param a first parameter
+	 * @param b second parameter
+	 * @param op mathematical operator to perform
 	 * @return integer value of the mathematical operation
+	 * @throws IllegalArgumentException if the operation isn't defined
 	 */
 	public static int evaluate(int a, int b, String op) {
 		switch (op) {
@@ -96,7 +93,7 @@ public class StackDemo {
 		case "%":
 			return b % a;
 		default:
-			return 0;
+			throw new IllegalArgumentException("Operator evaluate undefined for "+ op);
 		}
 	}
 

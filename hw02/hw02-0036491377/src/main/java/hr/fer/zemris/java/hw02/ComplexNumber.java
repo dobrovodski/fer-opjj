@@ -30,10 +30,8 @@ public class ComplexNumber {
 	 * Constructor which creates a {@code ComplexNumber} object from a real and
 	 * imaginary part.
 	 * 
-	 * @param real
-	 *            real part of complex number
-	 * @param imaginary
-	 *            imaginary part of complex number
+	 * @param real real part of complex number
+	 * @param imaginary imaginary part of complex number
 	 */
 	public ComplexNumber(double real, double imaginary) {
 		this.real = real;
@@ -43,8 +41,7 @@ public class ComplexNumber {
 	/**
 	 * Creates an instance of {@code ComplexNumber} from a real part only.
 	 * 
-	 * @param real
-	 *            real part of complex number
+	 * @param real real part of complex number
 	 * @return instance of {@code ComplexNumber}
 	 */
 	public static ComplexNumber fromReal(double real) {
@@ -54,8 +51,7 @@ public class ComplexNumber {
 	/**
 	 * Creates an instance of {@code ComplexNumber} from an imaginary part only.
 	 * 
-	 * @param imaginary
-	 *            imaginary part of complex number
+	 * @param imaginary imaginary part of complex number
 	 * @return instance of {@code ComplexNumber}
 	 */
 	public static ComplexNumber fromImaginary(double imaginary) {
@@ -66,10 +62,8 @@ public class ComplexNumber {
 	 * Creates an instance of {@code ComplexNumber} from the magnitude and angle of
 	 * number.
 	 * 
-	 * @param magnitude
-	 *            magnitude of complex number
-	 * @param angle
-	 *            angle of complex number
+	 * @param magnitude magnitude of complex number
+	 * @param angle angle of complex number
 	 * @return instance of {@code ComplexNumber}
 	 */
 	public static ComplexNumber fromMagnitudeAndAngle(double magnitude, double angle) {
@@ -83,13 +77,21 @@ public class ComplexNumber {
 	 * Creates an instance of {@code ComplexNumber} from a string representation of
 	 * a complex number.
 	 * 
-	 * @param s
-	 *            string to convert
+	 * @param s string to convert
 	 * @return instance of {@code ComplexNumber}
-	 * @throws IllegalArgumentException
-	 *             if the string cannot be parsed as a complex number
+	 * @throws IllegalArgumentException if the string is empty or cannot be parsed as a complex number
+	 * @throws NullPointerException if the string is null
 	 */
 	public static ComplexNumber parse(String s) {
+		if (s == null) {
+			throw new NullPointerException("String cannot be null.");
+		}
+		
+		if (s.isEmpty()) {
+			throw new IllegalArgumentException("Cannot parse empty string as complex number");
+		}
+		
+		// Good luck
 		String regex = "^(?<imaginaryNoCoef>(-)?i)?$|" // Matches complex numbers "i" or "-i"
 				+ "^((?<onlyImaginary>(-)?([0-9]++(\\.[0-9]+)?)?)i)?$|" // Only imaginary, i.e. "3i" or "-2.2i"
 				+ "^(?<real>(\\+|-)?[0-9]+(\\.[0-9]+)?)?(\\+)?" // Matches the real part of the number
@@ -165,9 +167,8 @@ public class ComplexNumber {
 	 * Returns the angle of the {@code ComplexNumber}.
 	 * 
 	 * @return angle of {@code ComplexNumber}
-	 * @throws ArithmeticException
-	 *             if both parts of the complex number are zero, the angle is
-	 *             indeterminate
+	 * @throws ArithmeticException if both parts of the complex number are zero, the angle is
+	 *         indeterminate
 	 * @see <a href=https://en.wikipedia.org/wiki/Complex_number#Polar_form.>Polar
 	 *      form - Absolute value and argument</a>
 	 */
@@ -189,8 +190,7 @@ public class ComplexNumber {
 	 * Adds two complex numbers together and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
-	 * @param c
-	 *            complex number to add
+	 * @param c complex number to add
 	 * @return a complex number that represents the addition of this number with the
 	 *         provided number
 	 */
@@ -202,8 +202,7 @@ public class ComplexNumber {
 	 * Subtracts two complex numbers together and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
-	 * @param c
-	 *            complex number to subtract
+	 * @param c complex number to subtract
 	 * @return a complex number that represents the subtraction of this number with
 	 *         the provided number
 	 */
@@ -215,8 +214,7 @@ public class ComplexNumber {
 	 * Multiplies two complex numbers together and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
-	 * @param c
-	 *            complex number to multiply
+	 * @param c complex number to multiply
 	 * @return a complex number that represents the multiplication of this number
 	 *         with the provided number
 	 */
@@ -232,8 +230,7 @@ public class ComplexNumber {
 	 * Divides two complex numbers together and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
-	 * @param c
-	 *            complex number to divide with
+	 * @param c complex number to divide with
 	 * @return a complex number that represents the division of this number with the
 	 *         provided number
 	 */
@@ -248,11 +245,9 @@ public class ComplexNumber {
 	/**
 	 * Raises the complex number to the n-th power and returns the result.
 	 * 
-	 * @param n
-	 *            power to raise to
+	 * @param n power to raise to
 	 * @return complex number that represents the n-th power of the number
-	 * @throws IllegalArgumentException
-	 *             if power is negative
+	 * @throws IllegalArgumentException if power is negative
 	 */
 	public ComplexNumber power(int n) {
 		if (n < 0) {
@@ -269,11 +264,9 @@ public class ComplexNumber {
 	 * Takes the n-th root of the complex number and returns an array of n resulting
 	 * complex numbers.
 	 * 
-	 * @param n
-	 *            root to take
+	 * @param n root to take
 	 * @return array of n resulting complex numbers
-	 * @throws IllegalArgumentException
-	 *             if power is negative
+	 * @throws IllegalArgumentException if power is negative
 	 */
 	public ComplexNumber[] root(int n) {
 		if (n <= 0) {

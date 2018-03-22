@@ -37,8 +37,7 @@ public class Collection {
 	/**
 	 * Adds the given object into this collection.
 	 * 
-	 * @param value
-	 *            object to add into collection
+	 * @param value object to add into collection
 	 */
 	public void add(Object value) {
 
@@ -48,8 +47,7 @@ public class Collection {
 	 * Returns {@code true} if the collection contains the specified value, as
 	 * determined by the {@code equals} method.
 	 * 
-	 * @param value
-	 *            object to find in collection
+	 * @param value object to find in collection
 	 * @return {@code true} if collection contains {@code value}, otherwise
 	 *         {@code false}
 	 */
@@ -61,8 +59,7 @@ public class Collection {
 	 * Returns {@code true} if the collection contains given value as determined by
 	 * the {@code equals} method and removes one occurrence of it.
 	 * 
-	 * @param value
-	 *            object to find in collection
+	 * @param value object to find in collection
 	 * @return {@code true} if {@code value} has been found and removed, otherwise
 	 *         {@code false}
 	 */
@@ -84,9 +81,8 @@ public class Collection {
 	 * Method calls {@code processor.process(element)} for each element of this
 	 * collection.
 	 * 
-	 * @param processor
-	 *            object whose {@code process} method is called on every element of
-	 *            collection
+	 * @param processor object whose {@code process} method is called on every element
+	 *        of collection
 	 */
 	void forEach(Processor processor) {
 
@@ -96,8 +92,7 @@ public class Collection {
 	 * Adds all elements from {@code other} collection into current collection
 	 * without modifying {@code other}.
 	 * 
-	 * @param other
-	 *            collection from which the elements are added
+	 * @param other collection from which the elements are added
 	 */
 	void addAll(Collection other) {
 		class LocalProcessor extends Processor {
