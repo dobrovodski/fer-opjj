@@ -1,9 +1,10 @@
 package hr.fer.zemris.java.custom.collections.demo;
 
+import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.collections.ObjectStack;
 
 /**
- * Demo for {@code ObjectStack} class. Evaluated postfix expression provided as
+ * Demo for {@code ObjectStack} class. Evaluates postfix expression provided as
  * a single argument.
  * 
  * @author matej
@@ -41,8 +42,13 @@ public class StackDemo {
 			if (StackDemo.isNumeric(element)) {
 				stack.push(Integer.parseInt(element));
 			} else {
-				int result = StackDemo.evaluate((int) stack.pop(), (int) stack.pop(), element);
-				stack.push(result);
+				try {
+					int result = StackDemo.evaluate((int) stack.pop(), (int) stack.pop(), element);
+					stack.push(result);
+				} catch (EmptyStackException ex) {
+					throw new IllegalArgumentException(
+							"Could not parse as postfix expression. Input was: " + String.join(" ", expression));
+				}
 			}
 		}
 
@@ -55,19 +61,15 @@ public class StackDemo {
 	}
 
 	/**
-	 * Returns {@code true} if the string is an integer, {@code false} otherwise.
+	 * Returns {@code true} if the string represents an integer, {@code false} otherwise.
 	 * 
 	 * @param num string to check
-	 * @return {@code true} if the string is an integer, {@code false} otherwise
+	 * @return {@code true} if the string represents an integer, {@code false} otherwise
 	 */
 	public static boolean isNumeric(String num) {
-		try {
-			Integer.parseInt(num);
-		} catch (NumberFormatException ex) {
-			return false;
-		}
-
-		return true;
+		// Not as fast as some other methods, but quite elegant
+		// Better than try-catch checking with parseInt
+		return num.matches("-?\\d+");
 	}
 
 	/**
