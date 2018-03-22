@@ -69,16 +69,11 @@ public class ArrayIndexedCollection extends Collection {
 		addAll(other);
 	}
 
-	@Override
-	public int size() {
-		return size;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 * 
 	 * @throws NullPointerException
-	 *             if the value is null
+	 *             if the value to add is null
 	 */
 	@Override
 	public void add(Object value) {
@@ -88,98 +83,13 @@ public class ArrayIndexedCollection extends Collection {
 
 		// Average complexity is O(1), unless reallocation happens, in which case the
 		// complexity is O(n).
-		if (size + 1 >= capacity) {
+		if (size + 1 > capacity) {
 			capacity *= 2;
 			elements = Arrays.copyOf(elements, capacity);
 		}
 
 		elements[size] = value;
 		size++;
-	}
-
-	@Override
-	public boolean contains(Object value) {
-		return indexOf(value) > -1;
-	}
-
-	@Override
-	public boolean remove(Object value) {
-		for (int i = 0; i < size; i++) {
-			if (elements[i].equals(value)) {
-				remove(i);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Removes element at {@code index} in the collection. Shifts all elements to
-	 * the right of {@code index} by one position to the left.
-	 * 
-	 * @param index
-	 *            position from which to remove element
-	 * @throws IndexOutOfBoundsException
-	 *             if the index is negative or more than size-1.
-	 */
-	public void remove(int index) {
-		if (index < 0 || index > size - 1) {
-			throw new IndexOutOfBoundsException(
-					"Cannot remove element if index is negative or more than size-1. Index: " + index);
-		}
-
-		for (int i = index; i < size; i++) {
-			elements[i] = elements[i + 1];
-		}
-
-		elements[size] = null;
-		size--;
-	}
-
-	@Override
-	public Object[] toArray() {
-		Object[] newElements = new Object[size];
-
-		for (int i = 0; i < size; i++) {
-			newElements[i] = elements[i];
-		}
-
-		return newElements;
-	}
-
-	@Override
-	public void forEach(Processor processor) {
-		for (int i = 0; i < size; i++) {
-			processor.process(elements[i]);
-		}
-	}
-
-	@Override
-	public void clear() {
-		for (int i = 0; i < size; i++) {
-			elements[i] = null;
-		}
-
-		size = 0;
-	}
-
-	/**
-	 * Returns the object at given index in the collection.
-	 * 
-	 * @param index
-	 *            position of the object in the collection
-	 * @return object found at specified position
-	 * @throws IndexOutOfBoundsException
-	 *             if the position is either negative or more than the size of the
-	 *             collection
-	 */
-	public Object get(int index) {
-		if (index < 0 || index > size - 1) {
-			throw new IndexOutOfBoundsException(
-					"Cannot get element if index is negative or more than size-1. Given index: " + index);
-		}
-
-		return elements[index];
 	}
 
 	/**
@@ -221,6 +131,78 @@ public class ArrayIndexedCollection extends Collection {
 	}
 
 	/**
+	 * Returns the object at given index in the collection.
+	 * 
+	 * @param index
+	 *            position of the object in the collection
+	 * @return object found at specified position
+	 * @throws IndexOutOfBoundsException
+	 *             if the position is either negative or more than the size of the
+	 *             collection
+	 */
+	public Object get(int index) {
+		if (index < 0 || index > size - 1) {
+			throw new IndexOutOfBoundsException(
+					"Cannot get element if index is negative or more than size-1. Given index: " + index);
+		}
+
+		return elements[index];
+	}
+
+	/**
+	 * Removes element at {@code index} in the collection. Shifts all elements to
+	 * the right of {@code index} by one position to the left.
+	 * 
+	 * @param index
+	 *            position from which to remove element
+	 * @throws IndexOutOfBoundsException
+	 *             if the index is negative or more than size-1.
+	 */
+	public void remove(int index) {
+		if (index < 0 || index > size - 1) {
+			throw new IndexOutOfBoundsException(
+					"Cannot remove element if index is negative or more than size-1. Index: " + index);
+		}
+
+		for (int i = index; i < size; i++) {
+			elements[i] = elements[i + 1];
+		}
+
+		elements[size] = null;
+		size--;
+	}
+
+	@Override
+	public boolean remove(Object value) {
+		for (int i = 0; i < size; i++) {
+			if (elements[i].equals(value)) {
+				remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void clear() {
+		for (int i = 0; i < size; i++) {
+			elements[i] = null;
+		}
+
+		size = 0;
+	}
+
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public boolean contains(Object value) {
+		return indexOf(value) > -1;
+	}
+
+	/**
 	 * Finds the given element in the collection and returns its position if found,
 	 * -1 otherwise.
 	 * 
@@ -236,6 +218,24 @@ public class ArrayIndexedCollection extends Collection {
 		}
 
 		return -1;
+	}
+
+	@Override
+	public Object[] toArray() {
+		Object[] newElements = new Object[size];
+
+		for (int i = 0; i < size; i++) {
+			newElements[i] = elements[i];
+		}
+
+		return newElements;
+	}
+
+	@Override
+	public void forEach(Processor processor) {
+		for (int i = 0; i < size; i++) {
+			processor.process(elements[i]);
+		}
 	}
 
 }

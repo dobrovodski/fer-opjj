@@ -403,6 +403,19 @@ public class ArrayIndexedCollectionTest {
 		Assert.assertEquals(-1, collection.indexOf(valueNotAdded));
 	}
 
+	@Test
+	public void IsEmpty_NothingAdded_True() {
+		ArrayIndexedCollection c = new ArrayIndexedCollection();
+		Assert.assertEquals(true, c.isEmpty());
+	}
+
+	@Test
+	public void IsEmpty_SomethingAdded_False() {
+		ArrayIndexedCollection c = new ArrayIndexedCollection();
+		c.add(5);
+		Assert.assertEquals(false, c.isEmpty());
+	}
+
 	// TODO foreach
 
 }

@@ -403,6 +403,19 @@ public class LinkedListIndexedCollectionTest {
 		Assert.assertEquals(-1, collection.indexOf(valueNotAdded));
 	}
 
+	@Test
+	public void IsEmpty_NothingAdded_True() {
+		LinkedListIndexedCollection c = new LinkedListIndexedCollection();
+		Assert.assertEquals(true, c.isEmpty());
+	}
+
+	@Test
+	public void IsEmpty_SomethingAdded_False() {
+		LinkedListIndexedCollection c = new LinkedListIndexedCollection();
+		c.add(5);
+		Assert.assertEquals(false, c.isEmpty());
+	}
+
 	// TODO foreach
 
 }

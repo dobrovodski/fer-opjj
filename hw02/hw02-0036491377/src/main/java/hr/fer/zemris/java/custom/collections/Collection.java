@@ -22,7 +22,7 @@ public class Collection {
 	 * @return {@code true} if collection is empty, otherwise {@code false}
 	 */
 	public boolean isEmpty() {
-		return size() > 0;
+		return size() == 0;
 	}
 
 	/**

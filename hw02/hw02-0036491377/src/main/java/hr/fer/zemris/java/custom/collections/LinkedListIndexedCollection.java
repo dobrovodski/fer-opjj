@@ -58,11 +58,12 @@ public class LinkedListIndexedCollection extends Collection {
 		addAll(other);
 	}
 
-	@Override
-	public int size() {
-		return size;
-	}
-
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws NullPointerException
+	 *             if the value is null
+	 */
 	@Override
 	public void add(Object value) {
 		if (value == null) {
@@ -85,39 +86,6 @@ public class LinkedListIndexedCollection extends Collection {
 	}
 
 	/**
-	 * Returns the object at given index in the collection.
-	 * 
-	 * @param index
-	 *            position of the object in the collection
-	 * @return object found at specified position
-	 * @throws IndexOutOfBoundsException
-	 *             if the position is either negative or more than the size of the
-	 *             collection
-	 */
-	Object get(int index) {
-		if (index < 0 || index > size - 1) {
-			throw new IndexOutOfBoundsException(
-					"Cannot get element if index is negative or more than size-1. Given index: " + index);
-		}
-
-		ListNode current;
-
-		if (index < size / 2) {
-			current = first;
-			for (int i = 0; i < index; i++) {
-				current = current.next;
-			}
-		} else {
-			current = last;
-			for (int i = size; i > index + 1; i--) {
-				current = current.previous;
-			}
-		}
-
-		return current.value;
-	}
-
-	/**
 	 * Inserts given object at specified position in the collection.
 	 * 
 	 * @param value
@@ -130,7 +98,7 @@ public class LinkedListIndexedCollection extends Collection {
 	 *             if the position is either negative or more than the size of the
 	 *             collection
 	 */
-	void insert(Object value, int position) {
+	public void insert(Object value, int position) {
 		if (position < 0 || position > size) {
 			throw new IndexOutOfBoundsException(
 					"Cannot insert element if position is negative or more than size. Given position: " + position);
@@ -162,27 +130,36 @@ public class LinkedListIndexedCollection extends Collection {
 	}
 
 	/**
-	 * Finds the given element in the collection and returns its position if found,
-	 * -1 otherwise.
+	 * Returns the object at given index in the collection.
 	 * 
-	 * @param value
-	 *            element to be found
-	 * @return position of element in collection if found, -1 otherwise
+	 * @param index
+	 *            position of the object in the collection
+	 * @return object found at specified position
+	 * @throws IndexOutOfBoundsException
+	 *             if the position is either negative or more than the size of the
+	 *             collection
 	 */
-	int indexOf(Object value) {
-		int index = 0;
-		ListNode current = first;
-
-		while (current != null) {
-			if (current.value.equals(value)) {
-				return index;
-			}
-
-			current = current.next;
-			index++;
+	public Object get(int index) {
+		if (index < 0 || index > size - 1) {
+			throw new IndexOutOfBoundsException(
+					"Cannot get element if index is negative or more than size-1. Given index: " + index);
 		}
 
-		return -1;
+		ListNode current;
+
+		if (index < size / 2) {
+			current = first;
+			for (int i = 0; i < index; i++) {
+				current = current.next;
+			}
+		} else {
+			current = last;
+			for (int i = size; i > index + 1; i--) {
+				current = current.previous;
+			}
+		}
+
+		return current.value;
 	}
 
 	/**
@@ -193,7 +170,7 @@ public class LinkedListIndexedCollection extends Collection {
 	 * @throws IndexOutOfBoundsException
 	 *             if the index is negative or more than size-1.
 	 */
-	void remove(int index) {
+	public void remove(int index) {
 		if (index < 0 || index > size - 1) {
 			throw new IndexOutOfBoundsException(
 					"Cannot remove element if index is negative or more than size-1. Index: " + index);
@@ -214,12 +191,7 @@ public class LinkedListIndexedCollection extends Collection {
 	}
 
 	@Override
-	boolean contains(Object value) {
-		return indexOf(value) > -1;
-	}
-
-	@Override
-	boolean remove(Object value) {
+	public boolean remove(Object value) {
 		ListNode current = first;
 		for (int i = 0; i < size; i++) {
 			if (current.value.equals(value)) {
@@ -233,7 +205,48 @@ public class LinkedListIndexedCollection extends Collection {
 	}
 
 	@Override
-	Object[] toArray() {
+	public void clear() {
+		first = null;
+		last = null;
+		size = 0;
+	}
+
+	@Override
+	public int size() {
+		return size;
+	}
+
+	@Override
+	public boolean contains(Object value) {
+		return indexOf(value) > -1;
+	}
+
+	/**
+	 * Finds the given element in the collection and returns its position if found,
+	 * -1 otherwise.
+	 * 
+	 * @param value
+	 *            element to be found
+	 * @return position of element in collection if found, -1 otherwise
+	 */
+	public int indexOf(Object value) {
+		int index = 0;
+		ListNode current = first;
+
+		while (current != null) {
+			if (current.value.equals(value)) {
+				return index;
+			}
+
+			current = current.next;
+			index++;
+		}
+
+		return -1;
+	}
+
+	@Override
+	public Object[] toArray() {
 		Object[] elements = new Object[size];
 		ListNode current = first;
 		for (int i = 0; i < size; i++) {
@@ -245,7 +258,7 @@ public class LinkedListIndexedCollection extends Collection {
 	}
 
 	@Override
-	void forEach(Processor processor) {
+	public void forEach(Processor processor) {
 		ListNode node = first;
 
 		for (int i = 0; i < size; i++) {
@@ -254,10 +267,4 @@ public class LinkedListIndexedCollection extends Collection {
 		}
 	}
 
-	@Override
-	void clear() {
-		first = null;
-		last = null;
-		size = 0;
-	}
 }

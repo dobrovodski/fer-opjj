@@ -51,8 +51,14 @@ public class ObjectStack {
 	 * Pops the value on top of the stack and removes it from the stack.
 	 * 
 	 * @return value on top of the stack
+	 * @throws EmptyStackException
+	 *             if the stack is empty
 	 */
 	public Object pop() {
+		if (isEmpty()) {
+			throw new EmptyStackException("Cannot pop from empty stack");
+		}
+
 		Object element = array.get(array.size() - 1);
 		array.remove(array.size() - 1);
 		return element;
@@ -62,8 +68,14 @@ public class ObjectStack {
 	 * Returns the value on top of the stack without modifying it.
 	 * 
 	 * @return value on top of the stack
+	 * @throws EmptyStackException
+	 *             if the stack is empty
 	 */
 	public Object peek() {
+		if (isEmpty()) {
+			throw new EmptyStackException("Cannot pop from empty stack");
+		}
+
 		return array.get(array.size() - 1);
 	}
 

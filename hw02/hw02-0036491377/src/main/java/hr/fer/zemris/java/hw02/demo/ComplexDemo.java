@@ -1,7 +1,13 @@
-package hr.fer.zemris.java.custom.collections.demo;
+package hr.fer.zemris.java.hw02.demo;
 
 import hr.fer.zemris.java.hw02.ComplexNumber;
 
+/**
+ * Demo for {@code ComplexDemo} class.
+ * 
+ * @author Marko Cupic
+ *
+ */
 public class ComplexDemo {
 
 	public static void main(String[] args) {
