@@ -35,7 +35,7 @@ public class Collection {
 	}
 
 	/**
-	 * Adds the given object into this collection.
+	 * Adds the given object at the end of this collection.
 	 * 
 	 * @param value object to add into collection
 	 */

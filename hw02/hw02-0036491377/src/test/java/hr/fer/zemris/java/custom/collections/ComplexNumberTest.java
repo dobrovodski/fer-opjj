@@ -340,8 +340,18 @@ public class ComplexNumberTest {
 	}
 
 	@Test
+	public void Parse_RealPositiveImaginaryNegative_CorrectlyParsed() {
+		double real = 333;
+		double imaginary = -3;
+		String numString = String.format("%f%fi", real, imaginary);
+		ComplexNumber parsed = ComplexNumber.parse(numString);
+
+		Assert.assertEquals(new ComplexNumber(real, imaginary), parsed);
+	}
+
+	@Test
 	public void Parse_IllegalString_ExceptionThrown() {
-		String[] definitelyNotComplexNumbers = { "hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii", "", null };
+		String[] definitelyNotComplexNumbers = { "hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii", "", null, "^i" };
 		int count = 0;
 
 		for (String garbage : definitelyNotComplexNumbers) {
@@ -356,15 +366,5 @@ public class ComplexNumberTest {
 		if (count != definitelyNotComplexNumbers.length) {
 			Assert.fail();
 		}
-	}
-
-	@Test
-	public void Parse_RealPositiveImaginaryNegative_CorrectlyParsed() {
-		double real = 333;
-		double imaginary = -3;
-		String numString = String.format("%f%fi", real, imaginary);
-		ComplexNumber parsed = ComplexNumber.parse(numString);
-
-		Assert.assertEquals(new ComplexNumber(real, imaginary), parsed);
 	}
 }

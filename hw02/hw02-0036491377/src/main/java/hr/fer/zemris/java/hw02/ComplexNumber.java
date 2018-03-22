@@ -199,7 +199,7 @@ public class ComplexNumber {
 	}
 
 	/**
-	 * Subtracts two complex numbers together and returns the result as a new
+	 * Subtracts provided complex number from this one and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
 	 * @param c complex number to subtract
@@ -227,7 +227,7 @@ public class ComplexNumber {
 	}
 
 	/**
-	 * Divides two complex numbers together and returns the result as a new
+	 * Divides this complex number by the provided one and returns the result as a new
 	 * {@code ComplexNumber} object.
 	 * 
 	 * @param c complex number to divide with
