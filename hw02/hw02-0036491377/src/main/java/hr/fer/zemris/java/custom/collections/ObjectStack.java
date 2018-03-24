@@ -2,9 +2,8 @@ package hr.fer.zemris.java.custom.collections;
 
 /**
  * The {@code ObjectStack} class represents an array-backed stack.
- * 
- * @author matej
  *
+ * @author matej
  */
 public class ObjectStack {
 
@@ -20,9 +19,9 @@ public class ObjectStack {
 	/**
 	 * Returns {@code true} if there are elements on the stack, {@code false}
 	 * otherwise.
-	 * 
+	 *
 	 * @return {@code true} if there are elements on the stack, {@code false}
-	 *         otherwise
+	 * otherwise
 	 */
 	public boolean isEmpty() {
 		return array.isEmpty();
@@ -30,7 +29,7 @@ public class ObjectStack {
 
 	/**
 	 * Returns the number of elements on the stack.
-	 * 
+	 *
 	 * @return number of elements on stack
 	 */
 	public int size() {
@@ -39,7 +38,7 @@ public class ObjectStack {
 
 	/**
 	 * Pushes given value onto the stack.
-	 * 
+	 *
 	 * @param value value to be put on top of the stack
 	 */
 	public void push(Object value) {
@@ -48,7 +47,7 @@ public class ObjectStack {
 
 	/**
 	 * Pops the value on top of the stack and removes it from the stack.
-	 * 
+	 *
 	 * @return value on top of the stack
 	 * @throws EmptyStackException if the stack is empty
 	 */
@@ -64,7 +63,7 @@ public class ObjectStack {
 
 	/**
 	 * Returns the value on top of the stack without modifying it.
-	 * 
+	 *
 	 * @return value on top of the stack
 	 * @throws EmptyStackException if the stack is empty
 	 */

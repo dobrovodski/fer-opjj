@@ -4,9 +4,8 @@ import hr.fer.zemris.java.hw02.ComplexNumber;
 
 /**
  * Demo for {@code ComplexDemo} class.
- * 
- * @author Marko Cupic
  *
+ * @author Marko Cupic
  */
 public class ComplexDemo {
 

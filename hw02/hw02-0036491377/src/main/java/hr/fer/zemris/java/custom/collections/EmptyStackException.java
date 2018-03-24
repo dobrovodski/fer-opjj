@@ -3,9 +3,8 @@ package hr.fer.zemris.java.custom.collections;
 /**
  * Thrown to indicate that the stack was empty when a method that retrieves an
  * element from the stack was called.
- * 
- * @author matej
  *
+ * @author matej
  */
 public class EmptyStackException extends RuntimeException {
 

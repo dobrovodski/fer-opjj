@@ -5,12 +5,11 @@ import org.junit.Test;
 
 /**
  * JUnit tests for ObjectStack.
- * 
- * @see <a href=
- *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
- *      Naming standards for unit tests </a>
- * @author matej
  *
+ * @author matej
+ * @see <a href=
+ * "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
+ * Naming standards for unit tests </a>
  */
 public class ObjectStackTest {
 
@@ -35,7 +34,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Size_FourValuesAdded_Four() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {
@@ -47,7 +46,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Clear_StackContainsValues_SizeZero() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {
@@ -61,7 +60,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Pop_SeveralValuesAdded_EqualsLastOneAdded() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {
@@ -79,7 +78,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Pop_SeveralValuesAdded_SizeDecreasedByOne() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {
@@ -92,7 +91,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Peek_SeveralValuesAdded_EqualsLastOneAdded() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {
@@ -104,7 +103,7 @@ public class ObjectStackTest {
 
 	@Test
 	public void Peek_SeveralValuesAdded_SizeUnchanged() {
-		String[] values = { "A", "quick", "brown", "fox" };
+		String[] values = {"A", "quick", "brown", "fox"};
 		ObjectStack stack = new ObjectStack();
 
 		for (String value : values) {

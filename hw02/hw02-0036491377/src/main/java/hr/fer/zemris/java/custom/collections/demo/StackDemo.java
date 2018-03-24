@@ -8,22 +8,21 @@ import hr.fer.zemris.java.custom.collections.ObjectStack;
 /**
  * Demo for {@code ObjectStack} class. Evaluates postfix expression provided as
  * a single argument.
- * 
- * @author matej
  *
+ * @author matej
  */
 public class StackDemo {
 
 	static ObjectStack stack;
-	static final String OPS[] = { "+", "-", "%", "*", "/" };
+	static final String OPS[] = {"+", "-", "%", "*", "/"};
 
 	public static void main(String[] args) {
-		
+
 		if (args.length != 1) {
 			System.err.println("This program only accepts a single argument.");
 			return;
 		}
-		
+
 		String input = args[0];
 		String[] splitInput = input.split("\\s+");
 		stack = new ObjectStack();
@@ -41,7 +40,7 @@ public class StackDemo {
 
 	/**
 	 * Calculates the result of a postfix expression.
-	 * 
+	 *
 	 * @param expression string representation of postfix expression
 	 * @return integer result of evaluated expression
 	 * @throws IllegalArgumentException if unable to evaluate expression
@@ -79,7 +78,7 @@ public class StackDemo {
 
 	/**
 	 * Returns {@code true} if the string represents a valid operator, {@code false} otherwise.
-	 * 
+	 *
 	 * @param op string to check
 	 * @return {@code true} if the string represents a valid operator, {@code false} otherwise
 	 */
@@ -90,27 +89,27 @@ public class StackDemo {
 	/**
 	 * Returns the result of the mathematical operation defined by {@code op} with
 	 * parameters {@code a} and {@code b}.
-	 * 
-	 * @param a first parameter
-	 * @param b second parameter
+	 *
+	 * @param a  first parameter
+	 * @param b  second parameter
 	 * @param op mathematical operator to perform
 	 * @return integer value of the mathematical operation
 	 * @throws IllegalArgumentException if the operation isn't defined
 	 */
 	public static int evaluate(int a, int b, String op) {
 		switch (op) {
-		case "+":
-			return b + a;
-		case "-":
-			return b - a;
-		case "/":
-			return b / a;
-		case "*":
-			return b * a;
-		case "%":
-			return b % a;
-		default:
-			throw new IllegalArgumentException("Operator evaluation undefined for "+ op);
+			case "+":
+				return b + a;
+			case "-":
+				return b - a;
+			case "/":
+				return b / a;
+			case "*":
+				return b * a;
+			case "%":
+				return b % a;
+			default:
+				throw new IllegalArgumentException("Operator evaluation undefined for " + op);
 		}
 	}
 

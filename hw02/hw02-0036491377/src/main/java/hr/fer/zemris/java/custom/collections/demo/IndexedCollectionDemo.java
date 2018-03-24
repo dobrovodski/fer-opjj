@@ -8,9 +8,8 @@ import hr.fer.zemris.java.custom.collections.Processor;
 
 /**
  * Demo for {@code IndexedCollectionDemo} class.
- * 
- * @author Marko Cupic
  *
+ * @author Marko Cupic
  */
 public class IndexedCollectionDemo {
 

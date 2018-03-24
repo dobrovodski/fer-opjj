@@ -14,12 +14,11 @@ import hr.fer.zemris.java.hw02.ComplexNumber;
 
 /**
  * JUnit tests for ComplexNumber.
- * 
- * @see <a href=
- *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
- *      Naming standards for unit tests </a>
- * @author matej
  *
+ * @author matej
+ * @see <a href=
+ * "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
+ * Naming standards for unit tests </a>
  */
 public class ComplexNumberTest {
 
@@ -351,7 +350,7 @@ public class ComplexNumberTest {
 
 	@Test
 	public void Parse_IllegalString_ExceptionThrown() {
-		String[] definitelyNotComplexNumbers = { "hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii", "", null, "^i" };
+		String[] definitelyNotComplexNumbers = {"hello3+3xi", "zzzi", "3a+3ia", "2.2a", "3i3", "5ii", "3+ii", "", null, "^i"};
 		int count = 0;
 
 		for (String garbage : definitelyNotComplexNumbers) {

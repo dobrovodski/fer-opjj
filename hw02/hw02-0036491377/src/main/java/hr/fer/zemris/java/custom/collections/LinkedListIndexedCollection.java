@@ -3,9 +3,8 @@ package hr.fer.zemris.java.custom.collections;
 /**
  * The {@code LinkedListIndexedCollection} class represents a list-backed
  * collection of objects.
- * 
- * @author matej
  *
+ * @author matej
  */
 public class LinkedListIndexedCollection extends Collection {
 
@@ -17,9 +16,8 @@ public class LinkedListIndexedCollection extends Collection {
 	 * Private class which represents a node in a link list with {@code previous}
 	 * and {@code next} points to other nodes, and {@code value} which holds the
 	 * value of the node.
-	 * 
-	 * @author matej
 	 *
+	 * @author matej
 	 */
 	private static class ListNode {
 		public ListNode previous;
@@ -44,7 +42,7 @@ public class LinkedListIndexedCollection extends Collection {
 	/**
 	 * Creates an instance of {@code ArrayIndexedCollection} using elements of
 	 * {@code other} collection and sets the initial capacity to 16.
-	 * 
+	 *
 	 * @param other other collection whose elements to put into this collection
 	 * @throws NullPointerException if the other collection is null
 	 */
@@ -58,7 +56,7 @@ public class LinkedListIndexedCollection extends Collection {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @throws NullPointerException if the value is null
 	 */
 	@Override
@@ -84,12 +82,12 @@ public class LinkedListIndexedCollection extends Collection {
 
 	/**
 	 * Inserts given object at specified position in the collection.
-	 * 
-	 * @param value element to insert into collection
+	 *
+	 * @param value    element to insert into collection
 	 * @param position index at which it should be inserted
-	 * @throws NullPointerException if the value is null
+	 * @throws NullPointerException      if the value is null
 	 * @throws IndexOutOfBoundsException if the position is either negative or
-	 * 		   more than the size of the collection
+	 *                                   more than the size of the collection
 	 */
 	public void insert(Object value, int position) {
 		if (position < 0 || position > size) {
@@ -124,11 +122,11 @@ public class LinkedListIndexedCollection extends Collection {
 
 	/**
 	 * Returns the object at given index in the collection.
-	 * 
+	 *
 	 * @param index position of the object in the collection
 	 * @return object found at specified position
 	 * @throws IndexOutOfBoundsException if the position is either negative or
-	 * 		   more than the size of the collection
+	 *                                   more than the size of the collection
 	 */
 	public Object get(int index) {
 		if (index < 0 || index > size - 1) {
@@ -155,10 +153,10 @@ public class LinkedListIndexedCollection extends Collection {
 
 	/**
 	 * Removes element at {@code index} in the collection.
-	 * 
+	 *
 	 * @param index position from which to remove element
 	 * @throws IndexOutOfBoundsException if the index is negative or more
-	 * 		   than size-1.
+	 *                                   than size-1.
 	 */
 	public void remove(int index) {
 		if (index < 0 || index > size - 1) {
@@ -213,7 +211,7 @@ public class LinkedListIndexedCollection extends Collection {
 	/**
 	 * Finds the given element in the collection and returns its position if found,
 	 * -1 otherwise.
-	 * 
+	 *
 	 * @param value element to be found
 	 * @return position of element in collection if found, -1 otherwise
 	 */
