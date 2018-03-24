@@ -175,7 +175,6 @@ public class LinkedListIndexedCollection extends Collection {
 		ListNode nextNode = current.next;
 		previousNode.next = nextNode;
 		nextNode.previous = previousNode;
-		current = null;
 
 		size--;
 	}

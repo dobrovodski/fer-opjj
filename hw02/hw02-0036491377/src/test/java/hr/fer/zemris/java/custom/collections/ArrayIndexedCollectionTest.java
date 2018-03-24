@@ -430,7 +430,7 @@ public class ArrayIndexedCollectionTest {
 		}
 
 		class P extends Processor {
-			public String valuesString = "";
+			private String valuesString = "";
 
 			public void process(Object o) {
 				valuesString += o.toString() + " ";
