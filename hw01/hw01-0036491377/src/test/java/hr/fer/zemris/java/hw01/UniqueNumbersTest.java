@@ -7,15 +7,14 @@ import hr.fer.zemris.java.hw01.UniqueNumbers.TreeNode;
 
 /**
  * JUnit tests for UniqueNumbers.
- * 
- * @see <a href=
- *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
- *      Naming standards for unit tests </a>
- * @author matej
  *
+ * @author matej
+ * @see <a href=
+ * "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
+ * Naming standards for unit tests </a>
  */
 public class UniqueNumbersTest {
-	
+
 	@Test
 	public void AddNode_OneValueAdded_Added() {
 		TreeNode head = null;
@@ -68,14 +67,14 @@ public class UniqueNumbersTest {
 
 		Assert.assertEquals(false, UniqueNumbers.containsValue(head, 55));
 	}
-	
+
 	@Test
 	public void TreeSize_NoNodesAdded_Zero() {
 		TreeNode head = null;
 
 		Assert.assertEquals(0, UniqueNumbers.treeSize(head));
 	}
-	
+
 	@Test
 	public void TreeSize_FiveNodesAdded_Five() {
 		TreeNode head = null;

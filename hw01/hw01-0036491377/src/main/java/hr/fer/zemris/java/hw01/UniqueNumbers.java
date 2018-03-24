@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 /**
  * @author matej
- *
  */
 public class UniqueNumbers {
 
@@ -19,7 +18,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Invoked when the program is executed.
-	 * 
+	 *
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
@@ -54,7 +53,7 @@ public class UniqueNumbers {
 
 		System.out.print("Ispis od najmanjeg: ");
 		printAscending(head);
-		
+
 		System.out.print("\nIspis od najvećeg: ");
 		printDescending(head);
 
@@ -63,8 +62,8 @@ public class UniqueNumbers {
 
 	/**
 	 * Inserts a node into the given binary search tree .
-	 * 
-	 * @param head head node of the binary search tree
+	 *
+	 * @param head  head node of the binary search tree
 	 * @param value value to be inserted in the tree
 	 * @return head of the binary search tree
 	 */
@@ -83,7 +82,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Calculates the size of the given binary search tree.
-	 * 
+	 *
 	 * @param head head of the tree
 	 * @return size of the tree
 	 */
@@ -97,8 +96,8 @@ public class UniqueNumbers {
 
 	/**
 	 * Returns <code>true</code> if a given value is in the tree.
-	 * 
-	 * @param head head of the tree
+	 *
+	 * @param head  head of the tree
 	 * @param value value to be found
 	 * @return <code>true</code> if value is in tree, <code>false</code> otherwise
 	 */
@@ -118,7 +117,7 @@ public class UniqueNumbers {
 
 	/**
 	 * Prints binary search tree in an ascending order.
-	 * 
+	 *
 	 * @param head head of the tree to be printed
 	 */
 	private static void printAscending(TreeNode head) {
@@ -130,10 +129,10 @@ public class UniqueNumbers {
 		System.out.print(head.value + " ");
 		printAscending(head.right);
 	}
-	
+
 	/**
 	 * Prints binary search tree in a descending order.
-	 * 
+	 *
 	 * @param head head of the tree to be printed
 	 */
 	private static void printDescending(TreeNode head) {
@@ -145,5 +144,5 @@ public class UniqueNumbers {
 		System.out.print(head.value + " ");
 		printDescending(head.left);
 	}
-	
+
 }

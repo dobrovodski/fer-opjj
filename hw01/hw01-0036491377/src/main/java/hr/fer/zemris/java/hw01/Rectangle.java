@@ -4,13 +4,12 @@ import java.util.Scanner;
 
 /**
  * @author matej
- *
  */
 public class Rectangle {
 
 	/**
 	 * Invoked when the program is executed.
-	 * 
+	 *
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
@@ -52,9 +51,9 @@ public class Rectangle {
 
 	/**
 	 * Repeatedly asks the user for input until a non-negative number is given.
-	 * 
+	 *
 	 * @param scanner scanner used to scan user input
-	 * @param prompt prompt provided to the user
+	 * @param prompt  prompt provided to the user
 	 * @return non-negative number provided by the user
 	 */
 	private static double queryInput(Scanner scanner, String prompt) {
@@ -84,8 +83,8 @@ public class Rectangle {
 
 	/**
 	 * Calculates the area of a rectangle using its width and height.
-	 * 
-	 * @param width width of rectangle
+	 *
+	 * @param width  width of rectangle
 	 * @param height height of rectangle
 	 * @return area of rectangle
 	 */
@@ -93,14 +92,14 @@ public class Rectangle {
 		if (width < 0 || height < 0) {
 			throw new IllegalArgumentException("Pravokutnik mora imati pozitivne stranice");
 		}
-		
+
 		return width * height;
 	}
 
 	/**
 	 * Calculates the perimeter of a rectangle using its width and height.
-	 * 
-	 * @param width width of rectangle
+	 *
+	 * @param width  width of rectangle
 	 * @param height height of rectangle
 	 * @return perimeter of rectangle
 	 */
@@ -108,14 +107,14 @@ public class Rectangle {
 		if (width < 0 || height < 0) {
 			throw new IllegalArgumentException("Pravokutnik mora imati pozitivne stranice");
 		}
-		
+
 		return 2 * (width + height);
 	}
 
 	/**
 	 * Prints information about a rectangle to the standard output.
-	 * 
-	 * @param width width of rectangle
+	 *
+	 * @param width  width of rectangle
 	 * @param height height of rectangle
 	 */
 	private static void printRectangle(double width, double height) {

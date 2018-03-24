@@ -5,12 +5,11 @@ import org.junit.Test;
 
 /**
  * JUnit tests for Rectangle.
- * 
- * @see <a href=
- *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
- *      Naming standards for unit tests </a>
- * @author matej
  *
+ * @author matej
+ * @see <a href=
+ * "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
+ * Naming standards for unit tests </a>
  */
 public class RectangleTest {
 
@@ -40,7 +39,7 @@ public class RectangleTest {
 	public void RectangleArea_NegativeValueAsParameter_ExceptionThrown() {
 		Rectangle.rectangleArea(-6.3, 3);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void RectanglePerimeter_NegativeValueAsParameter_ExceptionThrown() {
 		Rectangle.rectanglePerimeter(-6.3, 3);

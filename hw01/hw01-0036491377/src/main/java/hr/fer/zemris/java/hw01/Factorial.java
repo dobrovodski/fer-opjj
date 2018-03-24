@@ -4,13 +4,12 @@ import java.util.Scanner;
 
 /**
  * @author matej
- *
  */
 public class Factorial {
 
 	/**
 	 * Invoked when the program is executed.
-	 * 
+	 *
 	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
@@ -48,7 +47,7 @@ public class Factorial {
 
 	/**
 	 * Calculates the factorial of a given number.
-	 * 
+	 *
 	 * @param num given number
 	 * @return factorial of given number
 	 * @see <a href="https://en.wikipedia.org/wiki/Factorial">Factorial</a>

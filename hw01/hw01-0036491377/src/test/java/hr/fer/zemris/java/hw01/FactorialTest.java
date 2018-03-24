@@ -5,12 +5,11 @@ import org.junit.Test;
 
 /**
  * JUnit tests for Factorial.
- * 
- * @see <a href=
- *      "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
- *      Naming standards for unit tests </a>
- * @author matej
  *
+ * @author matej
+ * @see <a href=
+ * "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html">
+ * Naming standards for unit tests </a>
  */
 public class FactorialTest {
 
