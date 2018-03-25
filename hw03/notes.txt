@@ -1,0 +1,14 @@
+Zadatak 1.
+- Lexer - leksički analizator
+- Token, TokenType
+- LexerException
+- Tekst se sastoji od: niza riječi/brojeva/simbola
+- riječ = svaki niz od jednog ili više znakova nad kojima Character.isLetter vrijedi
+- broj = svaki broj od jedne ili više znamenaka, a prikaziv u tipu Long (iznimka za >Long)
+- simbol = svaki pojedinačni znak koji se dobije izbacivanjem praznina (praznine = ništa)
+- Riječi -> String, Brojevi -> Long, Simboli -> Character
+- EOF dolazi nakon finalnog poziva obrade
+- stanja: čitanje riječi, čitanje broja, čitanje simbola (nije stanje samo po sebi), #komentar#
+
+Zadatak 2.
+- 
