@@ -6,4 +6,6 @@ public class SmartScriptParser {
 	public SmartScriptParser(String document) {
 		this.document = document;
 	}
+
+
 }

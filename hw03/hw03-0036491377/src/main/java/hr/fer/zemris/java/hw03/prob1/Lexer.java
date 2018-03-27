@@ -5,13 +5,10 @@ import java.util.Objects;
 
 public class Lexer {
 	private char[] data;
-	private Token token;
-	private int currentIndex;
-	private LexerState state;
-
 	private int index;
+	private Token token;
+	private LexerState state;
 	private boolean end;
-	private Token lastGenerated;
 
 	/**
 	 * Constructor for the Lexer class.
@@ -41,8 +38,8 @@ public class Lexer {
 		// Check EOF
 		if (index == data.length) {
 			end = true;
-			lastGenerated = new Token(TokenType.EOF, null);
-			return lastGenerated;
+			token = new Token(TokenType.EOF, null);
+			return token;
 		}
 
 		// BASIC mode
@@ -73,7 +70,7 @@ public class Lexer {
 					index++;
 				}
 
-				lastGenerated = new Token(TokenType.WORD, wordBuilder.toString());
+				token = new Token(TokenType.WORD, wordBuilder.toString());
 			} else if (Character.isDigit(data[index])) {
 				StringBuilder numBuilder = new StringBuilder();
 
@@ -84,11 +81,11 @@ public class Lexer {
 				}
 
 				long num = parseLong(numBuilder.toString());
-				lastGenerated = new Token(TokenType.NUMBER, num);
+				token = new Token(TokenType.NUMBER, num);
 			} else if (!isEmpty(data[index])) {
 				char sym = data[index];
 				index++;
-				lastGenerated = new Token(TokenType.SYMBOL, sym);
+				token = new Token(TokenType.SYMBOL, sym);
 			}
 
 		} else if (this.state == LexerState.EXTENDED) {
@@ -96,7 +93,7 @@ public class Lexer {
 
 			if (data[index] == '#') {
 				index++;
-				lastGenerated = new Token(TokenType.SYMBOL, '#');
+				token = new Token(TokenType.SYMBOL, '#');
 			} else {
 				while (index < data.length && !isEmpty(data[index])) {
 					// Glue together everything up to #
@@ -107,15 +104,15 @@ public class Lexer {
 					index++;
 				}
 
-				lastGenerated = new Token(TokenType.WORD, wordBuilder.toString());
+				token = new Token(TokenType.WORD, wordBuilder.toString());
 			}
 		}
 
-		return lastGenerated;
+		return token;
 	}
 
 	public Token getToken() {
-		return lastGenerated;
+		return token;
 	}
 
 	public void setState(LexerState state) {
