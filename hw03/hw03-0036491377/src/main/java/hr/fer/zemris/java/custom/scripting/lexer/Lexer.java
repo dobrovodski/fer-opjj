@@ -33,64 +33,46 @@ public class Lexer {
 			//special case when data starts with tag
 			if (data[index] == '{' && (index == 0 || data[index - 1] != '\\') && data[index + 1] == '$') {
 				token = new Token(TokenType.TAG_START, "{$");
+				setState(LexerState.TAG_START);
 				index += 2;
 			} else {
 				// lex until first unescaped {$
 				token = lexText();
 			}
+
+		} else if (this.state == LexerState.TAG_START) {
+			// get tag identifier (for, =, end or anything else thats a variable name)
+			skipWhitespace();
+			token = new Token(TokenType.TAG_TYPE, getTag());
+			setState(LexerState.TAG);
+
 		} else if (this.state == LexerState.TAG) {
 			skipWhitespace();
-			//special symbols
-			if (follows("FOR")) {
-				token = new Token(TokenType.TAG_TYPE, "FOR");
-				index += 3;
-			} else if (follows("=")) {
-				token = new Token(TokenType.TAG_TYPE, "=");
-				index += 1;
-			} else if (follows("END")) {
-				token = new Token(TokenType.TAG_TYPE, "END");
-				index += 3;
-			} else if (follows("$}") && data[index - 1] != '\\') {
+			if (Character.isLetter(data[index])) {
+				//identifier
+				token = new Token(TokenType.IDENTIFIER, getIdentifier());
+			} else if (isOperator(data[index])) {
+				//negative number or operator
+				if (data[index] == '-' && Character.isDigit(data[index + 1])) {
+					token = lexNumber();
+				} else {
+					token = new Token(TokenType.OPERATOR, data[index]);
+					index++;
+				}
+			} else if (data[index] == '@') {
+				token = new Token(TokenType.SYMBOL, data[index]);
+				index++;
+			} else if (Character.isDigit(data[index])) {
+				token = lexNumber();
+			} else if (data[index] == '"') {
+				//string literal
+				token = lexStringLiteral();
+			} else if (data[index] == '$' && data[index + 1] == '}') {
 				token = new Token(TokenType.TAG_END, "$}");
 				index += 2;
+				setState(LexerState.BASIC);
 			} else {
-				if (Character.isLetter(data[index])) {
-					//identifier
-					StringBuilder identifierBuilder = new StringBuilder();
-					while (!Character.isWhitespace(data[index]) && data[index] != '$') {
-						identifierBuilder.append(data[index]);
-						index++;
-					}
-					token = new Token(TokenType.IDENTIFIER, identifierBuilder.toString());
-				} else if (isOperator(data[index])) {
-					//operator
-					if (data[index] == '-' && Character.isDigit(data[index + 1])) {
-						token = lexNumber();
-					}
-					else {
-						token = new Token(TokenType.OPERATOR, data[index]);
-						index++;
-					}
-				} else if (data[index] == '@') {
-					token = new Token(TokenType.SYMBOL, data[index]);
-					index++;
-				} else if (Character.isDigit(data[index])) {
-					token = lexNumber();
-				} else if (data[index] == '"') {
-					//string literal
-					StringBuilder strBuilder = new StringBuilder();
-					while (true) {
-						strBuilder.append(data[index]);
-						index++;
-						if (data[index] == '"' && data[index - 1] != '\\') {
-							strBuilder.append(data[index]);
-							index++;
-							break;
-						}
-					}
-
-					token = new Token(TokenType.LITERAL, strBuilder.toString());
-				}
+				throw new LexerException("Could not parse symbol: " + data[index]);
 			}
 		}
 
@@ -119,10 +101,18 @@ public class Lexer {
 		StringBuilder textBuilder = new StringBuilder();
 
 		while (index < data.length) {
-
 			if (data[index] == '{') {
 				if (data[index - 1] != '\\' && data[index + 1] == '$') {
 					break;
+				}
+			}
+
+			if (data[index] == '\\') {
+				if (data[index + 1] != '{' && data[index + 1] != '\\') {
+					throw new LexerException("Cannot escape this symbol: " + data[index + 1]);
+				} else {
+					index++;
+
 				}
 			}
 
@@ -137,7 +127,12 @@ public class Lexer {
 		//number literal
 		StringBuilder numBuilder = new StringBuilder();
 		boolean dot = false;
-		while (Character.isDigit(data[index]) || data[index] == '-' || data[index] == '.') {
+		if (data[index] == '-') {
+			numBuilder.append(data[index]);
+			index++;
+		}
+
+		while (Character.isDigit(data[index]) || data[index] == '.') {
 			numBuilder.append(data[index]);
 			if (data[index] == '.') {
 				if (dot) {
@@ -147,21 +142,54 @@ public class Lexer {
 			}
 			index++;
 		}
-		return new Token(TokenType.LITERAL, numBuilder.toString());
+		return new Token(TokenType.LITERAL_NUM, numBuilder.toString());
 	}
 
-	private boolean follows(String str) {
-		char[] find = str.toCharArray();
-		int i = index;
+	private Token lexStringLiteral() {
+		StringBuilder strBuilder = new StringBuilder();
+		//skip "
+		index++;
 
-		for (char c : find) {
-			if (c != Character.toUpperCase(data[i]) || i >= data.length) {
-				return false;
+		while (true) {
+			if (data[index] == '\\') {
+				if (data[index + 1] == '\\' || data[index + 1] == '"') {
+					strBuilder.append(data[index + 1]);
+					index += 2;
+					continue;
+				}
+			} else if (data[index] == '"') {
+				index++;
+				break;
 			}
-			i++;
+
+			strBuilder.append(data[index]);
+			index++;
 		}
 
-		return true;
+		return new Token(TokenType.LITERAL_STRING, strBuilder.toString());
+	}
+
+	private String getIdentifier() {
+		if (Character.isLetter(data[index])) {
+			//identifier
+			StringBuilder identifierBuilder = new StringBuilder();
+			while (Character.isLetter(data[index]) || Character.isDigit(data[index]) || data[index] == '_') {
+				identifierBuilder.append(data[index]);
+				index++;
+			}
+			return identifierBuilder.toString();
+		} else {
+			throw new LexerException("Expected identifier but couldn't find one.");
+		}
+	}
+
+	private String getTag() {
+		if (data[index] == '=') {
+			index++;
+			return "=";
+		} else {
+			return getIdentifier();
+		}
 	}
 
 	private boolean isOperator(char c) {

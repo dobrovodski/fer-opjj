@@ -3,11 +3,13 @@ package hr.fer.zemris.java.custom.scripting.lexer;
 public enum TokenType {
 	EOF,
 	IDENTIFIER, //variables, functions
-	OPERATOR, //+ - etc
+	OPERATOR, // - + * % ^ /
 	TEXT,
-	LITERAL, //integer, double, string
+	//LITERAL, //integer, double, string
+	LITERAL_STRING,
+	LITERAL_NUM,
 	TAG_TYPE, //for, end, =
 	TAG_START, //{$
-	SYMBOL, //@
-	TAG_END //$}
+	TAG_END, //$}
+	SYMBOL //@
 }
