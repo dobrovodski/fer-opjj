@@ -111,8 +111,8 @@ public class Lexer {
 				if (data[index + 1] != '{' && data[index + 1] != '\\') {
 					throw new LexerException("Cannot escape this symbol: " + data[index + 1]);
 				} else {
+					textBuilder.append(data[index]);
 					index++;
-
 				}
 			}
 
@@ -152,16 +152,19 @@ public class Lexer {
 	private Token lexStringLiteral() {
 		StringBuilder strBuilder = new StringBuilder();
 		//skip "
+		strBuilder.append(data[index]);
 		index++;
 
 		while (true) {
 			if (data[index] == '\\') {
 				if (data[index + 1] == '\\' || data[index + 1] == '"') {
+					strBuilder.append(data[index]);
 					strBuilder.append(data[index + 1]);
 					index += 2;
 					continue;
 				}
 			} else if (data[index] == '"') {
+				strBuilder.append(data[index]);
 				index++;
 				break;
 			}

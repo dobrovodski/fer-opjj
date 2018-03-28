@@ -33,4 +33,12 @@ public class Node {
 
 		return (Node)children.get(index);
 	}
+
+	public String asText() {
+		return "";
+	}
+
+	public boolean hasEndTag() {
+		return false;
+	}
 }

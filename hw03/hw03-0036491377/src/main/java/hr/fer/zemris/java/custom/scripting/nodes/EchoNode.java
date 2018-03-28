@@ -16,4 +16,12 @@ public class EchoNode extends Node {
 	public Element[] getElements() {
 		return elements;
 	}
+
+	public String asText() {
+		StringBuilder sb = new StringBuilder();
+		for (Element el : elements) {
+			sb.append(el.asText()).append(" ");
+		}
+		return "{$= " + sb.toString() + "$}";
+	}
 }

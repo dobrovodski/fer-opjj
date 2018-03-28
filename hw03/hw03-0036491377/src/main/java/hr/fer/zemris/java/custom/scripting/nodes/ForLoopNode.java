@@ -27,4 +27,31 @@ public class ForLoopNode extends Node {
 		this.endExpression = endExpression;
 		this.stepExpression = stepExpression;
 	}
+
+	public ElementVariable getVariable() {
+		return variable;
+	}
+
+	public Element getStartExpression() {
+		return startExpression;
+	}
+
+	public Element getEndExpression() {
+		return endExpression;
+	}
+
+	public Element getStepExpression() {
+		return stepExpression;
+	}
+
+	public String asText() {
+		return "{$ FOR " + getVariable().asText() + " "
+				+ getStartExpression().asText() + " "
+				+ getEndExpression().asText() + " "
+				+ getStepExpression().asText() + " $}";
+	}
+
+	public boolean hasEndTag() {
+		return true;
+	}
 }

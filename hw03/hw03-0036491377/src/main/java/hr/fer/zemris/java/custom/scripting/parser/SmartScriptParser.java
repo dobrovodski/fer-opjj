@@ -5,7 +5,6 @@ import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.elems.*;
 import hr.fer.zemris.java.custom.scripting.lexer.Lexer;
-import hr.fer.zemris.java.custom.scripting.lexer.LexerException;
 import hr.fer.zemris.java.custom.scripting.lexer.Token;
 import hr.fer.zemris.java.custom.scripting.lexer.TokenType;
 import hr.fer.zemris.java.custom.scripting.nodes.*;
@@ -42,6 +41,18 @@ public class SmartScriptParser {
 			// Prevention so I don't fail the class :^)
 			throw new SmartScriptParserException("Something went terribly wrong while parsing.");
 		}
+
+		String x = createOriginalDocumentBody(this.documentNode);
+		System.out.println(x);
+
+		this.lexer = new Lexer(x);
+		this.stack = new ObjectStack();
+		this.documentNode = new DocumentNode();
+		parse();
+
+		String y = createOriginalDocumentBody(this.documentNode);
+
+		System.out.println(y);
 	}
 
 	public static void main(String[] args) {
@@ -67,6 +78,7 @@ public class SmartScriptParser {
 
 		DocumentNode document = parser.getDocumentNode();
 		String originalDocumentBody = createOriginalDocumentBody(document);
+
 		System.out.println(originalDocumentBody); // should write something like original
 		// content of docBody
 	}
@@ -75,8 +87,33 @@ public class SmartScriptParser {
 		return documentNode;
 	}
 
-	private static String createOriginalDocumentBody(DocumentNode document) {
-		return null;
+	private static String createOriginalDocumentBody(Node node) {
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(node.asText());
+
+		int children = node.numberOfChildren();
+		for (int i = 0; i < children; i++) {
+			textBuilder.append(createOriginalDocumentBody(node.getChild(i)));
+		}
+
+		if (node.hasEndTag()) {
+			textBuilder.append("{$END$}");
+		}
+
+		return textBuilder.toString();
+	}
+
+	;
+
+	private static String nodeToString(Node node, String str) {
+
+
+		int numChild = node.numberOfChildren();
+		for (int i = 0; i < numChild; i++) {
+			str += nodeToString(node.getChild(i), "");
+		}
+
+		return str;
 	}
 
 	private void parse() {
@@ -129,6 +166,8 @@ public class SmartScriptParser {
 						}
 						token = lexer.nextToken();
 						break;
+					default:
+						throw new SmartScriptParserException("Unexpected tag: " + token.getValue());
 				}
 
 				if (token.getType() != TokenType.TAG_END) {
@@ -138,13 +177,6 @@ public class SmartScriptParser {
 
 			token = lexer.nextToken();
 		}
-
-		System.out.print("a");
-
-	}
-
-	private void pushNode(Node node) {
-		this.stack.push(node);
 	}
 
 	private void addNode(Node node, boolean toPush) {
@@ -209,4 +241,6 @@ public class SmartScriptParser {
 
 		return element;
 	}
+
+
 }
