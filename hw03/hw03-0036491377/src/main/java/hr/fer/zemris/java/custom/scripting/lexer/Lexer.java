@@ -56,11 +56,11 @@ public class Lexer {
 				if (data[index] == '-' && Character.isDigit(data[index + 1])) {
 					token = lexNumber();
 				} else {
-					token = new Token(TokenType.OPERATOR, data[index]);
+					token = new Token(TokenType.OPERATOR, Character.toString(data[index]));
 					index++;
 				}
 			} else if (data[index] == '@') {
-				token = new Token(TokenType.SYMBOL, data[index]);
+				token = new Token(TokenType.SYMBOL, Character.toString(data[index]));
 				index++;
 			} else if (Character.isDigit(data[index])) {
 				token = lexNumber();
@@ -142,7 +142,11 @@ public class Lexer {
 			}
 			index++;
 		}
-		return new Token(TokenType.LITERAL_NUM, numBuilder.toString());
+		if (dot) {
+			return new Token(TokenType.LITERAL_DOUBLE, numBuilder.toString());
+		} else {
+			return new Token(TokenType.LITERAL_INT, numBuilder.toString());
+		}
 	}
 
 	private Token lexStringLiteral() {

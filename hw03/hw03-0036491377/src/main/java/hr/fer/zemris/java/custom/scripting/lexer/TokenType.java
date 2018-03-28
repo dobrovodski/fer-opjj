@@ -7,7 +7,8 @@ public enum TokenType {
 	TEXT,
 	//LITERAL, //integer, double, string
 	LITERAL_STRING,
-	LITERAL_NUM,
+	LITERAL_DOUBLE,
+	LITERAL_INT,
 	TAG_TYPE, //for, end, =
 	TAG_START, //{$
 	TAG_END, //$}
