@@ -200,7 +200,7 @@ public class Lexer {
 	private Token lexStringLiteral() {
 		StringBuilder strBuilder = new StringBuilder();
 		//skip "
-		strBuilder.append(data[index]);
+		//strBuilder.append(data[index]);
 		index++;
 
 		while (true) {
@@ -226,7 +226,7 @@ public class Lexer {
 					continue;
 				}
 			} else if (data[index] == '"') {
-				strBuilder.append(data[index]);
+				//strBuilder.append(data[index]);
 				index++;
 				break;
 			}

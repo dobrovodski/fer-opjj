@@ -24,10 +24,7 @@ public class SmartScriptTester {
 		String docBody;
 
 		try {
-			docBody = new String(
-					Files.readAllBytes(Paths.get(filepath)),
-					StandardCharsets.UTF_8
-			);
+			docBody = new String(Files.readAllBytes(Paths.get(filepath)), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			System.err.println("Something went wrong trying to read the file.");
 			return;
@@ -59,10 +56,9 @@ public class SmartScriptTester {
 		}
 
 		DocumentNode document2 = parser2.getDocumentNode();
-		String originalDocumentBody2 = SmartScriptParser.createOriginalDocumentBody(document2);
-		System.out.println(originalDocumentBody2);
+		String docBody2 = SmartScriptParser.createOriginalDocumentBody(document2); // Nodes should be same
 
-		System.out.println("Are these 2 document bodies the same?: " + originalDocumentBody.equals(originalDocumentBody2));
+		//System.out.println("Are the 2 document bodies the same?: " + originalDocumentBody.equals(docBody2));
 
 	}
 }

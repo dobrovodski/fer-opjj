@@ -7,6 +7,11 @@ package hr.fer.zemris.java.custom.scripting.parser;
  */
 public class SmartScriptParserException extends RuntimeException {
 	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Default constructor.
 	 */
 	public SmartScriptParserException() {

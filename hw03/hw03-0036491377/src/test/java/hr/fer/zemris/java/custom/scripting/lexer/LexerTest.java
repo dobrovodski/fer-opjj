@@ -50,10 +50,60 @@ public class LexerTest {
 				new Token(TokenType.LITERAL_INT, "1"),
 				new Token(TokenType.LITERAL_INT, "-1"),
 				new Token(TokenType.LITERAL_DOUBLE, "-1.2"),
-				new Token(TokenType.LITERAL_STRING, "\"1\""),
+				new Token(TokenType.LITERAL_STRING, "1"),
 				new Token(TokenType.LITERAL_INT, "1"),
 				new Token(TokenType.TAG_END, "$}"),
 				new Token(TokenType.TEXT, "\r\n"),
+				new Token(TokenType.EOF, null)};
+
+		checkTokenStream(lexer, correctData);
+	}
+	
+	@Test
+	public void NextToken_EscapedTag_Correct() {
+		String text = loader("lexerTests\\test_EscapedTag.txt");
+		Lexer lexer = new Lexer(text);
+
+		Token[] correctData = {
+				new Token(TokenType.TEXT, "Example \\{$=1$}. Now actually write one "),
+				new Token(TokenType.TAG_START, "{$"),
+				new Token(TokenType.TAG_TYPE, "="),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.TAG_END, "$}"),
+				new Token(TokenType.EOF, null)};
+
+		checkTokenStream(lexer, correctData);
+	}
+	
+	@Test
+	public void NextToken_EscapedInString_Correct() {
+		String text = loader("lexerTests\\test_EscapedInString.txt");
+		Lexer lexer = new Lexer(text);
+
+		Token[] correctData = {
+				new Token(TokenType.TEXT, "Example \\{$=1$}. Now actually write one "),
+				new Token(TokenType.TAG_START, "{$"),
+				new Token(TokenType.TAG_TYPE, "FOR"),
+				new Token(TokenType.LITERAL_STRING, "a\\\"\\\""),
+				new Token(TokenType.LITERAL_STRING, "\\\\"),
+				new Token(TokenType.TAG_END, "$}"),
+				new Token(TokenType.EOF, null)};
+
+		checkTokenStream(lexer, correctData);
+	}
+
+	@Test
+	public void NextToken_IllegalTagName_Tokenized() {
+		String text = loader("lexerTests\\test_IllegalTagName.txt");
+		Lexer lexer = new Lexer(text);
+
+		Token[] correctData = {
+				new Token(TokenType.TEXT, "Example \\{$=1$}. Now actually write one "),
+				new Token(TokenType.TAG_START, "{$"),
+				new Token(TokenType.TAG_TYPE, "ZOOLOŠKI"),
+				new Token(TokenType.LITERAL_STRING, "a\\\"\\\""),
+				new Token(TokenType.LITERAL_STRING, "\\\\"),
+				new Token(TokenType.TAG_END, "$}"),
 				new Token(TokenType.EOF, null)};
 
 		checkTokenStream(lexer, correctData);

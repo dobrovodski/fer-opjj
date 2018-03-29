@@ -36,6 +36,7 @@ public class Lexer {
 	 * Retrieves the next token from data.
 	 *
 	 * @return next valid token that has been found
+	 * @throws LexerException if could not get next token
 	 */
 	public Token nextToken() {
 		// Throw error if calling nextToken after end
@@ -137,6 +138,7 @@ public class Lexer {
 	 * Sets the lexer's state to the given one.
 	 *
 	 * @param state state for the lexer to be in
+	 * @throws IllegalArgumentException if trying to set state to null
 	 */
 	public void setState(LexerState state) {
 		if (state == null) {

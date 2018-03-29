@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.custom.scripting.lexer;
 
+import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.nodes.Node;
 import hr.fer.zemris.java.custom.scripting.parser.SmartScriptParser;
 
@@ -18,72 +19,54 @@ public class ParserTest {
 	public void Parse_Example_NoException() {
 		String doc = loader("parserTests\\doc1.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test
 	public void Parse_UTF8_NoException() {
 		String doc = loader("parserTests\\test_UTF8.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_IllegalForTag_ExceptionThrown() {
 		String doc = loader("parserTests\\test_IllegalForTag.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_IllegalEndTag_ExceptionThrown() {
 		String doc = loader("parserTests\\test_IllegalEndTag.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_IllegalEchoTag_ExceptionThrown() {
 		String doc = loader("parserTests\\test_IllegalEchoTag.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_MissingEndCurlyBrace_ExceptionThrown() {
 		String doc = loader("parserTests\\test_MissingEndCurlyBrace.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_ForTooManyArguments_ExceptionThrown() {
 		String doc = loader("parserTests\\test_ForTooManyArguments.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test(expected = SmartScriptParserException.class)
 	public void Parse_ForTooFewArguments_ExceptionThrown() {
 		String doc = loader("parserTests\\test_ForTooFewArguments.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test
 	public void Parse_ForThreeArguments_NoException() {
 		String doc = loader("parserTests\\test_ForThreeArguments.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
-		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
 	}
 
 	@Test
@@ -96,7 +79,6 @@ public class ParserTest {
 		SmartScriptParser p2 = new SmartScriptParser(docbody1);
 		Node docNode2 = p2.getDocumentNode();
 		String docbody2 = SmartScriptParser.createOriginalDocumentBody(docNode2);
-		System.out.println(docbody1);
 		Assert.assertEquals(docbody1, docbody2);
 	}
 
@@ -104,8 +86,19 @@ public class ParserTest {
 	public void Parse_ForLoopFunctionAsArgument_ExceptionThrown() {
 		String doc = loader("parserTests\\test_ForLoopFunctionAsArgument.txt");
 		SmartScriptParser p = new SmartScriptParser(doc);
+	}
+
+	@Test
+	public void Parse_CompareDocumentModelStructure_Same() {
+		String doc = loader("parserTests\\doc1.txt");
+		SmartScriptParser p = new SmartScriptParser(doc);
 		Node docNode = p.getDocumentNode();
-		System.out.println(SmartScriptParser.createOriginalDocumentBody(docNode));
+		ObjectStack stack = p.getStack();
+
+		Assert.assertEquals(1, stack.size());
+		Assert.assertEquals(4, docNode.numberOfChildren());
+		Assert.assertEquals(3, docNode.getChild(1).numberOfChildren());
+		Assert.assertEquals(5, docNode.getChild(3).numberOfChildren());
 	}
 
 

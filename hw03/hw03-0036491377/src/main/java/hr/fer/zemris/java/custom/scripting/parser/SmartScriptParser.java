@@ -263,7 +263,7 @@ public class SmartScriptParser {
 				try {
 					parsedInt = Integer.parseInt((String) token.getValue());
 				} catch (NumberFormatException ex) {
-					throw new SmartScriptParserException("Could not parse this value as double: " + token.getValue());
+					throw new SmartScriptParserException("Could not parse this value as integer: " + token.getValue());
 				}
 				element = new ElementConstantInteger(parsedInt);
 				break;

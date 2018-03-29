@@ -18,6 +18,6 @@ public class ElementString extends Element {
 
 	@Override
 	public String asText() {
-		return value;
+		return "\"" + value + "\"";
 	}
 }
