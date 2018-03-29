@@ -5,6 +5,7 @@ import hr.fer.zemris.java.custom.collections.EmptyStackException;
 import hr.fer.zemris.java.custom.collections.ObjectStack;
 import hr.fer.zemris.java.custom.scripting.elems.*;
 import hr.fer.zemris.java.custom.scripting.lexer.Lexer;
+import hr.fer.zemris.java.custom.scripting.lexer.LexerException;
 import hr.fer.zemris.java.custom.scripting.lexer.Token;
 import hr.fer.zemris.java.custom.scripting.lexer.TokenType;
 import hr.fer.zemris.java.custom.scripting.nodes.*;
@@ -16,19 +17,15 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class SmartScriptParser {
-	private String document;
 	private Lexer lexer;
 	private DocumentNode documentNode;
 	private ObjectStack stack;
-
-	private Node[] nodes;
 
 	public SmartScriptParser(String document) {
 		if (document == null) {
 			throw new SmartScriptParserException("Cannot pass null as parser document.");
 		}
 
-		this.document = document;
 		this.lexer = new Lexer(document);
 		this.stack = new ObjectStack();
 		this.documentNode = new DocumentNode();
@@ -38,21 +35,8 @@ public class SmartScriptParser {
 		} catch (SmartScriptParserException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			// Prevention so I don't fail the class :^)
-			throw new SmartScriptParserException("Something went terribly wrong while parsing.");
+			throw new SmartScriptParserException("Something went wrong while parsing.");
 		}
-
-		String x = createOriginalDocumentBody(this.documentNode);
-		System.out.println(x);
-
-		this.lexer = new Lexer(x);
-		this.stack = new ObjectStack();
-		this.documentNode = new DocumentNode();
-		parse();
-
-		String y = createOriginalDocumentBody(this.documentNode);
-
-		System.out.println(y);
 	}
 
 	public static void main(String[] args) {
@@ -83,11 +67,11 @@ public class SmartScriptParser {
 		// content of docBody
 	}
 
-	private DocumentNode getDocumentNode() {
+	public DocumentNode getDocumentNode() {
 		return documentNode;
 	}
 
-	private static String createOriginalDocumentBody(Node node) {
+	public static String createOriginalDocumentBody(Node node) {
 		StringBuilder textBuilder = new StringBuilder();
 		textBuilder.append(node.asText());
 
@@ -103,19 +87,6 @@ public class SmartScriptParser {
 		return textBuilder.toString();
 	}
 
-	;
-
-	private static String nodeToString(Node node, String str) {
-
-
-		int numChild = node.numberOfChildren();
-		for (int i = 0; i < numChild; i++) {
-			str += nodeToString(node.getChild(i), "");
-		}
-
-		return str;
-	}
-
 	private void parse() {
 		this.stack.push(this.documentNode);
 		Token token = lexer.nextToken();
@@ -125,7 +96,11 @@ public class SmartScriptParser {
 			if (token.getType() == TokenType.TEXT) {
 				addNode(new TextNode((String) token.getValue()), false);
 			} else if (token.getType() == TokenType.TAG_START) {
-				token = lexer.nextToken();
+				try {
+					token = lexer.nextToken();
+				} catch (LexerException ex) {
+					throw new SmartScriptParserException("Something went wrong while lexing. Check tags (i.e. names, symbols).");
+				}
 
 				if (token.getType() != TokenType.TAG_TYPE) {
 					throw new SmartScriptParserException("Tag starts with invalid token: " + token.getValue());
@@ -134,17 +109,28 @@ public class SmartScriptParser {
 				switch (token.getValue().toString().toUpperCase()) {
 					case "FOR":
 						ArrayIndexedCollection forParams = new ArrayIndexedCollection();
-						for (int i = 0; i < 4; i++) {
+						final int MAX_ARG = 4;
+						boolean endedEarly = false;
+						for (int i = 0; i < MAX_ARG; i++) {
 							token = lexer.nextToken();
 							if (token.getType() == TokenType.TAG_END) {
-								forParams.add(null);
+								endedEarly = true;
 								break;
 							}
 							Element element = tokenToElement(token);
 							forParams.add(element);
 						}
-						token = lexer.nextToken();
-						addNode(new ForLoopNode((ElementVariable) forParams.get(0), (Element) forParams.get(1), (Element) forParams.get(2), (Element) forParams.get(3)), true);
+						if (!endedEarly) {
+							token = lexer.nextToken();
+						}
+						ElementVariable variable = (ElementVariable) forParams.get(0);
+						Element startExpression = (Element) forParams.get(1);
+						Element endExpression =  (Element) forParams.get(2);
+						Element stepExpression = forParams.size() == 4 ? (Element) forParams.get(3) : null;
+						if (!(isValidForLoopParam(startExpression) && isValidForLoopParam(endExpression) && isValidForLoopParam(stepExpression))) {
+							throw new SmartScriptParserException("For loop parameters aren't the correct type.");
+						}
+						addNode(new ForLoopNode(variable, startExpression, endExpression, stepExpression), true);
 						break;
 					case "=":
 						token = lexer.nextToken();
@@ -190,6 +176,14 @@ public class SmartScriptParser {
 		if (toPush) {
 			stack.push(node);
 		}
+	}
+
+	private boolean isValidForLoopParam(Element e) {
+		return (e instanceof ElementVariable
+				|| e instanceof ElementString
+				|| e instanceof ElementConstantDouble
+				|| e instanceof ElementConstantInteger
+				|| e == null);
 	}
 
 	private Element tokenToElement(Token token) {
@@ -241,6 +235,4 @@ public class SmartScriptParser {
 
 		return element;
 	}
-
-
 }

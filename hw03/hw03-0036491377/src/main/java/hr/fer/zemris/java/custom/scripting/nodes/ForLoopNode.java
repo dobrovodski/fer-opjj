@@ -18,7 +18,7 @@ public class ForLoopNode extends Node {
 			throw new NullPointerException("Cannot set startExpression to null.");
 		}
 
-		if (stepExpression == null) {
+		if (endExpression == null) {
 			throw new NullPointerException("Cannot set endExpression to null.");
 		}
 
@@ -45,10 +45,11 @@ public class ForLoopNode extends Node {
 	}
 
 	public String asText() {
+		String step = getStepExpression() == null ? "" : getStepExpression().asText();
 		return "{$ FOR " + getVariable().asText() + " "
 				+ getStartExpression().asText() + " "
 				+ getEndExpression().asText() + " "
-				+ getStepExpression().asText() + " $}";
+				+ step + " $}";
 	}
 
 	public boolean hasEndTag() {

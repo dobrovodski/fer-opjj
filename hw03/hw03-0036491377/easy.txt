@@ -1,0 +1,20 @@
+To start if off, an easy one:
+{$ FOR i -1 10 1 $} {$END$}
+
+You want a number? Here's a string instead.
+{$ FOR i"-1" 10 1 $} {$END$}
+
+Wow, i love this language.
+{$ FOR i "-1"10 1 $} {$END$}
+
+Seriously?
+{$ FOR i"1""10""1"$} {$END$}
+
+Looks unreadable to me.
+{$=@decfmt"hellothere"123"10"$}
+
+Are you sure about this? \\
+\{$=-10"20"534$}
+
+It has to work, right?
+{$ = "this" "is" "hell" "\"\"" "\\\\"$}

@@ -1,108 +1,88 @@
 package hr.fer.zemris.java.custom.scripting.lexer;
 
 import org.junit.Test;
-import org.junit.Assert;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
 public class LexerTest {
 
 	@Test
-	public void testLexer() {
-		Lexer lexer = new Lexer("{$ FoR i 1 10 1 $}\n" +
-				" This is {$= i $}-th time this message is generated.\n" +
-				"{$END$}\n" +
-				"{$FOR i 0 10 2 $}\n" +
-				" sin({$=i$}^2) = {$= i i * @sin \"0.000\" @decfmt $}\n" +
-				"{$END$}");
+	public void NextToken_BasicExample_Correct() {
+		String text = loader("lexerTests\\test_BasicExample.txt");
+		Lexer lexer = new Lexer(text);
 
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "FOR"));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "1"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "10"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "1"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "\n This is "));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "="));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "-th time this message is generated.\n"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "END"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "\n"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "FOR"));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "0"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "10"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "2"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "\n sin("));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "="));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "^2) = "));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "="));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "i"));
-		checkToken(lexer.nextToken(), new Token(TokenType.OPERATOR, '*'));
-		checkToken(lexer.nextToken(), new Token(TokenType.SYMBOL, '@'));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "sin"));
-		checkToken(lexer.nextToken(), new Token(TokenType.LITERAL, "\"0.000\""));
-		checkToken(lexer.nextToken(), new Token(TokenType.SYMBOL, '@'));
-		checkToken(lexer.nextToken(), new Token(TokenType.IDENTIFIER, "decfmt"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.TEXT, "\n"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_START, "{$"));
-		lexer.setState(LexerState.TAG);
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_TYPE, "END"));
-		checkToken(lexer.nextToken(), new Token(TokenType.TAG_END, "$}"));
-		lexer.setState(LexerState.BASIC);
-		checkToken(lexer.nextToken(), new Token(TokenType.EOF, null));
+		Token[] correctData = {
+				new Token(TokenType.TEXT, "This is sample text.\r\n"),
+				new Token(TokenType.TAG_START, "{$"),
+				new Token(TokenType.TAG_TYPE, "FOR"),
+				new Token(TokenType.IDENTIFIER, "i"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "10"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.TAG_END, "$}"),
+				new Token(TokenType.TEXT, "\r\n"),
+				new Token(TokenType.EOF, null)};
+
+		checkTokenStream(lexer, correctData);
 	}
 
 	@Test
-	public void testLexer2() {
-		Lexer lexer = new Lexer("Example \\{$=1$}. Now actually write one {$=1$}");
-		Token[] t = new Token[30];
-		int i = 0;
-		Token n;
-		while (true) {
-			n = lexer.nextToken();
-			if (n.getType() == TokenType.TAG_START) {
-				lexer.setState(LexerState.TAG);
-			}
-			if (n.getType() == TokenType.TAG_END){
-				lexer.setState(LexerState.BASIC);
-			}
-			t[i++] = n;
-			if (n.getType() == TokenType.EOF) {
-				break;
-			}
-		}
-		int z = 1;
+	public void NextToken_LongForLoop_Correct() {
+		String text = loader("lexerTests\\test_LongForLoop.txt");
+		Lexer lexer = new Lexer(text);
+
+		Token[] correctData = {
+				new Token(TokenType.TEXT, "This is sample text.\r\n"),
+				new Token(TokenType.TAG_START, "{$"),
+				new Token(TokenType.TAG_TYPE, "FOR"),
+				new Token(TokenType.IDENTIFIER, "i"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "10"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.LITERAL_INT, "-1"),
+				new Token(TokenType.LITERAL_DOUBLE, "-1.2"),
+				new Token(TokenType.LITERAL_STRING, "\"1\""),
+				new Token(TokenType.LITERAL_INT, "1"),
+				new Token(TokenType.TAG_END, "$}"),
+				new Token(TokenType.TEXT, "\r\n"),
+				new Token(TokenType.EOF, null)};
+
+		checkTokenStream(lexer, correctData);
 	}
 
-	private void checkToken(Token actual, Token expected) {
-		String msg = "Token are not equal.";
-		assertEquals(msg, expected.getType(), actual.getType());
-		assertEquals(msg, expected.getValue(), actual.getValue());
+	private String loader(String filename) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try (InputStream is =
+				     this.getClass().getClassLoader().getResourceAsStream(filename)) {
+			byte[] buffer = new byte[1024];
+			while (true) {
+				int read = is.read(buffer);
+				if (read < 1) break;
+				bos.write(buffer, 0, read);
+			}
+			return new String(bos.toByteArray(), StandardCharsets.UTF_8);
+		} catch (IOException ex) {
+			return null;
+		}
+	}
+
+	private void checkTokenStream(Lexer lexer, Token[] correctData) {
+		int counter = 0;
+		for (Token expected : correctData) {
+			Token actual = lexer.nextToken();
+			String msg = "Checking token " + counter + ":";
+			assertEquals(msg, expected.getType(), actual.getType());
+			assertEquals(msg, expected.getValue(), actual.getValue());
+			counter++;
+		}
 	}
 }

@@ -157,9 +157,23 @@ public class Lexer {
 
 		while (true) {
 			if (data[index] == '\\') {
+				boolean escaped = false;
 				if (data[index + 1] == '\\' || data[index + 1] == '"') {
 					strBuilder.append(data[index]);
 					strBuilder.append(data[index + 1]);
+					escaped = true;
+				} else if (data[index + 1] == 'n') {
+					strBuilder.append('\n');
+					escaped = true;
+				} else if (data[index + 1] == 'r') {
+					strBuilder.append('\r');
+					escaped = true;
+				} else if (data[index + 1] == 't') {
+					strBuilder.append('\t');
+					escaped = true;
+				}
+
+				if (escaped) {
 					index += 2;
 					continue;
 				}
