@@ -10,20 +10,20 @@ public class EmptyStackException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Default constructor.
+	 */
 	public EmptyStackException() {
 		super();
 	}
 
+	/**
+	 * Constructor which accepts message to display in output.
+	 *
+	 * @param message message to be shown
+	 */
 	public EmptyStackException(String message) {
 		super(message);
-	}
-
-	public EmptyStackException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public EmptyStackException(Throwable cause) {
-		super(cause);
 	}
 
 }

@@ -13,6 +13,10 @@ import java.nio.file.Paths;
  * Demo class for the {@code SmartScriptParser} class
  */
 public class SmartScriptTester {
+	/**
+	 * Main method
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 
 		if (args.length != 1) {

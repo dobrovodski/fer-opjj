@@ -8,6 +8,10 @@ package hr.fer.zemris.java.custom.collections;
  */
 public class Processor {
 
+	/**
+	 * Method to be overriden which is called on a given value
+	 * @param value value to be processed
+	 */
 	public void process(Object value) {
 
 	}
