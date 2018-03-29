@@ -16,11 +16,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * Parser class for a custom scripting language.
+ *
+ * @author matej
+ */
 public class SmartScriptParser {
+	// Lexer object used to tokenize input
 	private Lexer lexer;
+	// Initial tree node for parsing tree
 	private DocumentNode documentNode;
+	// Stack used for turning tokens into tree
 	private ObjectStack stack;
 
+	/**
+	 * Constructor for the parser. Takes in script in the form of a {@code String} and throws an error if parsing
+	 * was unsuccessful.
+	 *
+	 * @param document script to parse
+	 * @throws SmartScriptParserException thrown if script couldn't be parsed or if the {@code document} was null
+	 */
 	public SmartScriptParser(String document) {
 		if (document == null) {
 			throw new SmartScriptParserException("Cannot pass null as parser document.");
@@ -67,10 +82,21 @@ public class SmartScriptParser {
 		// content of docBody
 	}
 
+	/**
+	 * Returns the top node of the document model.
+	 *
+	 * @return node representing an entire document
+	 */
 	public DocumentNode getDocumentNode() {
 		return documentNode;
 	}
 
+	/**
+	 * Recreates the original document such that it is parsable again in the same way.
+	 *
+	 * @param node node representing the entire document
+	 * @return {@code string} representing the original script
+	 */
 	public static String createOriginalDocumentBody(Node node) {
 		StringBuilder textBuilder = new StringBuilder();
 		textBuilder.append(node.asText());
@@ -87,6 +113,9 @@ public class SmartScriptParser {
 		return textBuilder.toString();
 	}
 
+	/**
+	 * Used for actual parsing of the script.
+	 */
 	private void parse() {
 		this.stack.push(this.documentNode);
 		Token token = lexer.nextToken();
@@ -125,11 +154,13 @@ public class SmartScriptParser {
 						}
 						ElementVariable variable = (ElementVariable) forParams.get(0);
 						Element startExpression = (Element) forParams.get(1);
-						Element endExpression =  (Element) forParams.get(2);
+						Element endExpression = (Element) forParams.get(2);
 						Element stepExpression = forParams.size() == 4 ? (Element) forParams.get(3) : null;
+
 						if (!(isValidForLoopParam(startExpression) && isValidForLoopParam(endExpression) && isValidForLoopParam(stepExpression))) {
 							throw new SmartScriptParserException("For loop parameters aren't the correct type.");
 						}
+
 						addNode(new ForLoopNode(variable, startExpression, endExpression, stepExpression), true);
 						break;
 					case "=":
@@ -150,6 +181,7 @@ public class SmartScriptParser {
 						if (stack.size() < 1) {
 							throw new SmartScriptParserException("Script has more END tags than non-empty tags.");
 						}
+
 						token = lexer.nextToken();
 						break;
 					default:
@@ -165,6 +197,12 @@ public class SmartScriptParser {
 		}
 	}
 
+	/**
+	 * Adds given node to the node at the top of the stack and optionally pushes new node on stack.
+	 *
+	 * @param node   node to add
+	 * @param toPush {@code true} if the node is to be pushed on top of the stack, {@code false} otherwise
+	 */
 	private void addNode(Node node, boolean toPush) {
 		try {
 			Node top = (Node) stack.peek();
@@ -178,6 +216,12 @@ public class SmartScriptParser {
 		}
 	}
 
+	/**
+	 * Checks validity of the parameter for the FOR tag.
+	 *
+	 * @param e element to check
+	 * @return {@code true} if valid
+	 */
 	private boolean isValidForLoopParam(Element e) {
 		return (e instanceof ElementVariable
 				|| e instanceof ElementString
@@ -186,6 +230,12 @@ public class SmartScriptParser {
 				|| e == null);
 	}
 
+	/**
+	 * Converts given token into the appropriate {@code element}.
+	 *
+	 * @param token token to be converted
+	 * @return element that represents the given token
+	 */
 	private Element tokenToElement(Token token) {
 		Element element;
 
@@ -234,5 +284,14 @@ public class SmartScriptParser {
 		}
 
 		return element;
+	}
+
+	/**
+	 * Returns the stack in which the document model is stored.
+	 *
+	 * @return stack with document model
+	 */
+	public ObjectStack getStack() {
+		return stack;
 	}
 }

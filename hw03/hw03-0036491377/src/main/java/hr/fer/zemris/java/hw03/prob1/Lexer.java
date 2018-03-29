@@ -1,19 +1,27 @@
 package hr.fer.zemris.java.hw03.prob1;
 
-import java.util.Arrays;
-import java.util.Objects;
-
+/**
+ * Lexer class used to turn given text into tokens.
+ *
+ * @author matej
+ */
 public class Lexer {
+	// Data given to the lexer to tokenize
 	private char[] data;
+	// Current position in data
 	private int index;
+	// Latest generated token
 	private Token token;
+	// Current state of the lexer
 	private LexerState state;
+	// Keeps track whether the tokenization process has finished
 	private boolean end;
 
 	/**
 	 * Constructor for the Lexer class.
 	 *
 	 * @param text text that will be checked for lexical errors
+	 * @throws IllegalAccessException if the text is null
 	 */
 	public Lexer(String text) {
 		if (text == null) {
@@ -24,6 +32,11 @@ public class Lexer {
 		this.state = LexerState.BASIC;
 	}
 
+	/**
+	 * Retrieves the next token from data.
+	 *
+	 * @return next valid token that has been found
+	 */
 	public Token nextToken() {
 		// Throw error if calling nextToken after end
 		if (end) {
@@ -111,10 +124,20 @@ public class Lexer {
 		return token;
 	}
 
+	/**
+	 * Returns the last found token.
+	 *
+	 * @return last found token
+	 */
 	public Token getToken() {
 		return token;
 	}
 
+	/**
+	 * Sets the lexer's state to the given one.
+	 *
+	 * @param state state for the lexer to be in
+	 */
 	public void setState(LexerState state) {
 		if (state == null) {
 			throw new IllegalArgumentException("Cannot set state to null.");
@@ -123,10 +146,23 @@ public class Lexer {
 		this.state = state;
 	}
 
+	/**
+	 * Wrapper for {@code Character.isWhitespace}.
+	 *
+	 * @param character character to be checked
+	 * @return {@code true} if character is whitespace, {@code false} otherwise
+	 */
 	private boolean isEmpty(char character) {
 		return Character.isWhitespace(character);
 	}
 
+	/**
+	 * Attempts to parse given string as a long number.
+	 *
+	 * @param str string to be parsed
+	 * @return number that the string was parsed to
+	 * @throws LexerException if the string could not be parsed
+	 */
 	private long parseLong(String str) {
 		long num;
 
@@ -139,6 +175,12 @@ public class Lexer {
 		return num;
 	}
 
+	/**
+	 * Check if character is escape symbol.
+	 *
+	 * @param character character to be checked
+	 * @return {@code true} if character is escape symbol, {@code false} otherwise
+	 */
 	private boolean isEscape(char character) {
 		return character == '\\';
 	}
