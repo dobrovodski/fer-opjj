@@ -4,7 +4,7 @@ import hr.fer.zemris.java.custom.collections.Dictionary;
 import hr.fer.zemris.lsystems.LSystem;
 import hr.fer.zemris.lsystems.LSystemBuilder;
 import hr.fer.zemris.lsystems.Painter;
-import hr.fer.zemris.lsystems.impl.commands.DrawCommand;
+import hr.fer.zemris.lsystems.impl.commands.*;
 import hr.fer.zemris.math.Vector2D;
 
 import java.awt.*;
@@ -82,6 +82,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	private class LSystemImpl implements LSystem {
+
 		@Override
 		public String generate(int n) {
 			String generated = axiom;
@@ -93,6 +94,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					String prod = (String) actions.get(c);
 
 					if (prod == null) {
+						sb.append(c);
 						continue;
 					}
 
@@ -116,31 +118,47 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				char c = generated.charAt(pos);
 				String command = (String) commands.get(c);
 
-				if (command != null) {
+				if (command == null) {
 					continue;
 				}
 				//TODO: strings to enum
 				String[] split = command.split(" ");
 				String type = split[0].toLowerCase();
 				switch (type) {
-					case "draw":
-						double step = Double.parseDouble(split[1]);
-						new DrawCommand(step);
+					case "draw": {
+						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						new DrawCommand(step).execute(ctx, painter);
 						break;
-					case "skip":
+					}
+					case "skip": {
+						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						new SkipCommand(step).execute(ctx, painter);
 						break;
-					case "scale":
+					}
+					case "scale": {
+						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						new ScaleCommand(step).execute(ctx, painter);
 						break;
-					case "rotate":
+					}
+					case "rotate": {
+						double angle = Double.parseDouble(split[1]);
+						new RotateCommand(angle).execute(ctx, painter);
 						break;
-					case "push":
+					}
+					case "push": {
+						new PushCommand().execute(ctx, painter);
 						break;
-					case "pop":
+					}
+					case "pop": {
+						new PopCommand().execute(ctx, painter);
 						break;
-					case "color":
+					}
+					case "color": {
+						String color = split[1];
+						new ColorCommand(Color.decode("#" + color)).execute(ctx, painter);
 						break;
+					}
 				}
-				System.out.println("AA");
 			}
 
 
