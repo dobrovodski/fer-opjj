@@ -10,22 +10,32 @@ import hr.fer.zemris.math.Vector2D;
 import java.awt.*;
 
 public class LSystemBuilderImpl implements LSystemBuilder {
+	private final Color DEFAULT_COLOR = new Color(0, 0, 0);
+	private final double DEFAULT_UNIT = 0.1;
+	private final double DEFAULT_SCALAR = 1;
+	private final double DEFAULT_ANGLE = 0;
+	private final Vector2D DEFAULT_ORIGIN = new Vector2D(0, 0);
+	private final String DEFAULT_AXIOM = "";
+
 	private Dictionary commands;
 	private Dictionary actions;
 	private double unitLength;
 	private double unitLengthScalar;
 	private Vector2D origin;
 	private double angle;
-	protected String axiom;
+	private String axiom;
+	private Color color;
 
 	public LSystemBuilderImpl() {
 		commands = new Dictionary();
 		actions = new Dictionary();
-		unitLength = 0.1;
-		unitLengthScalar = 1;
-		origin = new Vector2D(0, 0);
-		angle = 0;
-		axiom = "";
+
+		unitLength = DEFAULT_UNIT;
+		unitLengthScalar = DEFAULT_SCALAR;
+		origin = DEFAULT_ORIGIN;
+		angle = DEFAULT_ANGLE;
+		axiom = DEFAULT_AXIOM;
+		color = DEFAULT_COLOR;
 	}
 
 	@Override
@@ -111,7 +121,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 		public void draw(int i, Painter painter) {
 			String generated = generate(i);
 			Context ctx = new Context();
-			TurtleState ts = new TurtleState(origin, new Vector2D(1, 0).rotated(angle), new Color(0, 0, 0), unitLength);
+			TurtleState ts = new TurtleState(origin, new Vector2D(1, 0).rotated(angle), color, unitLength);
 			ctx.pushState(ts);
 
 			for (int pos = 0; pos < generated.length(); pos++) {
