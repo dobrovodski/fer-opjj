@@ -83,16 +83,16 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	@Override
 	public LSystemBuilder configureFromText(String[] strings) {
 		for (String line : strings) {
-			line = line.trim().replaceAll("\\s", " ");
+			line = line.trim().replaceAll("\\s+", " ");
 			if (line.length() == 0) {
 				continue;
 			}
 
-			String[] tokens = line.split(" ");
+			String[] tokens = line.split(" ", 2);
 			DirectiveType type = DirectiveType.getType(tokens[0]);
 			switch (type) {
 				case ANGLE: {
-					double angle = Double.parseDouble(tokens[1]);
+					double angle = parseNumber(tokens[1]);
 					this.setAngle(angle);
 					break;
 				}
@@ -102,30 +102,34 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					break;
 				}
 				case ORIGIN: {
-					double x = Double.parseDouble(tokens[1]);
-					double y = Double.parseDouble(tokens[2]);
+					// Assuming that the origin points can't be fractional
+					String[] numbers = tokens[1].split(" ");
+					double x = Double.parseDouble(numbers[0]);
+					double y = Double.parseDouble(numbers[1]);
 					this.setOrigin(x, y);
 					break;
 				}
 				case SCALAR: {
-					double scalar = Double.parseDouble(tokens[1]);
+					double scalar = parseNumber(tokens[1]);
 					this.setUnitLengthDegreeScaler(scalar);
 					break;
 				}
 				case COMMAND: {
-					char name = tokens[1].charAt(0);
-					String command = tokens[2];
+					String[] commandTokens = tokens[1].split(" ", 2);
+					char name = commandTokens[0].charAt(0);
+					String command = commandTokens[1];
 					this.registerCommand(name, command);
 					break;
 				}
 				case PRODUCTION: {
-					char name = tokens[1].charAt(0);
-					String production = tokens[2];
+					String[] productionTokens = tokens[1].split(" ", 2);
+					char name = productionTokens[0].charAt(0);
+					String production = productionTokens[1];
 					this.registerProduction(name, production);
 					break;
 				}
 				case UNIT_LENGTH: {
-					double step = Double.parseDouble(tokens[1]);
+					double step = parseNumber(tokens[1]);
 					this.setUnitLength(step);
 					break;
 				}
@@ -175,27 +179,30 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				char c = generated.charAt(pos);
 				String command = (String) commands.get(c);
 
-				String[] split = command.split(" ");
-				CommandType type = CommandType.getType(split[0]);
+				if (command == null) {
+					continue;
+				}
+
+				String[] tokens = command.split(" ", 2);
+				CommandType type = CommandType.getType(tokens[0]);
 				switch (type) {
 					case DRAW: {
-						//double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
-						double step = Double.parseDouble("1.0/3.0");
+						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new DrawCommand(step).execute(ctx, painter);
 						break;
 					}
 					case SKIP: {
-						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new SkipCommand(step).execute(ctx, painter);
 						break;
 					}
 					case SCALE: {
-						double scale = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						double scale = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new ScaleCommand(scale).execute(ctx, painter);
 						break;
 					}
 					case ROTATE: {
-						double angle = Double.parseDouble(split[1]);
+						double angle = parseNumber(tokens[1]);
 						new RotateCommand(angle).execute(ctx, painter);
 						break;
 					}
@@ -208,12 +215,20 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 						break;
 					}
 					case COLOR: {
-						String color = split[1];
+						String color = tokens[1];
 						new ColorCommand(Color.decode("#" + color)).execute(ctx, painter);
 						break;
 					}
 				}
 			}
 		}
+	}
+
+	double parseNumber(String num) {
+		if (num.contains("/")) {
+			String[] digits = num.split("/");
+			return Double.parseDouble(digits[0]) / Double.parseDouble(digits[1]);
+		}
+		return Double.parseDouble(num);
 	}
 }
