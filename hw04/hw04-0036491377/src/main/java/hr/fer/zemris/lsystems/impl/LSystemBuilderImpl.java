@@ -82,8 +82,57 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	@Override
 	public LSystemBuilder configureFromText(String[] strings) {
-		return null;
-		//return this;
+		for (String line : strings) {
+			line = line.trim().replaceAll("\\s", " ");
+			if (line.length() == 0) {
+				continue;
+			}
+
+			String[] tokens = line.split(" ");
+			DirectiveType type = DirectiveType.getType(tokens[0]);
+			switch (type) {
+				case ANGLE: {
+					double angle = Double.parseDouble(tokens[1]);
+					this.setAngle(angle);
+					break;
+				}
+				case AXIOM: {
+					String axiom = tokens[1];
+					this.setAxiom(axiom);
+					break;
+				}
+				case ORIGIN: {
+					double x = Double.parseDouble(tokens[1]);
+					double y = Double.parseDouble(tokens[2]);
+					this.setOrigin(x, y);
+					break;
+				}
+				case SCALAR: {
+					double scalar = Double.parseDouble(tokens[1]);
+					this.setUnitLengthDegreeScaler(scalar);
+					break;
+				}
+				case COMMAND: {
+					char name = tokens[1].charAt(0);
+					String command = tokens[2];
+					this.registerCommand(name, command);
+					break;
+				}
+				case PRODUCTION: {
+					char name = tokens[1].charAt(0);
+					String production = tokens[2];
+					this.registerProduction(name, production);
+					break;
+				}
+				case UNIT_LENGTH: {
+					double step = Double.parseDouble(tokens[1]);
+					this.setUnitLength(step);
+					break;
+				}
+			}
+		}
+
+		return this;
 	}
 
 	@Override
@@ -92,7 +141,6 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	private class LSystemImpl implements LSystem {
-
 		@Override
 		public String generate(int n) {
 			String generated = axiom;
@@ -107,10 +155,8 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 						sb.append(c);
 						continue;
 					}
-
 					sb.append(prod);
 				}
-
 				generated = sb.toString();
 			}
 
@@ -121,6 +167,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 		public void draw(int i, Painter painter) {
 			String generated = generate(i);
 			Context ctx = new Context();
+
 			TurtleState ts = new TurtleState(origin, new Vector2D(1, 0).rotated(angle), color, unitLength);
 			ctx.pushState(ts);
 
@@ -128,50 +175,45 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				char c = generated.charAt(pos);
 				String command = (String) commands.get(c);
 
-				if (command == null) {
-					continue;
-				}
-				//TODO: strings to enum
 				String[] split = command.split(" ");
-				String type = split[0].toLowerCase();
+				CommandType type = CommandType.getType(split[0]);
 				switch (type) {
-					case "draw": {
-						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+					case DRAW: {
+						//double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						double step = Double.parseDouble("1.0/3.0");
 						new DrawCommand(step).execute(ctx, painter);
 						break;
 					}
-					case "skip": {
+					case SKIP: {
 						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
 						new SkipCommand(step).execute(ctx, painter);
 						break;
 					}
-					case "scale": {
-						double step = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
-						new ScaleCommand(step).execute(ctx, painter);
+					case SCALE: {
+						double scale = Double.parseDouble(split[1]) * Math.pow(unitLengthScalar, i);
+						new ScaleCommand(scale).execute(ctx, painter);
 						break;
 					}
-					case "rotate": {
+					case ROTATE: {
 						double angle = Double.parseDouble(split[1]);
 						new RotateCommand(angle).execute(ctx, painter);
 						break;
 					}
-					case "push": {
+					case PUSH: {
 						new PushCommand().execute(ctx, painter);
 						break;
 					}
-					case "pop": {
+					case POP: {
 						new PopCommand().execute(ctx, painter);
 						break;
 					}
-					case "color": {
+					case COLOR: {
 						String color = split[1];
 						new ColorCommand(Color.decode("#" + color)).execute(ctx, painter);
 						break;
 					}
 				}
 			}
-
-
 		}
 	}
 }
