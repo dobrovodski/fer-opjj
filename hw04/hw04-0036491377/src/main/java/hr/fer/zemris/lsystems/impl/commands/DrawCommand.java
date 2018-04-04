@@ -8,6 +8,9 @@ import hr.fer.zemris.math.Vector2D;
 
 import java.awt.Color;
 
+/**
+ *
+ */
 public class DrawCommand implements Command {
 	private double step;
 	private final static float DEFAULT_SIZE = 1.0f;
@@ -21,11 +24,11 @@ public class DrawCommand implements Command {
 		TurtleState current = ctx.getCurrentState();
 		Color color = current.getColor();
 		Vector2D pos = current.getPosition();
-		Vector2D d = current.getDirection().scaled(step);
+		Vector2D d = current.getDirection().scaled(step).scaled(current.getLength());
 		Vector2D nextPos = pos.translated(d);
 
-		Vector2D truePos = pos.scaled(current.getLength());
-		Vector2D trueNextPos = nextPos.scaled(current.getLength());
+		Vector2D truePos = pos;
+		Vector2D trueNextPos = nextPos;
 
 		painter.drawLine(truePos.getX(), truePos.getY(), trueNextPos.getX(), trueNextPos.getY(), color, DEFAULT_SIZE);
 

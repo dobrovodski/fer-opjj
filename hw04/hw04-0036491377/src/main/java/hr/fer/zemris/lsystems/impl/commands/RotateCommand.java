@@ -6,6 +6,9 @@ import hr.fer.zemris.lsystems.impl.Context;
 import hr.fer.zemris.lsystems.impl.TurtleState;
 import hr.fer.zemris.math.Vector2D;
 
+/**
+ *
+ */
 public class RotateCommand implements Command {
 	private double angle;
 

@@ -8,6 +8,9 @@ import hr.fer.zemris.math.Vector2D;
 
 import java.awt.Color;
 
+/**
+ *
+ */
 public class SkipCommand implements Command {
 	private double step;
 

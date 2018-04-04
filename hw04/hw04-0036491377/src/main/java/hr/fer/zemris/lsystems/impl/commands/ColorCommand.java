@@ -7,6 +7,9 @@ import hr.fer.zemris.lsystems.impl.TurtleState;
 
 import java.awt.Color;
 
+/**
+ *
+ */
 public class ColorCommand implements Command {
 	private Color color;
 

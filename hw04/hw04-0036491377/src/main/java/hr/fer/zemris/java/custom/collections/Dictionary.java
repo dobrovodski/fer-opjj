@@ -2,31 +2,58 @@ package hr.fer.zemris.java.custom.collections;
 
 import java.util.Objects;
 
+/**
+ *
+ */
 public class Dictionary {
+	/**
+	 *
+	 */
 	private static class Entry {
-		public Object key;
-		public Object value;
+		//
+		Object key;
+		//
+		Object value;
 	}
 
+	//
 	private ArrayIndexedCollection entries;
 
-
+	/**
+	 *
+	 */
 	public Dictionary() {
 		entries = new ArrayIndexedCollection();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isEmpty() {
 		return entries.isEmpty();
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int size() {
 		return entries.size();
 	}
 
+	/**
+	 *
+	 */
 	public void clear() {
 		entries.clear();
 	}
 
+	/**
+	 *
+	 * @param key
+	 * @param value
+	 */
 	public void put(Object key, Object value) {
 		Objects.requireNonNull(key, "Key cannot be null.");
 
@@ -47,6 +74,11 @@ public class Dictionary {
 		entries.add(entry);
 	}
 
+	/**
+	 *
+	 * @param key
+	 * @return
+	 */
 	public Object get(Object key) {
 		Objects.requireNonNull(key, "Key cannot be null.");
 		Entry current;

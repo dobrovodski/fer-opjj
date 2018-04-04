@@ -7,7 +7,7 @@ command F draw 1
 command + rotate 90
 command - rotate -90
 
-axiom F
+axiom F-F-F-F
 
 production F FF-F-F-F-FF
 

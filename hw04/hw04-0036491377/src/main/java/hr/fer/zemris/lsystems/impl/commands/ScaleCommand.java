@@ -5,6 +5,9 @@ import hr.fer.zemris.lsystems.impl.Command;
 import hr.fer.zemris.lsystems.impl.Context;
 import hr.fer.zemris.lsystems.impl.TurtleState;
 
+/**
+ *
+ */
 public class ScaleCommand implements Command {
 	private double step;
 

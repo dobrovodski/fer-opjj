@@ -1,12 +1,24 @@
 package hr.fer.zemris.lsystems.impl;
 
+import java.text.ParseException;
+
+/**
+ *
+ */
 public enum DirectiveType {
+	//
 	ORIGIN("origin"),
+	//
 	ANGLE("angle"),
-	UNIT_LENGTH("unitlength"),
-	SCALAR("unitlengthdegreescaler"),
+	//
+	UNIT_LENGTH("unitLength"),
+	//
+	SCALAR("unitLengthDegreeScaler"),
+	//
 	COMMAND("command"),
+	//
 	AXIOM("axiom"),
+	//
 	PRODUCTION("production");
 
 	private String name;
@@ -14,13 +26,18 @@ public enum DirectiveType {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 * @param name
+	 * @return
+	 */
 	public static DirectiveType getType(String name) {
 		for (DirectiveType t : DirectiveType.values()) {
-			if (t.name.equals(name.toLowerCase())) {
+			if (t.name.equals(name)) {
 				return t;
 			}
 		}
 
-		throw new IllegalArgumentException("Could not interpret as directive: " + name);
+		throw new LSystemBuilderException("Could not interpret as directive: " + name);
 	}
 }
