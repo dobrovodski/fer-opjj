@@ -56,6 +56,17 @@ public class Vector2D {
 		return new Vector2D(this.x, this.y);
 	}
 
+	public void normalize() {
+		double len = Math.sqrt(x*x + y*y);
+		x = x / len;
+		y = y / len;
+	}
+
+	public Vector2D normalized() {
+		double len = Math.sqrt(x*x + y*y);
+		return new Vector2D(x/len, y/len);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		final double EPS = 1E-6;

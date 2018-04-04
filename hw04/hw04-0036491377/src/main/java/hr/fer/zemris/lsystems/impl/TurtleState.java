@@ -12,9 +12,42 @@ public class TurtleState {
 
 	public TurtleState(Vector2D position, Vector2D direction, Color color, double length) {
 		this.position = position;
-		this.direction = direction;
+		this.direction = direction.normalized();
 		this.color = color;
 		this.length = length;
+	}
+
+	public void setPosition(Vector2D position) {
+		this.position = position;
+	}
+
+	public void setDirection(Vector2D direction) {
+		direction.normalize();
+		this.direction = direction;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public void setLength(double length) {
+		this.length = length;
+	}
+
+	public Vector2D getPosition() {
+		return position;
+	}
+
+	public Vector2D getDirection() {
+		return direction;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public double getLength() {
+		return length;
 	}
 
 	public TurtleState copy() {

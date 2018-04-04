@@ -1,4 +1,4 @@
-package hr.fer.zemris.demo;
+package demo;
 
 import hr.fer.zemris.lsystems.LSystem;
 import hr.fer.zemris.lsystems.LSystemBuilderProvider;

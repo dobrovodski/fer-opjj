@@ -7,6 +7,6 @@ import hr.fer.zemris.lsystems.impl.Context;
 public class PopCommand implements Command{
 	@Override
 	public void execute(Context ctx, Painter painter) {
-
+		ctx.popState();
 	}
 }

@@ -20,4 +20,8 @@ public class Context {
 	public void popState() {
 		states.pop();
 	}
+
+	public int depth() {
+		return states.size();
+	}
 }
