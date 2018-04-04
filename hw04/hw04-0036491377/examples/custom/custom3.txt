@@ -1,16 +1,18 @@
 origin                 0.405 0.1
 angle                  0
 unitLength             0.1
-unitLengthDegreeScaler 1.0 / 1.2
+unitLengthDegreeScaler 1.0 / 1.4
 
 command F draw 1
 command S skip 1
-command + rotate 5.625
+command + rotate 2.8125
 command - rotate
+command G color 00FF00
+command P color FF00FF
 
 command [ push
 command ] pop
 
-axiom F
+axiom PF+GF
 
-production F F+F
+production F PF+GF

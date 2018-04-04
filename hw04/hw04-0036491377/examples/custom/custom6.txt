@@ -1,0 +1,20 @@
+origin                 0.5 0.5
+angle                  0
+unitLength             0.8
+unitLengthDegreeScaler 1.0 / 1.8
+
+command 6 draw 1
+command 7 draw 1
+command 8 draw 1
+command 9 draw 1
+command + rotate 36
+command - rotate -36
+command [ push
+command ] pop
+
+axiom [7]++[7]++[7]++[7]++[7]
+
+production 6 81++91----71[-81----61]++
+production 7 +81--91[---61--71]+
+production 8 -61++71[+++81++91]-
+production 9 --81++++61[+91++++71]--71

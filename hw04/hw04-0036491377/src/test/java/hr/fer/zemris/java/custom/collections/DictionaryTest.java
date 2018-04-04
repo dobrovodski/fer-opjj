@@ -12,5 +12,5 @@ import org.junit.Test;
  * Naming standards for unit tests </a>
  */
 public class DictionaryTest {
-
+	
 }

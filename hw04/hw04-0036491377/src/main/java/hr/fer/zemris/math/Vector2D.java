@@ -3,12 +3,13 @@ package hr.fer.zemris.math;
 import java.util.Objects;
 
 /**
- *
+ * This class models a 2-dimensional vector as 2 real components (x, y) and provides methods to modify the vector.
+ * @author matej
  */
 public class Vector2D {
-	//
+	// x-component
 	private double x;
-	//
+	// y-component
 	private double y;
 
 	public Vector2D(double x, double y) {
@@ -17,24 +18,25 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns x component of vector.
+	 * @return x component
 	 */
 	public double getX() {
 		return x;
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns y component of vector
+	 * @return y component
 	 */
 	public double getY() {
 		return y;
 	}
 
 	/**
-	 *
-	 * @param offset
+	 * Translates current vector by {@code offset} vector.
+	 * @param offset vector to offset by
+	 * @throws NullPointerException if {@code offset} is null
 	 */
 	public void translate(Vector2D offset) {
 		Objects.requireNonNull(offset, "Cannot pass null to translate.");
@@ -43,9 +45,10 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @param offset
-	 * @return
+	 * Returns translated vector which is translated by {@code offset} vector. Does not modify {@code this} vector.
+	 * @param offset vector to offset by
+	 * @return newly created translated vector
+	 * @throws NullPointerException if {@code offset} is null
 	 */
 	public Vector2D translated(Vector2D offset) {
 		Objects.requireNonNull(offset, "Cannot pass null to translated.");
@@ -53,8 +56,8 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @param angle
+	 * Rotates current vector by {@code angle}.
+	 * @param angle angle to rotate by
 	 */
 	public void rotate(double angle) {
 		double radians = angle * Math.PI / 180;
@@ -66,9 +69,9 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @param angle
-	 * @return
+	 * Returns rotated vector which is rotated by {@code angle}. Does not modify {@code this} vector.
+	 * @param angle angle to rotate by
+	 * @return newly created rotated vector
 	 */
 	public Vector2D rotated(double angle) {
 		double radians = angle * Math.PI / 180;
@@ -79,8 +82,8 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @param scalar
+	 * Scales current vector by {@code scalar}.
+	 * @param scalar scalar value to scale {@code this} vector by.
 	 */
 	public void scale(double scalar) {
 		this.x *= scalar;
@@ -88,24 +91,24 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @param scalar
-	 * @return
+	 * Returns scaled vector which is scaled by {@code scalar}. Does not modify {@code this} vector.
+	 * @param scalar scalar value to scale by
+	 * @return newly created scaled vector
 	 */
 	public Vector2D scaled(double scalar) {
 		return new Vector2D(this.x * scalar, this.y * scalar);
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns a copy of this vector.
+	 * @return copy of this vector
 	 */
 	public Vector2D copy() {
 		return new Vector2D(this.x, this.y);
 	}
 
 	/**
-	 *
+	 * Normalizes this vector.
 	 */
 	public void normalize() {
 		double len = Math.sqrt(x * x + y * y);
@@ -114,8 +117,8 @@ public class Vector2D {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Returns normalized version of this vector
+	 * @return normalized vector
 	 */
 	public Vector2D normalized() {
 		double len = Math.sqrt(x*x + y*y);

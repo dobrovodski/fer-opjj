@@ -1,0 +1,16 @@
+origin                 0.7 0.8
+angle                  0
+unitLength             0.3
+unitLengthDegreeScaler 1.0 / 1.7
+
+command A draw 1
+command B draw 1
+command + rotate 60
+command - rotate -60
+command R color FF0000
+command T color 0000FF
+
+axiom A
+
+production A RA-B--B+A++AA+B-
+production B +TA-BB--B-A++A+B
