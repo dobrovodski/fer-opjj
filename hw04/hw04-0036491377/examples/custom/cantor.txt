@@ -1,0 +1,12 @@
+origin                 0.02 0.5
+angle                  0
+unitLength             0.96
+unitLengthDegreeScaler 1.0 / 3.0
+
+command F draw 1
+command . skip 1
+
+axiom F
+
+production F F.F
+production . ...

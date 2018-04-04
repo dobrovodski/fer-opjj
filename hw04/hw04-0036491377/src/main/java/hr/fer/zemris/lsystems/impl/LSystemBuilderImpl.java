@@ -12,6 +12,7 @@ import java.text.ParseException;
 
 /**
  *
+ * @author matej
  */
 public class LSystemBuilderImpl implements LSystemBuilder {
 	private final Color DEFAULT_COLOR = new Color(0, 0, 0);

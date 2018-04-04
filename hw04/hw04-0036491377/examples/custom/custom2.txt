@@ -1,0 +1,18 @@
+origin                 0.33 0.33
+angle                  0
+unitLength             0.33
+unitLengthDegreeScaler 1.0 / 2.3
+
+command F draw 1
+command S skip 0.5
+command + rotate 90
+command - rotate -90
+command B color 000000
+command R color FF0000
+
+command [ push
+command ] pop
+
+axiom F+F+F+F+
+
+production F BFS[R+F][R-F]SBF

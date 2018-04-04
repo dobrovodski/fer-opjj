@@ -7,7 +7,3 @@
 - command mogu biti draw s, skip s, scale s, rotate a, push, pop, color
 
 - Prilikom obrade tekstovnih zapisa sve višestruke praznine i tabove treba zanemariti. (s.trim().replaceAll(" +", " "));
-
-F+F--F+F
-
-(F+F--F+F)+(F+F--F+F)--(F+F--F+F)+(F+F--F+F)

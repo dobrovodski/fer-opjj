@@ -5,6 +5,9 @@ import hr.fer.zemris.lsystems.LSystemBuilderProvider;
 import hr.fer.zemris.lsystems.gui.LSystemViewer;
 import hr.fer.zemris.lsystems.impl.LSystemBuilderImpl;
 
+/**
+ * Demo class for L-Systems.
+ */
 public class Glavni2 {
 	public static void main(String[] args) {
 		LSystemViewer.showLSystem(createKochCurve2(LSystemBuilderImpl::new));

@@ -9,11 +9,14 @@ import hr.fer.zemris.math.Vector2D;
 import java.awt.Color;
 
 /**
- *
+ * Models command to draw the current state on the screen.
+ * @author matej
  */
 public class DrawCommand implements Command {
+	// Distance to draw
 	private double step;
-	private final static float DEFAULT_SIZE = 1.0f;
+	// Thickness of lines drawn
+	private final static float DEFAULT_SIZE = 2.0f;
 
 	public DrawCommand(double step) {
 		this.step = step;

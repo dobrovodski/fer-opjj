@@ -6,7 +6,8 @@ import hr.fer.zemris.lsystems.impl.Context;
 import hr.fer.zemris.lsystems.impl.TurtleState;
 
 /**
- *
+ * Models command to push the provided state onto the context.
+ * @author matej
  */
 public class PushCommand implements Command{
 	@Override

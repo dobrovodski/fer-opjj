@@ -5,7 +5,8 @@ import hr.fer.zemris.lsystems.impl.Command;
 import hr.fer.zemris.lsystems.impl.Context;
 
 /**
- *
+ * Models command to pop the current state from the context.
+ * @author matej
  */
 public class PopCommand implements Command{
 	@Override
