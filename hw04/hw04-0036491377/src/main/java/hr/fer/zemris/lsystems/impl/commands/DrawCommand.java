@@ -23,10 +23,9 @@ public class DrawCommand implements Command {
 		Vector2D d = current.getDirection().scaled(step);
 		Vector2D nextPos = pos.translated(d);
 
-		Vector2D truePos = pos.scaled(Math.pow(current.getLength(), ctx.depth()));
-		Vector2D trueNextPos = nextPos.scaled(Math.pow(current.getLength(), ctx.depth()));
-		//TODO: size
-		//TODO: efektivnas duljina pomaka?
+		Vector2D truePos = pos.scaled(current.getLength());
+		Vector2D trueNextPos = nextPos.scaled(current.getLength());
+		//TODO: size 1.0f
 		painter.drawLine(truePos.getX(), truePos.getY(), trueNextPos.getX(), trueNextPos.getY(), color, 1.0f);
 
 		current.setPosition(nextPos);

@@ -4,7 +4,10 @@ import hr.fer.zemris.java.custom.collections.Dictionary;
 import hr.fer.zemris.lsystems.LSystem;
 import hr.fer.zemris.lsystems.LSystemBuilder;
 import hr.fer.zemris.lsystems.Painter;
+import hr.fer.zemris.lsystems.impl.commands.DrawCommand;
 import hr.fer.zemris.math.Vector2D;
+
+import java.awt.*;
 
 public class LSystemBuilderImpl implements LSystemBuilder {
 	private Dictionary commands;
@@ -75,25 +78,71 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	@Override
 	public LSystem build() {
-		return null;
+		return new LSystemImpl();
 	}
 
 	private class LSystemImpl implements LSystem {
 		@Override
 		public String generate(int n) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(axiom);
+			String generated = axiom;
 
 			for (int i = 0; i < n; i++) {
-				String current = sb.toString();
-				sb.
+				StringBuilder sb = new StringBuilder();
+				for (int j = 0; j < generated.length(); j++) {
+					char c = generated.charAt(j);
+					String prod = (String) actions.get(c);
+
+					if (prod == null) {
+						continue;
+					}
+
+					sb.append(prod);
+				}
+
+				generated = sb.toString();
 			}
 
-			return sb.toString();
+			return generated;
 		}
 
 		@Override
 		public void draw(int i, Painter painter) {
+			String generated = generate(i);
+			Context ctx = new Context();
+			TurtleState ts = new TurtleState(origin, new Vector2D(1, 0).rotated(angle), new Color(0, 0, 0), unitLength);
+			ctx.pushState(ts);
+
+			for (int pos = 0; pos < generated.length(); pos++) {
+				char c = generated.charAt(pos);
+				String command = (String) commands.get(c);
+
+				if (command != null) {
+					continue;
+				}
+				//TODO: strings to enum
+				String[] split = command.split(" ");
+				String type = split[0].toLowerCase();
+				switch (type) {
+					case "draw":
+						double step = Double.parseDouble(split[1]);
+						new DrawCommand(step);
+						break;
+					case "skip":
+						break;
+					case "scale":
+						break;
+					case "rotate":
+						break;
+					case "push":
+						break;
+					case "pop":
+						break;
+					case "color":
+						break;
+				}
+				System.out.println("AA");
+			}
+
 
 		}
 	}

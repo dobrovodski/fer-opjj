@@ -1,0 +1,10 @@
+- lsystembuilderprovider stvara lsystembuildere
+- lsystembuilder stvara lsystem
+- lsystem viewer prikazuje lsystem
+- painter crta linije
+
+- lsystembuilderprovider stvori lsystembuilder i podesi mu konfiguraciju (command, origin, angle, unit length, scalar, production, axiom i na kraju build)
+- command mogu biti draw s, skip s, scale s, rotate a, push, pop, color
+
+- Prilikom obrade tekstovnih zapisa sve višestruke praznine i tabove treba zanemariti. (s.trim().replaceAll(" +", " "));
+
