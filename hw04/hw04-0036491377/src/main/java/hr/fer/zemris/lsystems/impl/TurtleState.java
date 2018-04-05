@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * This class models a single state of the system which will be used to calculate the next step in creating the
  * L-system (such as color, length of the line, position, direction).
+ *
  * @author matej
  */
 public class TurtleState {
@@ -22,10 +23,11 @@ public class TurtleState {
 
 	/**
 	 * Constructor for TurtleState.
-	 * @param position position of state
+	 *
+	 * @param position  position of state
 	 * @param direction direction of state
-	 * @param color color of state
-	 * @param length length of state
+	 * @param color     color of state
+	 * @param length    length of state
 	 * @throws NullPointerException if a state is set to null
 	 */
 	public TurtleState(Vector2D position, Vector2D direction, Color color, double length) {
@@ -40,6 +42,7 @@ public class TurtleState {
 
 	/**
 	 * Sets the position of the state.
+	 *
 	 * @param position position of state
 	 * @throws NullPointerException if position is null
 	 */
@@ -50,6 +53,7 @@ public class TurtleState {
 
 	/**
 	 * Sets the direction of the state.
+	 *
 	 * @param direction direction of state
 	 * @throws NullPointerException if direction is null
 	 */
@@ -61,6 +65,7 @@ public class TurtleState {
 
 	/**
 	 * Sets the color of the state.
+	 *
 	 * @param color color of state
 	 * @throws NullPointerException if color is null
 	 */
@@ -71,6 +76,7 @@ public class TurtleState {
 
 	/**
 	 * Sets the direction of the state.
+	 *
 	 * @param length length of state
 	 */
 	public void setLength(double length) {
@@ -79,6 +85,7 @@ public class TurtleState {
 
 	/**
 	 * Returns the position of the state.
+	 *
 	 * @return position of state
 	 */
 	public Vector2D getPosition() {
@@ -87,6 +94,7 @@ public class TurtleState {
 
 	/**
 	 * Returns the direction of the state.
+	 *
 	 * @return direction of state
 	 */
 	public Vector2D getDirection() {
@@ -95,6 +103,7 @@ public class TurtleState {
 
 	/**
 	 * Returns the color of the state.
+	 *
 	 * @return color of state
 	 */
 	public Color getColor() {
@@ -103,6 +112,7 @@ public class TurtleState {
 
 	/**
 	 * Returns the length of the state.
+	 *
 	 * @return length of state
 	 */
 	public double getLength() {
@@ -111,6 +121,7 @@ public class TurtleState {
 
 	/**
 	 * Returns a deep-copy of the current state.
+	 *
 	 * @return copy of the current state
 	 */
 	public TurtleState copy() {

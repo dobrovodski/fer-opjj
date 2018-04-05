@@ -10,6 +10,7 @@ import java.awt.Color;
 
 /**
  * Models command to change the position of the state by {@code step} without drawing a line.
+ *
  * @author matej
  */
 public class SkipCommand implements Command {

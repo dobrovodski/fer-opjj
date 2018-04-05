@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * This class models a 2-dimensional vector as 2 real components (x, y) and provides methods to modify the vector.
+ *
  * @author matej
  */
 public class Vector2D {
@@ -19,6 +20,7 @@ public class Vector2D {
 
 	/**
 	 * Returns x component of vector.
+	 *
 	 * @return x component
 	 */
 	public double getX() {
@@ -27,6 +29,7 @@ public class Vector2D {
 
 	/**
 	 * Returns y component of vector
+	 *
 	 * @return y component
 	 */
 	public double getY() {
@@ -35,6 +38,7 @@ public class Vector2D {
 
 	/**
 	 * Translates current vector by {@code offset} vector.
+	 *
 	 * @param offset vector to offset by
 	 * @throws NullPointerException if {@code offset} is null
 	 */
@@ -46,6 +50,7 @@ public class Vector2D {
 
 	/**
 	 * Returns translated vector which is translated by {@code offset} vector. Does not modify {@code this} vector.
+	 *
 	 * @param offset vector to offset by
 	 * @return newly created translated vector
 	 * @throws NullPointerException if {@code offset} is null
@@ -57,6 +62,7 @@ public class Vector2D {
 
 	/**
 	 * Rotates current vector by {@code angle}.
+	 *
 	 * @param angle angle to rotate by
 	 */
 	public void rotate(double angle) {
@@ -70,6 +76,7 @@ public class Vector2D {
 
 	/**
 	 * Returns rotated vector which is rotated by {@code angle}. Does not modify {@code this} vector.
+	 *
 	 * @param angle angle to rotate by
 	 * @return newly created rotated vector
 	 */
@@ -83,6 +90,7 @@ public class Vector2D {
 
 	/**
 	 * Scales current vector by {@code scalar}.
+	 *
 	 * @param scalar scalar value to scale {@code this} vector by.
 	 */
 	public void scale(double scalar) {
@@ -92,6 +100,7 @@ public class Vector2D {
 
 	/**
 	 * Returns scaled vector which is scaled by {@code scalar}. Does not modify {@code this} vector.
+	 *
 	 * @param scalar scalar value to scale by
 	 * @return newly created scaled vector
 	 */
@@ -101,6 +110,7 @@ public class Vector2D {
 
 	/**
 	 * Returns a copy of this vector.
+	 *
 	 * @return copy of this vector
 	 */
 	public Vector2D copy() {
@@ -118,10 +128,11 @@ public class Vector2D {
 
 	/**
 	 * Returns normalized version of this vector
+	 *
 	 * @return normalized vector
 	 */
 	public Vector2D normalized() {
-		double len = Math.sqrt(x*x + y*y);
+		double len = Math.sqrt(x * x + y * y);
 		return new Vector2D(x / len, y / len);
 	}
 

@@ -9,6 +9,7 @@ import java.awt.Color;
 
 /**
  * Models command to change the color of the current state.
+ *
  * @author matej
  */
 public class ColorCommand implements Command {

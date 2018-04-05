@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 /**
  * Enumerates the different directives.
+ *
  * @author matej
  */
 public enum DirectiveType {
@@ -31,6 +32,7 @@ public enum DirectiveType {
 
 	/**
 	 * Maps given string to a DirectiveType.
+	 *
 	 * @param name string to be mapped
 	 * @return directive type
 	 * @throws LSystemBuilderException if a type with that name cannot be found.

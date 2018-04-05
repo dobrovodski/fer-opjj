@@ -4,6 +4,7 @@ import hr.fer.zemris.java.custom.collections.ObjectStack;
 
 /**
  * Provides a class used to store the current state (such as color, direction ...)
+ *
  * @author matej
  */
 public class Context {
@@ -16,14 +17,16 @@ public class Context {
 
 	/**
 	 * Retrieves the current state without removing it.
+	 *
 	 * @return current state
 	 */
 	public TurtleState getCurrentState() {
-		return (TurtleState)states.peek();
+		return (TurtleState) states.peek();
 	}
 
 	/**
 	 * Pushes state onto the context stack
+	 *
 	 * @param state state to be pushed
 	 */
 	public void pushState(TurtleState state) {

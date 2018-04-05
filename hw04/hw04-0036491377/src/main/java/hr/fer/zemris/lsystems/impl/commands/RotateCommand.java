@@ -8,6 +8,7 @@ import hr.fer.zemris.math.Vector2D;
 
 /**
  * Models command to rotate the direction of the next draw/skip command.
+ *
  * @author matej
  */
 public class RotateCommand implements Command {

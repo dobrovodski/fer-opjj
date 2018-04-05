@@ -10,6 +10,7 @@ import java.awt.Color;
 
 /**
  * Models command to draw the current state on the screen.
+ *
  * @author matej
  */
 public class DrawCommand implements Command {

@@ -7,6 +7,7 @@ import hr.fer.zemris.lsystems.impl.TurtleState;
 
 /**
  * Models command to change the scale of the current unit length.
+ *
  * @author matej
  */
 public class ScaleCommand implements Command {

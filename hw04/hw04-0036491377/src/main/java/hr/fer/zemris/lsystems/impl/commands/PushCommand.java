@@ -7,9 +7,10 @@ import hr.fer.zemris.lsystems.impl.TurtleState;
 
 /**
  * Models command to push the provided state onto the context.
+ *
  * @author matej
  */
-public class PushCommand implements Command{
+public class PushCommand implements Command {
 	@Override
 	public void execute(Context ctx, Painter painter) {
 		TurtleState current = ctx.getCurrentState().copy();

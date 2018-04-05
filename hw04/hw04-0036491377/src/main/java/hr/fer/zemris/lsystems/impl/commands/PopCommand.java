@@ -6,9 +6,10 @@ import hr.fer.zemris.lsystems.impl.Context;
 
 /**
  * Models command to pop the current state from the context.
+ *
  * @author matej
  */
-public class PopCommand implements Command{
+public class PopCommand implements Command {
 	@Override
 	public void execute(Context ctx, Painter painter) {
 		ctx.popState();

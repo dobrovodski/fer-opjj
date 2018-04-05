@@ -2,6 +2,7 @@ package hr.fer.zemris.lsystems.impl;
 
 /**
  * Enumerates the different commands.
+ *
  * @author matej
  */
 public enum CommandType {
@@ -29,6 +30,7 @@ public enum CommandType {
 
 	/**
 	 * Maps given string to a CommandType.
+	 *
 	 * @param name string to be mapped
 	 * @return command type
 	 * @throws LSystemBuilderException if a type with that name cannot be found.

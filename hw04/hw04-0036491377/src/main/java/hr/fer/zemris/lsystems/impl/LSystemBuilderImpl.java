@@ -12,6 +12,7 @@ import java.text.ParseException;
 
 /**
  * Models an L-system builder and provides method to create and configure an L-system.
+ *
  * @author matej
  */
 public class LSystemBuilderImpl implements LSystemBuilder {
@@ -53,6 +54,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Sets unit length.
+	 *
 	 * @param length length to set it to
 	 * @return configured builder
 	 */
@@ -64,6 +66,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Sets origin point.
+	 *
 	 * @param x x coordinate of origin
 	 * @param y y coordinate of origin
 	 * @return configured builder
@@ -76,6 +79,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Sets angle of rotation.
+	 *
 	 * @param angle angle of rotation
 	 * @return configured builder
 	 */
@@ -87,6 +91,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Sets axiom (starting point of L-system).
+	 *
 	 * @param axiom axiom
 	 * @return configured builder
 	 */
@@ -98,6 +103,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Sets scalar to scale by in each iteration.
+	 *
 	 * @param scalar scalar to scale by
 	 * @return configured builder
 	 */
@@ -109,6 +115,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Maps string representation of production to character in the production dictionary.
+	 *
 	 * @param c left-hand side of production
 	 * @param s right-hand side of production
 	 * @return configured builder
@@ -121,6 +128,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Maps string representation of command to character in the command dictionary.
+	 *
 	 * @param c representation of command
 	 * @param s operation the command is to perform
 	 * @return configured builder
@@ -133,8 +141,10 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Configures the L-system builder from configuration provided as an array of strings.
+	 *
 	 * @param strings array of configuration parameters
 	 * @return configured L-system builder
+	 * @throws LSystemBuilderException if the configuration parameters are not parsable
 	 */
 	@Override
 	public LSystemBuilder configureFromText(String[] strings) {
@@ -148,29 +158,34 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 			DirectiveType type = DirectiveType.getType(tokens[0]);
 			switch (type) {
 				case ANGLE: {
-					if (tokens.length < 2) throw new LSystemBuilderException("Angle directive requires a parameter");
+					if (tokens.length < 2)
+						throw new LSystemBuilderException("Angle directive requires a parameter");
 					double angle = parseNumber(tokens[1]);
 					this.setAngle(angle);
 					break;
 				}
 				case AXIOM: {
-					if (tokens.length < 2) throw new LSystemBuilderException("Axiom directive requires a parameter");
+					if (tokens.length < 2)
+						throw new LSystemBuilderException("Axiom directive requires a parameter");
 					String axiom = tokens[1];
 					this.setAxiom(axiom);
 					break;
 				}
 				case ORIGIN: {
 					// Assuming that the origin points can't be fractional
-					if (tokens.length < 2) throw new LSystemBuilderException("Origin directive requires two numbers");
+					if (tokens.length < 2)
+						throw new LSystemBuilderException("Origin directive has no parameters, but requires two");
 					String[] numbers = tokens[1].split(" ");
-					if (numbers.length < 2) throw new LSystemBuilderException("Origin directive requires two numbers");
+					if (numbers.length < 2)
+						throw new LSystemBuilderException("Origin directive requires two numbers");
 					double x = Double.parseDouble(numbers[0]);
 					double y = Double.parseDouble(numbers[1]);
 					this.setOrigin(x, y);
 					break;
 				}
 				case SCALAR: {
-					if (tokens.length < 2) throw new LSystemBuilderException("Scalar directive requires a parameter");
+					if (tokens.length < 2)
+						throw new LSystemBuilderException("Scalar directive requires a parameter");
 					double scalar = parseNumber(tokens[1]);
 					this.setUnitLengthDegreeScaler(scalar);
 					break;
@@ -207,6 +222,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Creates the system object and returns it.
+	 *
 	 * @return L-system object
 	 */
 	@Override
@@ -214,13 +230,15 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 		return new LSystemImpl();
 	}
 
-	 /**
+	/**
 	 * Models L-system used to generate a fractal to be displayed.
+	 *
 	 * @author matej
 	 */
 	private class LSystemImpl implements LSystem {
 		/**
 		 * Generates string representation of the system created by applying production rules n times.
+		 *
 		 * @param n amount of times to apply productions
 		 * @return string representation of fractal
 		 */
@@ -248,8 +266,10 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 		/**
 		 * Draws L-system after i iterations using the provided painter object.
-		 * @param i number of iterations
+		 *
+		 * @param i       number of iterations
 		 * @param painter object used to display system
+		 * @throws LSystemBuilderException if the action parameters are not parsable
 		 */
 		@Override
 		public void draw(int i, Painter painter) {
@@ -271,21 +291,29 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				CommandType type = CommandType.getType(tokens[0]);
 				switch (type) {
 					case DRAW: {
+						if (tokens.length < 2)
+							throw new LSystemBuilderException("Draw length not specified.");
 						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new DrawCommand(step).execute(ctx, painter);
 						break;
 					}
 					case SKIP: {
+						if (tokens.length < 2)
+							throw new LSystemBuilderException("Skip length not specified.");
 						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new SkipCommand(step).execute(ctx, painter);
 						break;
 					}
 					case SCALE: {
+						if (tokens.length < 2)
+							throw new LSystemBuilderException("Scale factor not specified.");
 						double scale = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new ScaleCommand(scale).execute(ctx, painter);
 						break;
 					}
 					case ROTATE: {
+						if (tokens.length < 2)
+							throw new LSystemBuilderException("Rotation angle not specified.");
 						double angle = parseNumber(tokens[1]);
 						new RotateCommand(angle).execute(ctx, painter);
 						break;
@@ -299,6 +327,8 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 						break;
 					}
 					case COLOR: {
+						if (tokens.length < 2)
+							throw new LSystemBuilderException("Color not specified.");
 						String color = tokens[1];
 						new ColorCommand(Color.decode("#" + color)).execute(ctx, painter);
 						break;
@@ -310,12 +340,18 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 
 	/**
 	 * Utility method to parse string to a double. The string can be a fraction
+	 *
 	 * @param num string representation of a fraction or double number
 	 * @return parsed value
+	 * @throws LSystemBuilderException if the string couldn't be parsed as a number
 	 */
 	private double parseNumber(String num) {
+		// Ideally, this method would be in Util, but since it's the only one I might as well not pollute the package.
 		if (num.contains("/")) {
 			String[] digits = num.split("/");
+			if (digits.length != 2) {
+				throw new LSystemBuilderException("Could not parse this as a number: " + num);
+			}
 			return Double.parseDouble(digits[0]) / Double.parseDouble(digits[1]);
 		}
 		return Double.parseDouble(num);
