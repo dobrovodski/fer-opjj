@@ -52,6 +52,7 @@ public class Dictionary {
 	 * Puts given value under the provided key into the dictionary. Overwrites already existing value under {@code key}.
 	 * @param key key to store the value under
 	 * @param value value to be stored
+	 * @throws NullPointerException if the key is null.
 	 */
 	public void put(Object key, Object value) {
 		Objects.requireNonNull(key, "Key cannot be null.");

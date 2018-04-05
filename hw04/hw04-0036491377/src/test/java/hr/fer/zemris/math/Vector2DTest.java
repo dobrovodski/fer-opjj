@@ -161,4 +161,30 @@ public class Vector2DTest {
 		Assert.assertEquals(v.getX(), vc.getX(), EPS);
 		Assert.assertEquals(v.getY(), vc.getY(), EPS);
 	}
+
+	@Test
+	public void Normalize_SimpleValues_Normalized() {
+		double x = -34;
+		double y = 55;
+		double nx = -0.525822;
+		double ny = 0.850595;
+		Vector2D v = new Vector2D(x, y);
+		v.normalize();
+
+		Assert.assertEquals(nx, v.getX(), EPS);
+		Assert.assertEquals(ny, v.getY(), EPS);
+	}
+
+	@Test
+	public void Normalized_SimpleValues_Normalized() {
+		double x = 1.1;
+		double y = 1000;
+		double nx = 0.0011;
+		double ny = 0.999999;
+		Vector2D v = new Vector2D(x, y);
+		Vector2D vn = v.normalized();
+
+		Assert.assertEquals(nx, vn.getX(), EPS);
+		Assert.assertEquals(ny, vn.getY(), EPS);
+	}
 }
