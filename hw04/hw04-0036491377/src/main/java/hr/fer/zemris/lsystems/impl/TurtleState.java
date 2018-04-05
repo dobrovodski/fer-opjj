@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * This class models a single state of the system which will be used to calculate the next step in creating the
- * L-system (such as color, length of the line, position, direction).
+ * L-system (elements of the state are color, length of the line, position, direction).
  *
  * @author matej
  */
@@ -34,6 +34,7 @@ public class TurtleState {
 		if (position == null || direction == null || color == null) {
 			throw new NullPointerException("Cannot set state properties to null.");
 		}
+
 		this.position = position;
 		this.direction = direction.normalized();
 		this.color = color;

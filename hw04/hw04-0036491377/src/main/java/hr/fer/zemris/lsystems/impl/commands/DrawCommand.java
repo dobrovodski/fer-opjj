@@ -31,11 +31,7 @@ public class DrawCommand implements Command {
 		Vector2D d = current.getDirection().scaled(step).scaled(current.getLength());
 		Vector2D nextPos = pos.translated(d);
 
-		Vector2D truePos = pos;
-		Vector2D trueNextPos = nextPos;
-
-		painter.drawLine(truePos.getX(), truePos.getY(), trueNextPos.getX(), trueNextPos.getY(), color, DEFAULT_SIZE);
-
+		painter.drawLine(pos.getX(), pos.getY(), nextPos.getX(), nextPos.getY(), color, DEFAULT_SIZE);
 		current.setPosition(nextPos);
 	}
 }

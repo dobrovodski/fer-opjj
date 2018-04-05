@@ -160,6 +160,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				case ANGLE: {
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Angle directive requires a parameter");
+
 					double angle = parseNumber(tokens[1]);
 					this.setAngle(angle);
 					break;
@@ -167,6 +168,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				case AXIOM: {
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Axiom directive requires a parameter");
+
 					String axiom = tokens[1];
 					this.setAxiom(axiom);
 					break;
@@ -175,9 +177,11 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					// Assuming that the origin points can't be fractional
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Origin directive has no parameters, but requires two");
+
 					String[] numbers = tokens[1].split(" ");
 					if (numbers.length < 2)
 						throw new LSystemBuilderException("Origin directive requires two numbers");
+
 					double x = Double.parseDouble(numbers[0]);
 					double y = Double.parseDouble(numbers[1]);
 					this.setOrigin(x, y);
@@ -186,6 +190,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				case SCALAR: {
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Scalar directive requires a parameter");
+
 					double scalar = parseNumber(tokens[1]);
 					this.setUnitLengthDegreeScaler(scalar);
 					break;
@@ -193,6 +198,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				case COMMAND: {
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Command directive requires at least two parameters");
+
 					String[] commandTokens = tokens[1].split(" ", 2);
 					char name = commandTokens[0].charAt(0);
 					String command = commandTokens[1];
@@ -202,6 +208,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 				case PRODUCTION: {
 					if (tokens.length < 2)
 						throw new LSystemBuilderException("Production directive requires at least two parameters");
+
 					String[] productionTokens = tokens[1].split(" ", 2);
 					char name = productionTokens[0].charAt(0);
 					String production = productionTokens[1];
@@ -209,7 +216,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					break;
 				}
 				case UNIT_LENGTH: {
-					if (tokens.length < 2) throw new LSystemBuilderException("Angle directive requires a parameter");
+					if (tokens.length < 2)
+						throw new LSystemBuilderException("Angle directive requires a parameter");
+
 					double step = parseNumber(tokens[1]);
 					this.setUnitLength(step);
 					break;
@@ -293,6 +302,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					case DRAW: {
 						if (tokens.length < 2)
 							throw new LSystemBuilderException("Draw length not specified.");
+
 						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new DrawCommand(step).execute(ctx, painter);
 						break;
@@ -300,6 +310,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					case SKIP: {
 						if (tokens.length < 2)
 							throw new LSystemBuilderException("Skip length not specified.");
+
 						double step = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new SkipCommand(step).execute(ctx, painter);
 						break;
@@ -307,6 +318,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					case SCALE: {
 						if (tokens.length < 2)
 							throw new LSystemBuilderException("Scale factor not specified.");
+
 						double scale = parseNumber(tokens[1]) * Math.pow(unitLengthScalar, i);
 						new ScaleCommand(scale).execute(ctx, painter);
 						break;
@@ -314,6 +326,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					case ROTATE: {
 						if (tokens.length < 2)
 							throw new LSystemBuilderException("Rotation angle not specified.");
+
 						double angle = parseNumber(tokens[1]);
 						new RotateCommand(angle).execute(ctx, painter);
 						break;
@@ -329,6 +342,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 					case COLOR: {
 						if (tokens.length < 2)
 							throw new LSystemBuilderException("Color not specified.");
+
 						String color = tokens[1];
 						new ColorCommand(Color.decode("#" + color)).execute(ctx, painter);
 						break;
@@ -339,7 +353,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 * Utility method to parse string to a double. The string can be a fraction
+	 * Utility method to parse string to a double. The string can be a fraction.
 	 *
 	 * @param num string representation of a fraction or double number
 	 * @return parsed value
@@ -352,6 +366,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 			if (digits.length != 2) {
 				throw new LSystemBuilderException("Could not parse this as a number: " + num);
 			}
+			
 			return Double.parseDouble(digits[0]) / Double.parseDouble(digits[1]);
 		}
 		return Double.parseDouble(num);

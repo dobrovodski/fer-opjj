@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit tests for DictionaryTest.
+ * JUnit tests for Dictionary.
  *
  * @author matej
  * @see <a href=

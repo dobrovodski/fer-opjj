@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit tests for Vector2DTest.
+ * JUnit tests for Vector2D.
  *
  * @author matej
  * @see <a href=

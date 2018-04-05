@@ -1,0 +1,12 @@
+origin                 0.1 0.3
+angle                  0
+unitLength             0.06
+unitLengthDegreeScaler 1.0 / 2.0
+
+command F draw 1
+command + rotate 60
+command - rotate -60
+
+axiom F++F++F
+
+production F F-F++F-F

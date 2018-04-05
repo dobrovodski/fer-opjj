@@ -3,7 +3,7 @@ package hr.fer.zemris.math;
 import java.util.Objects;
 
 /**
- * This class models a 2-dimensional vector as 2 real components (x, y) and provides methods to modify the vector.
+ * This class models a 2-dimensional vector with 2 real components (x, y) and provides methods to modify the vector.
  *
  * @author matej
  */
@@ -61,7 +61,7 @@ public class Vector2D {
 	}
 
 	/**
-	 * Rotates current vector by {@code angle}.
+	 * Rotates current vector by {@code angle}. Angle should be provided in degrees.
 	 *
 	 * @param angle angle to rotate by
 	 */
@@ -76,6 +76,7 @@ public class Vector2D {
 
 	/**
 	 * Returns rotated vector which is rotated by {@code angle}. Does not modify {@code this} vector.
+	 * Angle should be provided in degrees.
 	 *
 	 * @param angle angle to rotate by
 	 * @return newly created rotated vector
