@@ -20,7 +20,9 @@ public enum CommandType {
 	// Color command
 	COLOR("color");
 
+	// Name of the command
 	private String name;
+
 	CommandType(String name) {
 		this.name = name;
 	}

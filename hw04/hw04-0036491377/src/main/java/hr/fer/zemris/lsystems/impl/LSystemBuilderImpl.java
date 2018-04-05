@@ -11,7 +11,7 @@ import java.awt.*;
 import java.text.ParseException;
 
 /**
- *
+ * Models an L-system builder and provides method to create and configure an L-system.
  * @author matej
  */
 public class LSystemBuilderImpl implements LSystemBuilder {
@@ -22,21 +22,21 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	private final Vector2D DEFAULT_ORIGIN = new Vector2D(0, 0);
 	private final String DEFAULT_AXIOM = "";
 
-	//
+	// Maps commands
 	private Dictionary commands;
-	//
+	// Maps actions
 	private Dictionary actions;
-	//
+	// Length of a unit distance
 	private double unitLength;
-	//
+	// Scalar to scale length by in each iteration
 	private double unitLengthScalar;
-	//
+	// Origin point of system
 	private Vector2D origin;
-	//
+	// Direction of system
 	private double angle;
-	//
+	// Axiom of system
 	private String axiom;
-	//
+	// Color of lines to be drawn
 	private Color color;
 
 	public LSystemBuilderImpl() {
@@ -52,9 +52,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param length
-	 * @return
+	 * Sets unit length.
+	 * @param length length to set it to
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder setUnitLength(double length) {
@@ -63,10 +63,10 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param x
-	 * @param y
-	 * @return
+	 * Sets origin point.
+	 * @param x x coordinate of origin
+	 * @param y y coordinate of origin
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder setOrigin(double x, double y) {
@@ -75,9 +75,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param angle
-	 * @return
+	 * Sets angle of rotation.
+	 * @param angle angle of rotation
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder setAngle(double angle) {
@@ -86,9 +86,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param axiom
-	 * @return
+	 * Sets axiom (starting point of L-system).
+	 * @param axiom axiom
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder setAxiom(String axiom) {
@@ -97,9 +97,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param scalar
-	 * @return
+	 * Sets scalar to scale by in each iteration.
+	 * @param scalar scalar to scale by
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder setUnitLengthDegreeScaler(double scalar) {
@@ -108,10 +108,10 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param c
-	 * @param s
-	 * @return
+	 * Maps string representation of production to character in the production dictionary.
+	 * @param c left-hand side of production
+	 * @param s right-hand side of production
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder registerProduction(char c, String s) {
@@ -120,10 +120,10 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param c
-	 * @param s
-	 * @return
+	 * Maps string representation of command to character in the command dictionary.
+	 * @param c representation of command
+	 * @param s operation the command is to perform
+	 * @return configured builder
 	 */
 	@Override
 	public LSystemBuilder registerCommand(char c, String s) {
@@ -132,9 +132,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param strings
-	 * @return
+	 * Configures the L-system builder from configuration provided as an array of strings.
+	 * @param strings array of configuration parameters
+	 * @return configured L-system builder
 	 */
 	@Override
 	public LSystemBuilder configureFromText(String[] strings) {
@@ -206,22 +206,23 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @return
+	 * Creates the system object and returns it.
+	 * @return L-system object
 	 */
 	@Override
 	public LSystem build() {
 		return new LSystemImpl();
 	}
 
-	/**
-	 *
+	 /**
+	 * Models L-system used to generate a fractal to be displayed.
+	 * @author matej
 	 */
 	private class LSystemImpl implements LSystem {
 		/**
-		 *
-		 * @param n
-		 * @return
+		 * Generates string representation of the system created by applying production rules n times.
+		 * @param n amount of times to apply productions
+		 * @return string representation of fractal
 		 */
 		@Override
 		public String generate(int n) {
@@ -246,9 +247,9 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 		}
 
 		/**
-		 *
-		 * @param i
-		 * @param painter
+		 * Draws L-system after i iterations using the provided painter object.
+		 * @param i number of iterations
+		 * @param painter object used to display system
 		 */
 		@Override
 		public void draw(int i, Painter painter) {
@@ -308,11 +309,11 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 	}
 
 	/**
-	 *
-	 * @param num
-	 * @return
+	 * Utility method to parse string to a double. The string can be a fraction
+	 * @param num string representation of a fraction or double number
+	 * @return parsed value
 	 */
-	double parseNumber(String num) {
+	private double parseNumber(String num) {
 		if (num.contains("/")) {
 			String[] digits = num.split("/");
 			return Double.parseDouble(digits[0]) / Double.parseDouble(digits[1]);

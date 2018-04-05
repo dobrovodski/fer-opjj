@@ -16,7 +16,7 @@ public class DrawCommand implements Command {
 	// Distance to draw
 	private double step;
 	// Thickness of lines drawn
-	private final static float DEFAULT_SIZE = 2.0f;
+	private final static float DEFAULT_SIZE = 1.0f;
 
 	public DrawCommand(double step) {
 		this.step = step;

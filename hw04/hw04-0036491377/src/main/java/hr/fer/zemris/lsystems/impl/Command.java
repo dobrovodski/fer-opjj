@@ -3,7 +3,7 @@ package hr.fer.zemris.lsystems.impl;
 import hr.fer.zemris.lsystems.Painter;
 
 /**
- * Interface which models a single command to be executed to create an L-System.
+ * Interface which models a single command to be executed to modify the state of an L-System.
  * @author matej
  * @see <a href="https://en.wikipedia.org/wiki/L-system">L-system</a>
  */

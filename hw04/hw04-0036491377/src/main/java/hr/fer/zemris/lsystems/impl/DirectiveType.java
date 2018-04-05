@@ -24,6 +24,7 @@ public enum DirectiveType {
 
 	// Name of the directive
 	private String name;
+
 	DirectiveType(String name) {
 		this.name = name;
 	}
