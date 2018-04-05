@@ -6,6 +6,8 @@ package hr.fer.zemris.lsystems.impl;
  * @author matej
  */
 public class LSystemBuilderException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
 	public LSystemBuilderException(String message) {
 		super(message);
 	}

@@ -7,8 +7,7 @@ import hr.fer.zemris.lsystems.Painter;
 import hr.fer.zemris.lsystems.impl.commands.*;
 import hr.fer.zemris.math.Vector2D;
 
-import java.awt.*;
-import java.text.ParseException;
+import java.awt.Color;
 
 /**
  * Models an L-system builder and provides method to create and configure an L-system.
@@ -366,7 +365,7 @@ public class LSystemBuilderImpl implements LSystemBuilder {
 			if (digits.length != 2) {
 				throw new LSystemBuilderException("Could not parse this as a number: " + num);
 			}
-			
+
 			return Double.parseDouble(digits[0]) / Double.parseDouble(digits[1]);
 		}
 		return Double.parseDouble(num);

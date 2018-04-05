@@ -6,8 +6,6 @@ import hr.fer.zemris.lsystems.impl.Context;
 import hr.fer.zemris.lsystems.impl.TurtleState;
 import hr.fer.zemris.math.Vector2D;
 
-import java.awt.Color;
-
 /**
  * Models command to change the position of the state by {@code step} without drawing a line.
  *

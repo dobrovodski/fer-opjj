@@ -1,7 +1,5 @@
 package hr.fer.zemris.lsystems.impl;
 
-import java.text.ParseException;
-
 /**
  * Enumerates the different directives.
  *
