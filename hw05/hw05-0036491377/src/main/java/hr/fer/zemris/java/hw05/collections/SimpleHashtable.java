@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw05.collections;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
 	private static final int DEFAULT_CAPACITY = 16;
@@ -30,6 +31,19 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
 		public String toString() {
 			return this.key.toString() + "=" + this.value.toString();
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			TableEntry<?, ?> other = (TableEntry<?, ?>) o;
+			return Objects.equals(key, other.key);
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(key, value);
 		}
 	}
 
