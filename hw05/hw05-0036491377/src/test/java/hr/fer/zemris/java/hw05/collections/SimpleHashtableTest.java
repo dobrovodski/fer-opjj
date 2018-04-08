@@ -1,9 +1,12 @@
 package hr.fer.zemris.java.hw05.collections;
 
+import javafx.scene.control.Tab;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * JUnit tests for SimpleHashtable.
@@ -349,6 +352,17 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
+	public void ToString_Numbers_CorrectString() {
+		SimpleHashtable<Integer, Integer> ht = new SimpleHashtable<>(4);
+		ht.put(0, 10);
+		ht.put(1, 11);
+		ht.put(4, 14);
+
+		String correct = "[0=10, 4=14, 1=11]";
+		Assert.assertEquals(correct, ht.toString());
+	}
+
+	@Test
 	public void Clear_SimpleValues_SizeZero() {
 		int initialCapacity = 10;
 		String keyTemplate = "key";
@@ -384,57 +398,224 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
-	public void IteratorHasNext_HasNextSameSlot_True() {
+	public void IteratorHasNext_NextCalled_True() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		int size = 3;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>(size);
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		it.next();
+		it.next();
+		Assert.assertEquals(true, it.hasNext());
 	}
 
 	@Test
-	public void IteratorHasNext_HasNextDifferentSlot_True() {
+	public void IteratorHasNext_NextNotCalled_True() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		int size = 3;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>(size);
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		Assert.assertEquals(true, it.hasNext());
 	}
 
 	@Test
-	public void IteratorHasNext_NoNext_False() {
+	public void IteratorHasNext_NothingAdded_False() {
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		Iterator it = ht.iterator();
+		Assert.assertEquals(false, it.hasNext());
 	}
 
 	@Test
+	public void IteratorHasNext_HasNextSameSlot_Retrieved() {
+		SimpleHashtable<Integer, Integer> ht = new SimpleHashtable<>(4);
+		ht.put(0, 10);
+		ht.put(4, 20);
+
+		Iterator<SimpleHashtable.TableEntry<Integer, Integer>> it = ht.iterator();
+		it.next();
+		Assert.assertEquals(true, it.hasNext());
+	}
+
+	@Test
+	public void IteratorHasNext_AllValuesIteratedOVer_False() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		int size = 3;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>(size);
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		for (int i = 0; i < numberOfEntries; i++) {
+			it.next();
+		}
+
+		Assert.assertEquals(false, it.hasNext());
+	}
+
+	@Test(expected = NoSuchElementException.class)
 	public void IteratorNext_NoNext_ExceptionThrown() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		for (int i = 0; i < numberOfEntries; i++) {
+			it.next();
+		}
+
+		it.next();
 	}
 
-	@Test
+	@Test(expected = NoSuchElementException.class)
 	public void IteratorNext_NoElementsInTable_ExceptionThrown() {
-
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
+		Iterator it = ht.iterator();
+		it.next();
 	}
 
-	@Test
+	@Test(expected = ConcurrentModificationException.class)
 	public void IteratorNext_ConcurrentModification_ExceptionThrown() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		it.next();
+		ht.remove(keyTemplate + (numberOfEntries - 1));
+		it.next();
 	}
 
 	@Test
 	public void IteratorNext_HasNext_Retrieved() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator<SimpleHashtable.TableEntry<String, String>> it = ht.iterator();
+		for (int i = 0; i < numberOfEntries; i++) {
+			Assert.assertEquals(ht.get(keyTemplate + i), it.next().getValue());
+		}
 	}
 
 	@Test
+	public void IteratorNext_HasNextSameSlot_Retrieved() {
+		SimpleHashtable<Integer, Integer> ht = new SimpleHashtable<>(4);
+		ht.put(0, 10);
+		ht.put(4, 20);
+
+		Iterator<SimpleHashtable.TableEntry<Integer, Integer>> it = ht.iterator();
+		Assert.assertEquals(ht.get(0), it.next().getValue());
+		Assert.assertEquals(ht.get(4), it.next().getValue());
+	}
+
+
+	@Test(expected = ConcurrentModificationException.class)
 	public void IteratorRemove_ConcurrentModification_ExceptionThrown() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		it.next();
+		ht.remove(keyTemplate + (numberOfEntries - 1));
+		it.remove();
 	}
 
-	@Test
+	@Test(expected = IllegalStateException.class)
 	public void IteratorRemove_CalledAgainWithoutCallingNext_ExceptionThrown() {
-		
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		it.next();
+		it.remove();
+		it.remove();
 	}
 
-	@Test
+	@Test(expected = IllegalStateException.class)
 	public void IteratorRemove_CalledBeforeNext_ExceptionThrown() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator it = ht.iterator();
+		it.remove();
 	}
 
 	@Test
 	public void IteratorRemove_CalledAfterNext_ElementRemoved() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 10;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		Iterator<SimpleHashtable.TableEntry<String, String>> it = ht.iterator();
+		String key = it.next().getKey();
+		Assert.assertEquals(true, ht.containsKey(key));
+		it.remove();
+		Assert.assertEquals(false, ht.containsKey(key));
+	}
+
+	@Test
+	public void TableEntryEquals_AllCombinations_True() {
+		SimpleHashtable.TableEntry te1 = new SimpleHashtable.TableEntry("key1", "value1");
+		SimpleHashtable.TableEntry te2 = new SimpleHashtable.TableEntry("key1", "value2");
+		Assert.assertEquals(true, te1.equals(te1));
+		Assert.assertEquals(true, te2.equals(te2));
+		Assert.assertEquals(true, te1.equals(te2));
+		Assert.assertEquals(true, te2.equals(te1));
 	}
 }

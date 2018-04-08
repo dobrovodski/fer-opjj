@@ -1,8 +1,9 @@
 package hr.fer.zemris.java.hw05.collections;
 
-import javafx.scene.control.Tab;
-
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
 	private static final int DEFAULT_CAPACITY = 16;
@@ -226,15 +227,14 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			TableEntry current = table[i];
 			while (current != null) {
 				sb.append(current.toString());
-
-				// Dont Append ', ' if you are in the final slot and its the last entry in the slot
-				if (!(current.next == null && i == capacity - 1)) {
-					sb.append(", ");
-				}
+				sb.append(", ");
 
 				current = current.next;
 			}
 		}
+
+		// Delete last ', '
+		sb.setLength(sb.toString().length() - 2);
 		sb.append(']');
 
 		return sb.toString();
@@ -272,7 +272,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		table = newTable;
 	}
 
-	private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
+	private class IteratorImpl implements Iterator<TableEntry<K, V>> {
 		private int currentSlotIndex;
 		private TableEntry<K, V> currentEntry;
 		private boolean canRemove;
