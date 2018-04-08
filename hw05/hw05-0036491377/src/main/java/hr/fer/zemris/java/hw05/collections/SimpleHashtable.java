@@ -114,7 +114,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		}
 	}
 
-	public V get(Object key) {
+	public V get(java.io.Serializable key) {
 		if (key == null) {
 			return null;
 		}
@@ -198,8 +198,8 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		return size == 0;
 	}
 
-	public boolean containsValue(Object value) {
-		for (TableEntry e : table) {
+	public boolean containsValue(java.io.Serializable value) {
+		for (TableEntry<K, V> e : table) {
 			while (e != null) {
 				if (e.getValue().equals(value)) {
 					return true;
@@ -224,7 +224,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
 		for (int i = 0; i < capacity; i++) {
-			TableEntry current = table[i];
+			TableEntry<K, V> current = table[i];
 			while (current != null) {
 				sb.append(current.toString());
 				sb.append(", ");

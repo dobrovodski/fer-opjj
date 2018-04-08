@@ -1,6 +1,5 @@
 package hr.fer.zemris.java.hw05.collections;
 
-import javafx.scene.control.Tab;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -198,7 +197,7 @@ public class SimpleHashtableTest {
 			ht.put(keyTemplate + i, valueTemplate + i);
 		}
 
-		Assert.assertEquals(true, ht.containsKey(keyTemplate+(numberOfEntries - 1)));
+		Assert.assertEquals(true, ht.containsKey(keyTemplate + (numberOfEntries - 1)));
 	}
 
 	@Test
@@ -540,7 +539,6 @@ public class SimpleHashtableTest {
 		Assert.assertEquals(ht.get(0), it.next().getValue());
 		Assert.assertEquals(ht.get(4), it.next().getValue());
 	}
-
 
 	@Test(expected = ConcurrentModificationException.class)
 	public void IteratorRemove_ConcurrentModification_ExceptionThrown() {
