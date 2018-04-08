@@ -19,12 +19,11 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
-	public void Put_SimpleValues_GetReturnsValue() {
+	public void Put_ALotOfSimpleValues_GetReturnsValue() {
 		String keyTemplate = "key";
 		String valueTemplate = "value";
-		int numberOfEntries = 4;
-		int hashTableSize = 1;
-		SimpleHashtable<String, String> ht = new SimpleHashtable<>(hashTableSize);
+		int numberOfEntries = 1000;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
 		for (int i = 0; i < numberOfEntries; i++) {
 			ht.put(keyTemplate + i, valueTemplate + i);
@@ -48,7 +47,7 @@ public class SimpleHashtableTest {
 	public void Put_OverwriteValue_ValueOverwrittenSizeSame() {
 		String keyTemplate = "key";
 		String valueTemplate = "value";
-		int numberOfEntries = 4;
+		int numberOfEntries = 20;
 		int hashTableSize = 10;
 		SimpleHashtable<String, String> ht = new SimpleHashtable<>(hashTableSize);
 
@@ -65,6 +64,30 @@ public class SimpleHashtableTest {
 		ht.put(key, newValue);
 		Assert.assertEquals(newValue, ht.get(key));
 		Assert.assertEquals(size, ht.size());
+	}
+
+	@Test
+	public void Put_ALotOfSimpleValuesOverwrite_Overwritten() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 1000;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + "2_" + i);
+		}
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			Assert.assertEquals(false, ht.containsValue(keyTemplate + i));
+		}
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			Assert.assertEquals(valueTemplate + "2_" + i, ht.get(keyTemplate + i));
+		}
 	}
 
 	@Test
@@ -150,27 +173,12 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
-	public void ContainsKey_NonExistentKeyEmptyHashSlot_False() {
+	public void ContainsKey_NonExistentKey_False() {
 		String key = "key";
 		int initialCapacity = 20;
 		SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
 
 		Assert.assertEquals(false, ht.containsKey(key));
-	}
-
-	@Test
-	public void ContainsKey_NonExistentKeyNonEmptyHashSlot_False() {
-		int initialCapacity = 1;
-		String keyTemplate = "key";
-		String valueTemplate = "value";
-		int numberOfEntries = 3;
-		SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
-
-		for (int i = 0; i < numberOfEntries; i++) {
-			ht.put(keyTemplate + i, valueTemplate + i);
-		}
-
-		Assert.assertEquals(false, ht.containsKey(keyTemplate+numberOfEntries));
 	}
 
 	@Test
@@ -261,37 +269,25 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
-	public void Remove_ExistentValueFirstInSlot_ContainsKeyReturnsFalse() {
-		int initialCapacity = 10;
+	public void Remove_ALotOfValues_ContainsFalseSizeZero() {
 		String keyTemplate = "key";
 		String valueTemplate = "value";
-		int numberOfEntries = 5;
-		SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
+		int numberOfEntries = 1000;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>(1);
 
 		for (int i = 0; i < numberOfEntries; i++) {
 			ht.put(keyTemplate + i, valueTemplate + i);
 		}
 
-		String key = keyTemplate + (numberOfEntries - 1);
-		ht.remove(key);
-		Assert.assertEquals(false, ht.containsKey(key));
-	}
-
-	@Test
-	public void Remove_ExistentValueNotFirstInSlot_ContainsKeyReturnsFalse() {
-		int initialCapacity = 1;
-		String keyTemplate = "key";
-		String valueTemplate = "value";
-		int numberOfEntries = 5;
-		SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
-
-		for (int i = 0; i < numberOfEntries; i++) {
-			ht.put(keyTemplate + i, valueTemplate + i);
+		for (int i = numberOfEntries - 1; i >= 0; i--) {
+			ht.remove(keyTemplate + i);
 		}
 
-		String key = keyTemplate + (numberOfEntries - 1);
-		ht.remove(key);
-		Assert.assertEquals(false, ht.containsKey(key));
+		for (int i = 0; i < numberOfEntries; i++) {
+			Assert.assertEquals(false, ht.containsKey(keyTemplate + i));
+		}
+
+		Assert.assertEquals(0, ht.size());
 	}
 
 	@Test
@@ -351,15 +347,37 @@ public class SimpleHashtableTest {
 	}
 
 	@Test
-	public void ToString_PreComputedString_CorrectReturn() {
-		int initialCapacity = 2;
-		SimpleHashtable<String, Integer> ht = new SimpleHashtable<>(initialCapacity);
-		ht.put("Ivana", 5);
-		ht.put("Jasna", 2);
-		ht.put("Kristina", 5);
-		ht.put("Ante", 2);
-		String correct = "[Ante=2, Ivana=5, Jasna=2, Kristina=5]";
+	public void Clear_SimpleValues_SizeZero() {
+		int initialCapacity = 10;
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 5;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
 
-		Assert.assertEquals(correct, ht.toString());
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		ht.clear();
+
+		Assert.assertEquals(0, ht.size());
+	}
+
+	@Test
+	public void Clear_ALotOfValues_ContainsFalse() {
+		String keyTemplate = "key";
+		String valueTemplate = "value";
+		int numberOfEntries = 1000;
+		SimpleHashtable<String, String> ht = new SimpleHashtable<>();
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			ht.put(keyTemplate + i, valueTemplate + i);
+		}
+
+		ht.clear();
+
+		for (int i = 0; i < numberOfEntries; i++) {
+			Assert.assertEquals(false, ht.containsKey(keyTemplate + i));
+		}
 	}
 }

@@ -1,17 +1,19 @@
 package hr.fer.zemris.java.hw05.collections;
 
-public class SimpleHashtable<K, V> {
+import java.util.Iterator;
+
+public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
 	private static final int DEFAULT_CAPACITY = 16;
+	private static final double THRESHOLD = 0.75;
 
 	public static class TableEntry<K, V> {
 		private final K key;
 		private V value;
 		private TableEntry<K, V> next;
 
-		public TableEntry(K key, V value, TableEntry<K, V> next) {
+		public TableEntry(K key, V value) {
 			this.key = key;
 			this.value = value;
-			this.next = next;
 		}
 
 		public K getKey() {
@@ -59,10 +61,14 @@ public class SimpleHashtable<K, V> {
 			throw new IllegalArgumentException("Cannot insert item with the key null into hashtable.");
 		}
 
+		if (size / capacity > THRESHOLD) {
+			rehash();
+		}
+
 		int hash = getHash(key);
 
 		if (table[hash] == null) {
-			table[hash] = new TableEntry<>(key, value, null);
+			table[hash] = new TableEntry<>(key, value);
 			size++;
 			return;
 		}
@@ -73,7 +79,7 @@ public class SimpleHashtable<K, V> {
 				currentEntry = currentEntry.next;
 			}
 
-			currentEntry.next = new TableEntry<>(key, value, null);
+			currentEntry.next = new TableEntry<>(key, value);
 			size++;
 			return;
 		}
@@ -183,6 +189,14 @@ public class SimpleHashtable<K, V> {
 		return false;
 	}
 
+	public void clear() {
+		for (int i = 0; i < capacity; i++) {
+			table[i] = null;
+		}
+
+		size = 0;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
@@ -202,6 +216,60 @@ public class SimpleHashtable<K, V> {
 		sb.append(']');
 
 		return sb.toString();
+	}
+
+	private void rehash() {
+		int newCapacity = capacity * 2;
+		TableEntry<K, V>[] newTable = (TableEntry<K, V>[]) new TableEntry[newCapacity];
+
+		for (int i = 0; i < capacity; i++) {
+			TableEntry<K, V> current = table[i];
+			while (current != null) {
+				int hash = (current.getKey().hashCode() & 0x7FFFFFFF) % newCapacity;
+
+				// First entry in slot
+				if (newTable[hash] == null) {
+					newTable[hash] = new TableEntry<>(current.getKey(), current.getValue());
+					current = current.next;
+					continue;
+				}
+
+				// If not first, add to the end
+				TableEntry<K, V> existent = newTable[hash];
+				while (existent.next != null) {
+					existent = existent.next;
+				}
+				existent.next = new TableEntry<>(current.getKey(), current.getValue());
+
+				current = current.next;
+			}
+		}
+
+		capacity = newCapacity;
+		table = newTable;
+	}
+
+	private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
+
+		@Override
+		public boolean hasNext() {
+			return false;
+		}
+
+		@Override
+		public TableEntry<K, V> next() {
+			return null;
+		}
+
+		@Override
+		public void remove() {
+
+		}
+	}
+
+	@Override
+	public Iterator<TableEntry<K, V>> iterator() {
+		return null;
 	}
 
 	private int getHash(Object key) {
