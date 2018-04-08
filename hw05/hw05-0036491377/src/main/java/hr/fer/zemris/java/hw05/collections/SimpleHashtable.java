@@ -1,11 +1,13 @@
 package hr.fer.zemris.java.hw05.collections;
 
-import java.util.Iterator;
-import java.util.Objects;
+import javafx.scene.control.Tab;
+
+import java.util.*;
 
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
 	private static final int DEFAULT_CAPACITY = 16;
 	private static final double THRESHOLD = 0.75;
+	private static final boolean REHASH = true;
 
 	public static class TableEntry<K, V> {
 		private final K key;
@@ -50,6 +52,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 	private int capacity;
 	private TableEntry<K, V>[] table;
 	private int size;
+	private int modificationCount;
 
 	public SimpleHashtable() {
 		this.capacity = DEFAULT_CAPACITY;
@@ -75,7 +78,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			throw new IllegalArgumentException("Cannot insert item with the key null into hashtable.");
 		}
 
-		if (size / capacity > THRESHOLD) {
+		if (size / capacity > THRESHOLD && REHASH) {
 			rehash();
 		}
 
@@ -84,6 +87,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		if (table[hash] == null) {
 			table[hash] = new TableEntry<>(key, value);
 			size++;
+			modificationCount++;
 			return;
 		}
 
@@ -95,6 +99,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
 			currentEntry.next = new TableEntry<>(key, value);
 			size++;
+			modificationCount++;
 			return;
 		}
 
@@ -171,6 +176,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		if (currentEntry.getKey().equals(key)) {
 			table[hash] = currentEntry.next;
 			size--;
+			modificationCount++;
 			return;
 		}
 
@@ -179,6 +185,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			if (nextEntry.getKey().equals(key)) {
 				currentEntry.next = nextEntry.next;
 				size--;
+				modificationCount++;
 				return;
 			}
 			currentEntry = nextEntry;
@@ -208,6 +215,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			table[i] = null;
 		}
 
+		modificationCount++;
 		size = 0;
 	}
 
@@ -259,31 +267,106 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 			}
 		}
 
+		modificationCount++;
 		capacity = newCapacity;
 		table = newTable;
 	}
 
 	private class IteratorImpl implements Iterator<SimpleHashtable.TableEntry<K, V>> {
+		private int currentSlotIndex;
+		private TableEntry<K, V> currentEntry;
+		private boolean canRemove;
+		private int expectedModificationCount;
+
+		public IteratorImpl() {
+			expectedModificationCount = modificationCount;
+		}
 
 		@Override
 		public boolean hasNext() {
+			if (currentEntry == null) {
+				for (int i = 0; i < capacity; i++) {
+					if (table[i] != null) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+			if (currentEntry.next != null) {
+				return true;
+			}
+
+			for (int i = currentSlotIndex + 1; i < capacity; i++) {
+				if (table[i] != null) {
+					return true;
+				}
+			}
+
 			return false;
 		}
 
 		@Override
 		public TableEntry<K, V> next() {
-			return null;
+			if (SimpleHashtable.this.modificationCount != expectedModificationCount) {
+				throw new ConcurrentModificationException();
+			}
+
+			if (currentEntry == null) {
+				for (int i = 0; i < capacity; i++) {
+					if (table[i] != null) {
+						currentEntry = table[i];
+						currentSlotIndex = i;
+						canRemove = true;
+
+						return currentEntry;
+					}
+				}
+
+				throw new NoSuchElementException("The iteration has no elements");
+			}
+
+			if (currentEntry.next != null) {
+				currentEntry = currentEntry.next;
+				canRemove = true;
+
+				return currentEntry;
+			}
+
+			for (int i = currentSlotIndex + 1; i < capacity; i++) {
+				if (table[i] != null) {
+					currentEntry = table[i];
+					currentSlotIndex = i;
+					canRemove = true;
+
+					return currentEntry;
+				}
+			}
+
+			throw new NoSuchElementException("The iteration has no more elements");
 		}
 
 		@Override
 		public void remove() {
+			if (SimpleHashtable.this.modificationCount != expectedModificationCount) {
+				throw new ConcurrentModificationException();
+			}
 
+			if (!canRemove) {
+				throw new IllegalStateException("Remove method has already been called.");
+			}
+
+			expectedModificationCount++;
+			SimpleHashtable.this.remove(currentEntry.getKey());
+
+			canRemove = false;
 		}
 	}
 
 	@Override
 	public Iterator<TableEntry<K, V>> iterator() {
-		return null;
+		return new IteratorImpl();
 	}
 
 	private int getHash(Object key) {

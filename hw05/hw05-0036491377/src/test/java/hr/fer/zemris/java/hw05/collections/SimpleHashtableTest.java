@@ -3,6 +3,8 @@ package hr.fer.zemris.java.hw05.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 /**
  * JUnit tests for SimpleHashtable.
  *
@@ -379,5 +381,60 @@ public class SimpleHashtableTest {
 		for (int i = 0; i < numberOfEntries; i++) {
 			Assert.assertEquals(false, ht.containsKey(keyTemplate + i));
 		}
+	}
+
+	@Test
+	public void IteratorHasNext_HasNextSameSlot_True() {
+
+	}
+
+	@Test
+	public void IteratorHasNext_HasNextDifferentSlot_True() {
+
+	}
+
+	@Test
+	public void IteratorHasNext_NoNext_False() {
+
+	}
+
+	@Test
+	public void IteratorNext_NoNext_ExceptionThrown() {
+
+	}
+
+	@Test
+	public void IteratorNext_NoElementsInTable_ExceptionThrown() {
+
+	}
+
+	@Test
+	public void IteratorNext_ConcurrentModification_ExceptionThrown() {
+
+	}
+
+	@Test
+	public void IteratorNext_HasNext_Retrieved() {
+
+	}
+
+	@Test
+	public void IteratorRemove_ConcurrentModification_ExceptionThrown() {
+
+	}
+
+	@Test
+	public void IteratorRemove_CalledAgainWithoutCallingNext_ExceptionThrown() {
+		
+	}
+
+	@Test
+	public void IteratorRemove_CalledBeforeNext_ExceptionThrown() {
+
+	}
+
+	@Test
+	public void IteratorRemove_CalledAfterNext_ElementRemoved() {
+
 	}
 }
