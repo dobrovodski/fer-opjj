@@ -76,7 +76,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
 	public void put(K key, V value) {
 		if (key == null) {
-			throw new IllegalArgumentException("Cannot insert item with the key null into hashtable.");
+			throw new NullPointerException("Cannot insert item with the key null into hashtable.");
 		}
 
 		if (size / capacity > THRESHOLD && REHASH) {
@@ -114,7 +114,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		}
 	}
 
-	public V get(java.io.Serializable key) {
+	public V get(Object key) {
 		if (key == null) {
 			return null;
 		}
@@ -198,7 +198,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 		return size == 0;
 	}
 
-	public boolean containsValue(java.io.Serializable value) {
+	public boolean containsValue(Object value) {
 		for (TableEntry<K, V> e : table) {
 			while (e != null) {
 				if (e.getValue().equals(value)) {
@@ -222,19 +222,24 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
+		boolean empty = true;
 		sb.append('[');
+
 		for (int i = 0; i < capacity; i++) {
 			TableEntry<K, V> current = table[i];
 			while (current != null) {
 				sb.append(current.toString());
 				sb.append(", ");
+				empty = false;
 
 				current = current.next;
 			}
 		}
 
 		// Delete last ', '
-		sb.setLength(sb.toString().length() - 2);
+		if (!empty) {
+			sb.setLength(sb.toString().length() - 2);
+		}
 		sb.append(']');
 
 		return sb.toString();

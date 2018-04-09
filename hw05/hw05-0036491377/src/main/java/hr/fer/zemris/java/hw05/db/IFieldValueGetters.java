@@ -1,4 +1,0 @@
-package hr.fer.zemris.java.hw05.db;
-
-public interface IFieldValueGetters {
-}

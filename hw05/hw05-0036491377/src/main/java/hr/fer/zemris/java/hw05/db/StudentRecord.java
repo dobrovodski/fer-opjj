@@ -6,9 +6,9 @@ public class StudentRecord {
 	private String jmbag;
 	private String lastName;
 	private String firstName;
-	private short finalGrade;
+	private int finalGrade;
 
-	public StudentRecord(String jmbag, String lastName, String firstName, short finalGrade) {
+	public StudentRecord(String jmbag, String lastName, String firstName, int finalGrade) {
 		this.jmbag = jmbag;
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -26,5 +26,21 @@ public class StudentRecord {
 	@Override
 	public int hashCode() {
 		return Objects.hash(jmbag);
+	}
+
+	public String getJmbag() {
+		return jmbag;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public int getFinalGrade() {
+		return finalGrade;
 	}
 }
