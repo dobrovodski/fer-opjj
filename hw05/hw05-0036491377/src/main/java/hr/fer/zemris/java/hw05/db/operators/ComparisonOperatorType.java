@@ -1,28 +1,28 @@
 package hr.fer.zemris.java.hw05.db.operators;
 
 public enum ComparisonOperatorType {
-	EQ("="),
-	LT("<"),
-	LTE("<="),
-	GT(">"),
-	GTE(">="),
-	NE("!="),
-	LIKE("like");
+    EQ("="),
+    LT("<"),
+    LTE("<="),
+    GT(">"),
+    GTE(">="),
+    NE("!="),
+    LIKE("LIKE");
 
-	private String name;
+    private String name;
 
-	ComparisonOperatorType(String name) {
-		this.name = name;
-	}
+    ComparisonOperatorType(String name) {
+        this.name = name;
+    }
 
-	public static ComparisonOperatorType getType(String name) {
-		for (ComparisonOperatorType t : ComparisonOperatorType.values()) {
-			if (t.name.equals(name.toLowerCase())) {
-				return t;
-			}
-		}
+    public static ComparisonOperatorType getType(String name) {
+        for (ComparisonOperatorType t : ComparisonOperatorType.values()) {
+            if (t.name.equals(name)) {
+                return t;
+            }
+        }
 
-		throw new IllegalArgumentException("Could not interpret as command: " + name);
-	}
+        throw new IllegalArgumentException("Could not interpret as operator: " + name);
+    }
 }
 
