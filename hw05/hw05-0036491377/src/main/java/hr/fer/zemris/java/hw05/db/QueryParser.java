@@ -1,10 +1,7 @@
-package hr.fer.zemris.java.hw05.db.parser;
+package hr.fer.zemris.java.hw05.db;
 
-import hr.fer.zemris.java.hw05.db.ConditionalExpression;
-import hr.fer.zemris.java.hw05.db.fieldgetters.FieldValueGetterType;
 import hr.fer.zemris.java.hw05.db.fieldgetters.FieldValueGetters;
 import hr.fer.zemris.java.hw05.db.fieldgetters.IFieldValueGetters;
-import hr.fer.zemris.java.hw05.db.operators.ComparisonOperatorType;
 import hr.fer.zemris.java.hw05.db.operators.ComparisonOperators;
 import hr.fer.zemris.java.hw05.db.operators.IComparisonOperator;
 
@@ -29,6 +26,10 @@ public class QueryParser {
     }
 
     public String getQueriedJMBAG() {
+        if (!isDirectQuery()) {
+            throw new IllegalStateException("Query was not direct.");
+        }
+
         return query.get(0).getStringLiteral();
     }
 
@@ -39,7 +40,12 @@ public class QueryParser {
     private void parse() {
         List<ConditionalExpression> expressionsList = new ArrayList<>();
 
+        // Splits query into expressions on logical operator AND
         String[] expressions = this.queryString.split("(?i)\\s+and\\s+");
+
+        // id - matches field
+        // op - matches operators
+        // lit - matches string literal
         String regex = "^(?<id>([a-zA-z]+))\\s*(?<op>[!=<>]+|(LIKE))\\s*\"(?<lit>(.)+)\"$";
         Pattern p = Pattern.compile(regex);
 
@@ -55,11 +61,8 @@ public class QueryParser {
             String operator = m.group("op");
             String literal = m.group("lit");
 
-            FieldValueGetterType fieldType = FieldValueGetterType.getType(field);
-            IFieldValueGetters fieldGetter = FieldValueGetters.from(fieldType);
-
-            ComparisonOperatorType operatorType = ComparisonOperatorType.getType(operator);
-            IComparisonOperator comparisonOperator = ComparisonOperators.from(operatorType);
+            IFieldValueGetters fieldGetter = FieldValueGetters.from(field);
+            IComparisonOperator comparisonOperator = ComparisonOperators.from(operator);
 
             expressionsList.add(new ConditionalExpression(fieldGetter, literal, comparisonOperator));
         }

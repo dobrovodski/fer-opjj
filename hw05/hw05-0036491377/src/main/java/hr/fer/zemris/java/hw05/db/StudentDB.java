@@ -1,7 +1,6 @@
 package hr.fer.zemris.java.hw05.db;
 
 import hr.fer.zemris.java.hw05.db.filter.QueryFilter;
-import hr.fer.zemris.java.hw05.db.parser.QueryParser;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,12 +11,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StudentDB {
-    private static String QUERY_KEYWORD = "query";
-    private static String END_KEYWORD = "exit";
-
+    private static final String QUERY_KEYWORD = "query";
+    private static final String END_KEYWORD = "exit";
 
     public static void main(String[] args) {
-
         List<String> lines;
 
         try {
@@ -26,13 +23,13 @@ public class StudentDB {
                     StandardCharsets.UTF_8
             );
         } catch (IOException e) {
-            System.err.println("Could not fine file database.txt in current directory.");
+            System.err.println("Could not find file database.txt in current directory.");
             return;
         }
+
         StudentDatabase db = new StudentDatabase(lines);
 
         Scanner scanner = new Scanner(System.in);
-
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
@@ -53,7 +50,7 @@ public class StudentDB {
 
             try {
                 parser = new QueryParser(input);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
                 continue;
             }

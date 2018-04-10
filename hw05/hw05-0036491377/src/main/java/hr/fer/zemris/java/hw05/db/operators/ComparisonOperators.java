@@ -32,7 +32,9 @@ public class ComparisonOperators {
         };
     }
 
-    public static IComparisonOperator from(ComparisonOperatorType type) {
+    public static IComparisonOperator from(String operator) {
+        ComparisonOperatorType type = ComparisonOperatorType.getType(operator);
+
         switch (type) {
             case EQ:
                 return EQUALS;

@@ -17,6 +17,11 @@ public class StudentDatabase {
         for (String row : databaseRows) {
             String[] studentInformation = row.split("\t");
 
+            if (studentInformation.length != 4) {
+                throw new IllegalArgumentException("Invalid database entry. "
+                                                   + "Needs to have 4 tab-separated fields: " + row);
+            }
+
             String jmbag = studentInformation[0].trim();
             String firstName = studentInformation[1].trim();
             String lastName = studentInformation[2].trim();

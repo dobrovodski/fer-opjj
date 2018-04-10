@@ -13,7 +13,9 @@ public class FieldValueGetters {
         JMBAG = StudentRecord::getJmbag;
     }
 
-    public static IFieldValueGetters from(FieldValueGetterType type) {
+    public static IFieldValueGetters from(String field) {
+        FieldValueGetterType type = FieldValueGetterType.getType(field);
+
         switch (type) {
             case FIRST_NAME:
                 return FieldValueGetters.FIRST_NAME;
