@@ -4,14 +4,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * JUnit tests for StudentDatabase.
+ *
+ * @author matej
+ * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
+ *         tests </a>
+ */
 public class StudentDatabaseTest {
     private StudentDatabase db;
 

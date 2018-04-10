@@ -1,16 +1,38 @@
 package hr.fer.zemris.java.hw05.db.fieldgetters;
 
+/**
+ *
+ */
 public enum FieldValueGetterType {
+    /**
+     *
+     */
     FIRST_NAME("firstName"),
+    /**
+     *
+     */
     LAST_NAME("lastName"),
+    /**
+     *
+     */
     JMBAG("jmbag");
 
+    //
     private String name;
 
+    /**
+     *
+     * @param name
+     */
     FieldValueGetterType(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static FieldValueGetterType getType(String name) {
         for (FieldValueGetterType t : FieldValueGetterType.values()) {
             if (t.name.equals(name)) {

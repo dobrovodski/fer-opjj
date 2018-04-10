@@ -5,9 +5,17 @@ import hr.fer.zemris.java.hw05.db.StudentRecord;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class QueryFilter implements IFilter {
+    //
     private List<ConditionalExpression> query;
 
+    /**
+     *
+     * @param query
+     */
     public QueryFilter(List<ConditionalExpression> query) {
         this.query = query;
     }

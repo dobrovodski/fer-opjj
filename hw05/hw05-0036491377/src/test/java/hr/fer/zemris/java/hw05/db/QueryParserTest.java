@@ -12,21 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * JUnit tests for QueryParserT.
+ *
+ * @author matej
+ * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
+ *         tests </a>
+ */
 public class QueryParserTest {
-    private StudentDatabase db;
-
-    @Before
-    public void initialize() {
-        List<String> databaseText = null;
-        try {
-            databaseText = loader("./database.txt");
-        } catch (IOException e) {
-            Assert.fail();
-        }
-
-        db = new StudentDatabase(databaseText);
-    }
-
     @Test
     public void IsDirectQuery_QueryIsDirect_True() {
         String query = " jmbag=\"0000000003\"";
@@ -104,12 +97,5 @@ public class QueryParserTest {
         Assert.assertEquals(e2.getComparisonOperator(), ComparisonOperators.EQUALS);
         Assert.assertEquals(e2.getFieldGetter(), FieldValueGetters.FIRST_NAME);
         Assert.assertEquals(e2.getStringLiteral(), "Marko");
-    }
-
-    private List<String> loader(String path) throws IOException {
-        return Files.readAllLines(
-                Paths.get(path),
-                StandardCharsets.UTF_8
-        );
     }
 }

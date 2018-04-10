@@ -10,21 +10,38 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ *
+ */
 public class QueryParser {
+    //
     private String queryString;
+    //
     private List<ConditionalExpression> query;
 
+    /**
+     *
+     * @param queryString
+     */
     public QueryParser(String queryString) {
         this.queryString = queryString.trim();
         parse();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isDirectQuery() {
         return query.size() == 1 &&
                query.get(0).getComparisonOperator().equals(ComparisonOperators.EQUALS) &&
                query.get(0).getFieldGetter().equals(FieldValueGetters.JMBAG);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getQueriedJMBAG() {
         if (!isDirectQuery()) {
             throw new IllegalStateException("Query was not direct.");
@@ -33,10 +50,17 @@ public class QueryParser {
         return query.get(0).getStringLiteral();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ConditionalExpression> getQuery() {
         return query;
     }
 
+    /**
+     *
+     */
     private void parse() {
         List<ConditionalExpression> expressionsList = new ArrayList<>();
 

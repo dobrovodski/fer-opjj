@@ -1,12 +1,22 @@
 package hr.fer.zemris.java.hw05.db.operators;
 
+/**
+ *
+ */
 public class ComparisonOperators {
+    //
     public static final IComparisonOperator LESS;
+    //
     public static final IComparisonOperator LESS_OR_EQUALS;
+    //
     public static final IComparisonOperator GREATER;
+    //
     public static final IComparisonOperator GREATER_OR_EQUALS;
+    //
     public static final IComparisonOperator EQUALS;
+    //
     public static final IComparisonOperator NOT_EQUALS;
+    //
     public static final IComparisonOperator LIKE;
 
     static {
@@ -32,6 +42,11 @@ public class ComparisonOperators {
         };
     }
 
+    /**
+     *
+     * @param operator
+     * @return
+     */
     public static IComparisonOperator from(String operator) {
         ComparisonOperatorType type = ComparisonOperatorType.getType(operator);
 

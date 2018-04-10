@@ -5,6 +5,13 @@ import hr.fer.zemris.java.hw05.db.operators.IComparisonOperator;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * JUnit tests for ComparisonOperators.
+ *
+ * @author matej
+ * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
+ *         tests </a>
+ */
 public class ComparisonOperatorsTest {
     @Test
     public void LIKE_NotAlike_False() {

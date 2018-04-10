@@ -6,10 +6,19 @@ import hr.fer.zemris.java.hw05.db.filter.IFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class StudentDatabase {
+    //
     private SimpleHashtable<String, StudentRecord> index;
+    //
     private List<StudentRecord> recordsList;
 
+    /**
+     *
+     * @param databaseRows
+     */
     public StudentDatabase(List<String> databaseRows) {
         index = new SimpleHashtable<>();
         recordsList = new ArrayList<>();
@@ -33,10 +42,20 @@ public class StudentDatabase {
         }
     }
 
+    /**
+     *
+     * @param jmbag
+     * @return
+     */
     public StudentRecord forJMBAG(String jmbag) {
         return index.get(jmbag);
     }
 
+    /**
+     *
+     * @param filter
+     * @return
+     */
     public List<StudentRecord> filter(IFilter filter) {
         List<StudentRecord> filtered = new ArrayList<>();
         for (StudentRecord record : recordsList) {
@@ -48,6 +67,10 @@ public class StudentDatabase {
         return filtered;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<StudentRecord> getRecordsList() {
         return recordsList;
     }

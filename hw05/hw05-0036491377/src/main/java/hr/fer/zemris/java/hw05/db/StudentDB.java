@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ *
+ */
 public class StudentDB {
     private static final String QUERY_KEYWORD = "query";
     private static final String END_KEYWORD = "exit";
@@ -72,6 +75,10 @@ public class StudentDB {
         scanner.close();
     }
 
+    /**
+     *
+     * @param records
+     */
     private static void printRecords(List<StudentRecord> records) {
         int jmbagWidth = 0;
         int lastNameWidth = 0;
@@ -141,7 +148,12 @@ public class StudentDB {
         System.out.println(sb.toString());
     }
 
-    // Utility
+    /**
+     *
+     * @param template
+     * @param n
+     * @return
+     */
     private static String repeat(String template, int n) {
         return new String(new char[n]).replace("\0", template);
     }

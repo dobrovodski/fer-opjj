@@ -5,33 +5,70 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+/**
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
+    //
     private static final int DEFAULT_CAPACITY = 16;
+    //
     private static final double THRESHOLD = 0.75;
+    //
     private static final boolean REHASH = true;
 
+    /**
+     *
+     * @param <K>
+     * @param <V>
+     */
     public static class TableEntry<K, V> {
+        //
         private final K key;
+        //
         private V value;
+        //
         private TableEntry<K, V> next;
 
+        /**
+         *
+         * @param key
+         * @param value
+         */
         public TableEntry(K key, V value) {
             this.key = key;
             this.value = value;
         }
 
+        /**
+         *
+         * @return
+         */
         public K getKey() {
             return key;
         }
 
+        /**
+         *
+         * @return
+         */
         public V getValue() {
             return value;
         }
 
+        /**
+         *
+         * @param value
+         */
         public void setValue(V value) {
             this.value = value;
         }
 
+        /**
+         *
+         * @return
+         */
         public String toString() {
             return this.key.toString() + "=" + this.value.toString();
         }
@@ -52,16 +89,27 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
     }
 
+    //
     private int capacity;
+    //
     private TableEntry<K, V>[] table;
+    //
     private int size;
+    //
     private int modificationCount;
 
+    /**
+     *
+     */
     public SimpleHashtable() {
         this.capacity = DEFAULT_CAPACITY;
         this.table = (TableEntry<K, V>[]) new TableEntry[capacity];
     }
 
+    /**
+     *
+     * @param initialCapacity
+     */
     public SimpleHashtable(int initialCapacity) {
         if (initialCapacity < 1) {
             throw new IllegalArgumentException("Cannot set initial capacity to less than 1.");
@@ -76,6 +124,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         this.table = (TableEntry<K, V>[]) new TableEntry[capacity];
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("Cannot insert item with the key null into hashtable.");
@@ -116,6 +169,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public V get(Object key) {
         if (key == null) {
             return null;
@@ -139,10 +197,19 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return size;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public boolean containsKey(Object key) {
         if (key == null) {
             return false;
@@ -165,6 +232,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return false;
     }
 
+    /**
+     *
+     * @param key
+     */
     public void remove(Object key) {
         if (key == null) {
             return;
@@ -196,10 +267,19 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public boolean containsValue(Object value) {
         for (TableEntry<K, V> e : table) {
             while (e != null) {
@@ -213,6 +293,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return false;
     }
 
+    /**
+     *
+     *
+     */
     public void clear() {
         for (int i = 0; i < capacity; i++) {
             table[i] = null;
@@ -222,6 +306,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         size = 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean empty = true;
@@ -247,6 +335,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return sb.toString();
     }
 
+    /**
+     *
+     */
     private void rehash() {
         int newCapacity = capacity * 2;
         TableEntry<K, V>[] newTable = (TableEntry<K, V>[]) new TableEntry[newCapacity];
@@ -279,12 +370,22 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         table = newTable;
     }
 
+    /**
+     *
+     */
     private class IteratorImpl implements Iterator<TableEntry<K, V>> {
+        //
         private int currentSlotIndex;
+        //
         private TableEntry<K, V> currentEntry;
+        //
         private boolean canRemove;
+        //
         private int expectedModificationCount;
 
+        /**
+         *
+         */
         public IteratorImpl() {
             expectedModificationCount = modificationCount;
         }
@@ -376,6 +477,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
         return new IteratorImpl();
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     private int getHash(Object key) {
         return (key.hashCode() & 0x7FFFFFFF) % capacity;
     }
