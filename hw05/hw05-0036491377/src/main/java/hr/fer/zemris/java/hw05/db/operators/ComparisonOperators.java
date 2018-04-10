@@ -1,22 +1,16 @@
 package hr.fer.zemris.java.hw05.db.operators;
 
 /**
- *
+ * Implements concrete strategies for all the different operators that can be found in database queries.
+ * @author matej
  */
 public class ComparisonOperators {
-    //
     public static final IComparisonOperator LESS;
-    //
     public static final IComparisonOperator LESS_OR_EQUALS;
-    //
     public static final IComparisonOperator GREATER;
-    //
     public static final IComparisonOperator GREATER_OR_EQUALS;
-    //
     public static final IComparisonOperator EQUALS;
-    //
     public static final IComparisonOperator NOT_EQUALS;
-    //
     public static final IComparisonOperator LIKE;
 
     static {
@@ -43,9 +37,9 @@ public class ComparisonOperators {
     }
 
     /**
-     *
-     * @param operator
-     * @return
+     * Attempts to turn the given string into a certain operator.
+     * @param operator string to be converted
+     * @return operator method
      */
     public static IComparisonOperator from(String operator) {
         ComparisonOperatorType type = ComparisonOperatorType.getType(operator);

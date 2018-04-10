@@ -3,14 +3,15 @@ package hr.fer.zemris.java.hw05.db.fieldgetters;
 import hr.fer.zemris.java.hw05.db.StudentRecord;
 
 /**
- *
+ * This class holds the strategies responsible for obtaining a requested field from a given {@link StudentRecord}.
+ * @author matej
  */
 public class FieldValueGetters {
-    //
+    // First name getter
     public static final IFieldValueGetters FIRST_NAME;
-    //
+    // Last name getter
     public static final IFieldValueGetters LAST_NAME;
-    //
+    // JMBAG getter
     public static final IFieldValueGetters JMBAG;
 
     static {
@@ -20,9 +21,9 @@ public class FieldValueGetters {
     }
 
     /**
-     *
-     * @param field
-     * @return
+     * Converts given string to corresponding FieldValueGetter
+     * @param field string representation of the getter
+     * @return converted FieldValueGetter
      */
     public static IFieldValueGetters from(String field) {
         FieldValueGetterType type = FieldValueGetterType.getType(field);

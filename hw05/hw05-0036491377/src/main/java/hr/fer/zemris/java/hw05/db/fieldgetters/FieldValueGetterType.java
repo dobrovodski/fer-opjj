@@ -1,37 +1,35 @@
 package hr.fer.zemris.java.hw05.db.fieldgetters;
 
 /**
- *
+ * Enum for representing the different {@link FieldValueGetters}.
+ * @author matej
  */
 public enum FieldValueGetterType {
     /**
-     *
+     * The firstName getter enum.
      */
     FIRST_NAME("firstName"),
     /**
-     *
+     * The lastName getter enum.
      */
     LAST_NAME("lastName"),
     /**
-     *
+     * The jmbag getter enum.
      */
     JMBAG("jmbag");
 
-    //
+    // String representation of getter
     private String name;
 
-    /**
-     *
-     * @param name
-     */
     FieldValueGetterType(String name) {
         this.name = name;
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Returns enum based on given string. Case sensitive.
+     * @param name field to convert
+     * @return enum representing the selected {@link FieldValueGetters} strategy
+     * @throws IllegalArgumentException if the string cannot be converted to an existing getter
      */
     public static FieldValueGetterType getType(String name) {
         for (FieldValueGetterType t : FieldValueGetterType.values()) {

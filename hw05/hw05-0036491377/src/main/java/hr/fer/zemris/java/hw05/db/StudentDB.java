@@ -80,15 +80,15 @@ public class StudentDB {
      * @param records
      */
     private static void printRecords(List<StudentRecord> records) {
-        int jmbagWidth = 0;
-        int lastNameWidth = 0;
-        int firstNameWidth = 0;
-        int gradeWidth = 0;
-
         if (records.size() == 0) {
             System.out.println("Records selected: " + records.size());
             return;
         }
+
+        int jmbagWidth = 0;
+        int lastNameWidth = 0;
+        int firstNameWidth = 0;
+        int gradeWidth = 0;
 
         for (StudentRecord r : records) {
             if (r.getJmbag().length() > jmbagWidth) {
