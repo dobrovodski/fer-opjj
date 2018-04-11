@@ -72,14 +72,17 @@ public class StudentDB {
             if (parser.isDirectQuery()) {
                 StudentRecord r = db.forJMBAG(parser.getQueriedJMBAG());
                 System.out.println("Using index for record retrieval.");
-                records.add(r);
+                if (r != null) {
+                    records.add(r);
+                }
+
                 printRecords(records);
                 continue;
             }
 
             try {
                 records.addAll(db.filter(new QueryFilter(parser.getQuery())));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
                 continue;
             }

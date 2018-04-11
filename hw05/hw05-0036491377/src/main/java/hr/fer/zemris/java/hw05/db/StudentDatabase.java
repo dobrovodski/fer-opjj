@@ -23,8 +23,6 @@ public class StudentDatabase {
      * Constructor.
      *
      * @param databaseRows List of rows in a database.
-     *
-     * @throws IllegalArgumentException if the fields in the student database aren't tab-separated
      */
     public StudentDatabase(List<String> databaseRows) {
         index = new SimpleHashtable<>();

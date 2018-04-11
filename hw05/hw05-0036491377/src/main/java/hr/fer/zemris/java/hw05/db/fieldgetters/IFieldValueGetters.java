@@ -13,5 +13,5 @@ public interface IFieldValueGetters {
      *
      * @return requested field
      */
-    public String get(StudentRecord record);
+    String get(StudentRecord record);
 }

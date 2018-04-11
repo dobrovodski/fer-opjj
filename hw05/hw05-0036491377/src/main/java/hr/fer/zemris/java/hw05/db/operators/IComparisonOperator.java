@@ -14,5 +14,5 @@ public interface IComparisonOperator {
      *
      * @return {@code true} if it is satisfied, {@code false} otherwise
      */
-    public boolean satisfied(String value1, String value2);
+    boolean satisfied(String value1, String value2);
 }

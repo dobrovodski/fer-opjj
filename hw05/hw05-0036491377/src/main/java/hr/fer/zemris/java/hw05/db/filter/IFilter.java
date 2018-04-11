@@ -15,5 +15,5 @@ public interface IFilter {
      *
      * @return {@code true} if the filter accepts the record, {@code false} otherwise
      */
-    public boolean accepts(StudentRecord record);
+    boolean accepts(StudentRecord record);
 }

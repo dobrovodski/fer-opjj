@@ -105,6 +105,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
     /**
      * Default constructor for the table which sets the initial capacity to 16.
      */
+    @SuppressWarnings("unchecked")
     public SimpleHashtable() {
         this.capacity = DEFAULT_CAPACITY;
         this.table = (TableEntry<K, V>[]) new TableEntry[capacity];
@@ -117,6 +118,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
      *
      * @throws IllegalArgumentException if capacity is less than 1
      */
+    @SuppressWarnings("unchecked")
     public SimpleHashtable(int initialCapacity) {
         if (initialCapacity < 1) {
             throw new IllegalArgumentException("Cannot set initial capacity to less than 1.");
@@ -139,6 +141,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
      *
      * @throws NullPointerException if the key is null
      */
+    @SuppressWarnings("ProhibitedExceptionThrown")
     public void put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("Cannot insert item with the key null into hashtable.");
@@ -356,6 +359,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
      * Regularly resizes the hashtable to prevent collisions. By default, it triggers when there is 0.75 * capacity
      * entries in the table.
      */
+    @SuppressWarnings("unchecked")
     private void rehash() {
         int newCapacity = capacity * 2;
         TableEntry<K, V>[] newTable = (TableEntry<K, V>[]) new TableEntry[newCapacity];
@@ -470,6 +474,12 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             throw new NoSuchElementException("The iteration has no more elements");
         }
 
+        /**
+         * {@inheritDoc}
+         *
+         * @throws ConcurrentModificationException if the table is modified from outside of the iterator during
+         *         iteration
+         */
         @Override
         public void remove() {
             if (SimpleHashtable.this.modificationCount != expectedModificationCount) {
