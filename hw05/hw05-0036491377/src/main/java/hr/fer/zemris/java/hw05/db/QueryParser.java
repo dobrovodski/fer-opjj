@@ -69,8 +69,9 @@ public class QueryParser {
 
         // id - matches field
         // op - matches operators
-        // lit - matches string literal
-        String regex = "^(?<id>([a-zA-z]+))\\s*(?<op>[!=<>]+|(LIKE))\\s*\"(?<lit>(.)+)\"$";
+        // lit - matches string literal (asterisk, numbers, unicode letters)
+        //TODO: check more if regex ever breaks
+        String regex = "^(?<id>([a-zA-z]+))\\s*(?<op>[!=<>]+|(LIKE))\\s*\"(?<lit>[*0-9\\p{L}]+)\"$";
         Pattern p = Pattern.compile(regex);
 
         for (String expression : expressions) {

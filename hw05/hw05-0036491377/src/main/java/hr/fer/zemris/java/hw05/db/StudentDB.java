@@ -68,7 +68,13 @@ public class StudentDB {
                 continue;
             }
 
-            records.addAll(db.filter(new QueryFilter(parser.getQuery())));
+            try {
+                records.addAll(db.filter(new QueryFilter(parser.getQuery())));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                continue;
+            }
+
             printRecords(records);
         }
 

@@ -27,7 +27,8 @@ public class ComparisonOperators {
         NOT_EQUALS = (value1, value2) -> value1.compareTo(value2) != 0;
 
         LIKE = (value1, value2) -> {
-            if (value2.split("\\*").length > 2) {
+            //String[] z = value2.split("\\*", -1);
+            if (value2.split("\\*", -1).length > 2) {
                 throw new IllegalArgumentException("LIKE operator supports up to one wildcard *.");
             }
             value2 = value2.replaceAll("\\*", ".*");
