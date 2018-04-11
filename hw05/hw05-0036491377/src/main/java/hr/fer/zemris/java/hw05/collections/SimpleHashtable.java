@@ -141,7 +141,6 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
      *
      * @throws NullPointerException if the key is null
      */
-    @SuppressWarnings("ProhibitedExceptionThrown")
     public void put(K key, V value) {
         if (key == null) {
             throw new NullPointerException("Cannot insert item with the key null into hashtable.");

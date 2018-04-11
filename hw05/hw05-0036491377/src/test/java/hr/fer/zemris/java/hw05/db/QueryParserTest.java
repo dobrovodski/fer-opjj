@@ -3,13 +3,8 @@ package hr.fer.zemris.java.hw05.db;
 import hr.fer.zemris.java.hw05.db.fieldgetters.FieldValueGetters;
 import hr.fer.zemris.java.hw05.db.operators.ComparisonOperators;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -51,19 +46,19 @@ public class QueryParserTest {
     @Test(expected = IllegalArgumentException.class)
     public void Parse_BadOperator_ExceptionThrown() {
         String query = " jmbag<<\"0000000003\"";
-        QueryParser qp = new QueryParser(query);
+        new QueryParser(query);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void Parse_BadFieldGetter_ExceptionThrown() {
         String query = " jbmag=\"0000000003\"";
-        QueryParser qp = new QueryParser(query);
+        new QueryParser(query);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void Parse_BadLiteral_ExceptionThrown() {
         String query = " jmbag=\"0000000003";
-        QueryParser qp = new QueryParser(query);
+        new QueryParser(query);
     }
 
     @Test

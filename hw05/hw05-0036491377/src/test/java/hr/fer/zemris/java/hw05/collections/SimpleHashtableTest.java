@@ -3,6 +3,8 @@ package hr.fer.zemris.java.hw05.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import hr.fer.zemris.java.hw05.collections.SimpleHashtable.TableEntry;
+
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -18,7 +20,7 @@ public class SimpleHashtableTest {
     @Test(expected = IllegalArgumentException.class)
     public void SimpleHashtable_InitialCapacityLessThanOne_ExceptionThrown() {
         int initialCapacity = 0;
-        SimpleHashtable<String, String> ht = new SimpleHashtable<>(initialCapacity);
+        new SimpleHashtable<>(initialCapacity);
     }
 
     @Test
@@ -407,7 +409,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.next();
         it.next();
         Assert.assertEquals(true, it.hasNext());
@@ -425,7 +427,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         Assert.assertEquals(true, it.hasNext());
     }
 
@@ -433,7 +435,7 @@ public class SimpleHashtableTest {
     public void IteratorHasNext_NothingAdded_False() {
         SimpleHashtable<String, String> ht = new SimpleHashtable<>();
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         Assert.assertEquals(false, it.hasNext());
     }
 
@@ -460,7 +462,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         for (int i = 0; i < numberOfEntries; i++) {
             it.next();
         }
@@ -479,7 +481,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         for (int i = 0; i < numberOfEntries; i++) {
             it.next();
         }
@@ -490,7 +492,7 @@ public class SimpleHashtableTest {
     @Test(expected = NoSuchElementException.class)
     public void IteratorNext_NoElementsInTable_ExceptionThrown() {
         SimpleHashtable<String, String> ht = new SimpleHashtable<>();
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.next();
     }
 
@@ -505,7 +507,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.next();
         ht.remove(keyTemplate + (numberOfEntries - 1));
         it.next();
@@ -550,7 +552,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.next();
         ht.remove(keyTemplate + (numberOfEntries - 1));
         it.remove();
@@ -567,7 +569,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.next();
         it.remove();
         it.remove();
@@ -584,7 +586,7 @@ public class SimpleHashtableTest {
             ht.put(keyTemplate + i, valueTemplate + i);
         }
 
-        Iterator it = ht.iterator();
+        Iterator<?> it = ht.iterator();
         it.remove();
     }
 
@@ -608,8 +610,8 @@ public class SimpleHashtableTest {
 
     @Test
     public void TableEntryEquals_AllCombinations_True() {
-        SimpleHashtable.TableEntry te1 = new SimpleHashtable.TableEntry("key1", "value1");
-        SimpleHashtable.TableEntry te2 = new SimpleHashtable.TableEntry("key1", "value2");
+        SimpleHashtable.TableEntry<String, String> te1 = new SimpleHashtable.TableEntry<String, String>("key1", "value1");
+        SimpleHashtable.TableEntry<String, String> te2 = new TableEntry<String, String>("key1", "value2");
         Assert.assertEquals(true, te1.equals(te1));
         Assert.assertEquals(true, te2.equals(te2));
         Assert.assertEquals(true, te1.equals(te2));
