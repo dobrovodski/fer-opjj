@@ -11,17 +11,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * This class handles parsing for database queries. It turns the given String query into a list of conditional
+ * expressions and provides methods for retrieving the expressions and checking if it was a direct query.
  *
+ * @author matej
  */
 public class QueryParser {
-    //
+    // String to parse
     private String queryString;
-    //
+    // List of conditional expressions after parsing
     private List<ConditionalExpression> query;
 
     /**
+     * This constructor immediately parses the provided query.
      *
-     * @param queryString
+     * @param queryString query to parse
      */
     public QueryParser(String queryString) {
         this.queryString = queryString.trim();
@@ -29,8 +33,9 @@ public class QueryParser {
     }
 
     /**
+     * Returns {@code true} if the query was direct (i.e. the format was jmbag = "(number)"), {@code false} otherwise.
      *
-     * @return
+     * @return returns {@code true} if the query was direct, {@code false} otherwise.
      */
     public boolean isDirectQuery() {
         return query.size() == 1 &&
@@ -39,8 +44,11 @@ public class QueryParser {
     }
 
     /**
+     * If the query was direct, returns the JMBAG associated with that query.
      *
-     * @return
+     * @return the JMBAG of the direct query
+     *
+     * @throws IllegalStateException if the query was not direct
      */
     public String getQueriedJMBAG() {
         if (!isDirectQuery()) {
@@ -51,15 +59,22 @@ public class QueryParser {
     }
 
     /**
+     * Returns the query as a list of conditional expressions.
      *
-     * @return
+     * @return list of conditional expressions extracted from the query
      */
     public List<ConditionalExpression> getQuery() {
         return query;
     }
 
     /**
+     * The main method used for parsing the provided query and turning it into conditional expressions. It splits the
+     * query on the keyword "and" and then checks each individual expression on its own, turning them into {@link
+     * ConditionalExpression} objects and putting them in a list.
      *
+     * @throws IllegalArgumentException if the expressions within the query could not be parsed. This will also
+     *         fire if the "and" operator was mangled because the query could not have been properly split into
+     *         expressions
      */
     private void parse() {
         List<ConditionalExpression> expressionsList = new ArrayList<>();
@@ -67,10 +82,9 @@ public class QueryParser {
         // Splits query into expressions on logical operator AND
         String[] expressions = this.queryString.split("(?i)\\s+and\\s+");
 
-        // id - matches field
-        // op - matches operators
+        // id - matches field (one or more letters)
+        // op - matches operators (any combination of !=<> or just a single LIKE)
         // lit - matches string literal (asterisk, numbers, unicode letters)
-        //TODO: check more if regex ever breaks
         String regex = "^(?<id>([a-zA-z]+))\\s*(?<op>[!=<>]+|(LIKE))\\s*\"(?<lit>[*0-9\\p{L}]+)\"$";
         Pattern p = Pattern.compile(regex);
 

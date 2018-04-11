@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw05.db.operators;
 
 /**
  * Enumerates all the different operators which can be found in a database query.
+ *
  * @author matej
  */
 public enum ComparisonOperatorType {
@@ -43,8 +44,11 @@ public enum ComparisonOperatorType {
 
     /**
      * Returns enum based on given string.
+     *
      * @param operator string representation of the operator to convert to
+     *
      * @return enum representing the selected {@link ComparisonOperators} strategy
+     *
      * @throws IllegalArgumentException if the string cannot be converted to an existing operator
      */
     public static ComparisonOperatorType getType(String operator) {

@@ -4,6 +4,7 @@ import hr.fer.zemris.java.hw05.db.StudentRecord;
 
 /**
  * This class holds the strategies responsible for obtaining a requested field from a given {@link StudentRecord}.
+ *
  * @author matej
  */
 public class FieldValueGetters {
@@ -22,7 +23,9 @@ public class FieldValueGetters {
 
     /**
      * Converts given string to corresponding FieldValueGetter
+     *
      * @param field string representation of the getter
+     *
      * @return converted FieldValueGetter
      */
     public static IFieldValueGetters from(String field) {

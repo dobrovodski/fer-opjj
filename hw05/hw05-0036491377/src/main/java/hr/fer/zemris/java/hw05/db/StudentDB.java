@@ -11,11 +11,20 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * The main class for demonstrating the usage of the database. The user can provide queries to the database via the
+ * console and the selected entries will be displayed back to them. Every query has to start with the keyword "query"
+ * after which follows one or more expressions in the format of (field) (operator) "(literal)". Entering the keyword
+ * "exit" ends the program.
  *
+ * @author matej
  */
 public class StudentDB {
+    // Keyword that each query has to start with
     private static final String QUERY_KEYWORD = "query";
+    // Keyword to end the program
     private static final String END_KEYWORD = "exit";
+    // Prompt symbol
+    private static final String PROMPT_SYMBOL = "> ";
 
     public static void main(String[] args) {
         List<String> lines;
@@ -34,7 +43,7 @@ public class StudentDB {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("> ");
+            System.out.print(PROMPT_SYMBOL);
             String input = scanner.nextLine().trim();
 
             // Loop exit condition
@@ -82,8 +91,9 @@ public class StudentDB {
     }
 
     /**
+     * Pretty-prints provided records onto the standard output.
      *
-     * @param records
+     * @param records list of records to be printed
      */
     private static void printRecords(List<StudentRecord> records) {
         if (records.size() == 0) {
@@ -155,10 +165,12 @@ public class StudentDB {
     }
 
     /**
+     * Utility method for repeating the template string n times.
      *
-     * @param template
-     * @param n
-     * @return
+     * @param template template string to repeat
+     * @param n number of times to repeat it
+     *
+     * @return template string repeated n times
      */
     private static String repeat(String template, int n) {
         return new String(new char[n]).replace("\0", template);

@@ -20,7 +20,6 @@ import java.util.List;
  *         tests </a>
  */
 public class QueryParserTest {
-    //TODO: check multiple wildcards
     @Test
     public void IsDirectQuery_QueryIsDirect_True() {
         String query = " jmbag=\"0000000003\"";

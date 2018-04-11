@@ -45,7 +45,14 @@ public class ComparisonOperatorsTest {
     @Test(expected = IllegalArgumentException.class)
     public void LIKE_MoreThanOneWildcard_ExceptionThrown() {
         IComparisonOperator oper = ComparisonOperators.LIKE;
-        Assert.assertEquals(false, oper.satisfied("Zagreb", "Z*g*b"));
+        oper.satisfied("Zagreb", "Z*g*b");
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void LIKE_WildcardsNextToEachother_ExceptionThrown() {
+        IComparisonOperator oper = ComparisonOperators.LIKE;
+        oper.satisfied("Zagreb", "Z**b");
     }
 
     @Test

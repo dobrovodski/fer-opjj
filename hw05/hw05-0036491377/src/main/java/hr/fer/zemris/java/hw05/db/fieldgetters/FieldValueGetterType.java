@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw05.db.fieldgetters;
 
 /**
  * Enum for representing the different {@link FieldValueGetters}.
+ *
  * @author matej
  */
 public enum FieldValueGetterType {
@@ -27,8 +28,11 @@ public enum FieldValueGetterType {
 
     /**
      * Returns enum based on given string. Case sensitive.
+     *
      * @param name field to convert
+     *
      * @return enum representing the selected {@link FieldValueGetters} strategy
+     *
      * @throws IllegalArgumentException if the string cannot be converted to an existing getter
      */
     public static FieldValueGetterType getType(String name) {

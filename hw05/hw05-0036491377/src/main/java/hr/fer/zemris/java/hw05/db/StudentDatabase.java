@@ -7,17 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class models a simple database used to hold student records. It can filter the records and return the selected
+ * ones through the {@code filter} method and it also provides O(1) access for selecting students by direct JMBAG
+ * query.
  *
+ * @author matej
  */
 public class StudentDatabase {
-    //
+    // Hashtable used to store StudentRecords via their JMBAG
     private SimpleHashtable<String, StudentRecord> index;
-    //
+    // Stores all the StudentRecords
     private List<StudentRecord> recordsList;
 
     /**
+     * Constructor.
      *
-     * @param databaseRows
+     * @param databaseRows List of rows in a database.
+     *
+     * @throws IllegalArgumentException if the fields in the student database aren't tab-separated
      */
     public StudentDatabase(List<String> databaseRows) {
         index = new SimpleHashtable<>();
@@ -43,18 +50,22 @@ public class StudentDatabase {
     }
 
     /**
+     * Returns a {@link StudentRecord} in O(1) time using the student's JMBAG.
      *
-     * @param jmbag
-     * @return
+     * @param jmbag JMBAG of the student
+     *
+     * @return StudentRecord with given jmbag
      */
     public StudentRecord forJMBAG(String jmbag) {
         return index.get(jmbag);
     }
 
     /**
+     * Takes in a filter and returns a filtered list of records.
      *
-     * @param filter
-     * @return
+     * @param filter filter used to select wanted records
+     *
+     * @return filtered list of records
      */
     public List<StudentRecord> filter(IFilter filter) {
         List<StudentRecord> filtered = new ArrayList<>();
@@ -68,8 +79,9 @@ public class StudentDatabase {
     }
 
     /**
+     * Returns a list of all the {@link StudentRecord}s.
      *
-     * @return
+     * @return list of student records
      */
     public List<StudentRecord> getRecordsList() {
         return recordsList;

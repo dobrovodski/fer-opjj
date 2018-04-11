@@ -2,15 +2,37 @@ package hr.fer.zemris.java.hw05.db.operators;
 
 /**
  * Implements concrete strategies for all the different operators that can be found in database queries.
+ *
  * @author matej
  */
 public class ComparisonOperators {
+    /**
+     * Returns true if the first value is lexicographically smaller than the second.
+     */
     public static final IComparisonOperator LESS;
+    /**
+     * Returns true if the first value is lexicographically smaller or equal than the second.
+     */
     public static final IComparisonOperator LESS_OR_EQUALS;
+    /**
+     * Returns true if the first value is lexicographically bigger than the second.
+     */
     public static final IComparisonOperator GREATER;
+    /**
+     * Returns true if the first value is lexicographically bigger or equal than the second.
+     */
     public static final IComparisonOperator GREATER_OR_EQUALS;
+    /**
+     * Returns true if the two values are lexicographically the same.
+     */
     public static final IComparisonOperator EQUALS;
+    /**
+     * Returns true if the two values are not lexicographically the same.
+     */
     public static final IComparisonOperator NOT_EQUALS;
+    /**
+     * Returns true if the two values are lexicographically the same excluding the wildcard character.
+     */
     public static final IComparisonOperator LIKE;
 
     static {
@@ -27,7 +49,6 @@ public class ComparisonOperators {
         NOT_EQUALS = (value1, value2) -> value1.compareTo(value2) != 0;
 
         LIKE = (value1, value2) -> {
-            //String[] z = value2.split("\\*", -1);
             if (value2.split("\\*", -1).length > 2) {
                 throw new IllegalArgumentException("LIKE operator supports up to one wildcard *.");
             }
@@ -39,7 +60,9 @@ public class ComparisonOperators {
 
     /**
      * Attempts to turn the given string into a certain operator.
+     *
      * @param operator string to be converted
+     *
      * @return operator method
      */
     public static IComparisonOperator from(String operator) {

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * This class is used to decide if the provided {@link StudentRecord} passes the given query.
+ *
  * @author matej
  */
 public class QueryFilter implements IFilter {

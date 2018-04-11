@@ -47,8 +47,7 @@ public class StudentDatabaseTest {
     @Test
     public void Filter_FilterAlwaysTrue_AllRecordsReturned() {
         List<StudentRecord> filtered = db.filter(sr -> true);
-        filtered.removeAll(db.getRecordsList());
-        Assert.assertEquals(0, filtered.size());
+        Assert.assertEquals(db.getRecordsList(), filtered);
     }
 
     @Test

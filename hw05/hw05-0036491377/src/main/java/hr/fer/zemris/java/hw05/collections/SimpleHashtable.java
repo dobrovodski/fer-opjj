@@ -3,12 +3,13 @@ package hr.fer.zemris.java.hw05.collections;
 import java.util.*;
 
 /**
- * This class implements a hash table, which maps keys to values. The key cannot be null.
- * In order to store items and retrieve them, the keys must implement {@code hashCode} and {@code equals}.
- * The constructor for the hashtable can use a parameter to set the initial capacity of the table to.
- * By default, the table resizes after reaching 75% capacity.
+ * This class implements a hash table, which maps keys to values. The key cannot be null. In order to store items and
+ * retrieve them, the keys must implement {@code hashCode} and {@code equals}. The constructor for the hashtable can use
+ * a parameter to set the initial capacity of the table to. By default, the table resizes after reaching 75% capacity.
+ *
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values
+ *
  * @author matej
  */
 public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntry<K, V>> {
@@ -21,6 +22,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * This class represents a single entry in the hashtable.
+     *
      * @param <K> the type of the key
      * @param <V> the type of the mapped value
      */
@@ -34,6 +36,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         /**
          * Constructor for the entry.
+         *
          * @param key Key object that the entry will be stored under
          * @param value The value to store
          */
@@ -44,6 +47,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         /**
          * Returns the key that the entry is stored under.
+         *
          * @return TableEntry key
          */
         public K getKey() {
@@ -52,6 +56,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         /**
          * Returns the stored value.
+         *
          * @return TableEntry value
          */
         public V getValue() {
@@ -60,6 +65,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
         /**
          * Sets the value of the entry.
+         *
          * @param value value to set
          */
         public void setValue(V value) {
@@ -106,7 +112,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Default constructor for the table which sets the initial capacity to the value provided.
+     *
      * @param initialCapacity initial capacity to set the table to
+     *
      * @throws IllegalArgumentException if capacity is less than 1
      */
     public SimpleHashtable(int initialCapacity) {
@@ -125,8 +133,10 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Puts the provided value in the hashtable under the given key.
+     *
      * @param key key to store value under
      * @param value value to be stored
+     *
      * @throws NullPointerException if the key is null
      */
     public void put(K key, V value) {
@@ -134,7 +144,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             throw new NullPointerException("Cannot insert item with the key null into hashtable.");
         }
 
-        if (size / capacity > THRESHOLD && REHASH) {
+        if ((float) size / capacity > THRESHOLD && REHASH) {
             rehash();
         }
 
@@ -170,9 +180,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
     }
 
     /**
-     * Returns value stored under key if it is in the table. Returns null otherwise.
-     * Keep in mind that the value stored under the key can also be null.
+     * Returns value stored under key if it is in the table. Returns null otherwise. Keep in mind that the value stored
+     * under the key can also be null.
+     *
      * @param key key that the value is stored under
+     *
      * @return value
      */
     public V get(Object key) {
@@ -200,6 +212,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Returns the number of entries in the table.
+     *
      * @return number of entries in table
      */
     public int size() {
@@ -208,7 +221,9 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Returns {@code true} if given key is in the table, {@code false} otherwise.
+     *
      * @param key key to check
+     *
      * @return {@code true} if given key is in the table, {@code false} otherwise
      */
     public boolean containsKey(Object key) {
@@ -235,6 +250,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Removes the value stored in the table under the given key. If the key is not in the table, it does nothing
+     *
      * @param key key for which the value should be removed
      */
     public void remove(Object key) {
@@ -270,6 +286,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
 
     /**
      * Returns {@code true} if the table is empty, {@code false} otherwise.
+     *
      * @return {@code true} if the table is empty, {@code false} otherwise
      */
     public boolean isEmpty() {
@@ -277,9 +294,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
     }
 
     /**
-     * Returns {@code true} if the given value is in the table, {@code false} otherwise.
-     * The complexity of this method is O(n).
+     * Returns {@code true} if the given value is in the table, {@code false} otherwise. The complexity of this method
+     * is O(n).
+     *
      * @param value value to check
+     *
      * @return {@code true} if the given value is in the table, {@code false} otherwise
      */
     public boolean containsValue(Object value) {
@@ -474,9 +493,11 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
     }
 
     /**
-     * Calculates the hashcode of the given key for this table. This is also the index of the table slot that the
-     * entry will be stored under
+     * Calculates the hashcode of the given key for this table. This is also the index of the table slot that the entry
+     * will be stored under
+     *
      * @param key key to hash
+     *
      * @return hashcode for given key
      */
     private int getHash(Object key) {
