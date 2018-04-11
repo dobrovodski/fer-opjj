@@ -273,7 +273,7 @@ public class SimpleHashtable<K, V> implements Iterable<SimpleHashtable.TableEntr
             return;
         }
 
-        TableEntry<K, V> nextEntry = table[hash];
+        TableEntry<K, V> nextEntry = table[hash].next;
         while (nextEntry != null) {
             if (nextEntry.getKey().equals(key)) {
                 currentEntry.next = nextEntry.next;

@@ -25,8 +25,15 @@ public class StudentRecord {
      * @param lastName last name
      * @param firstName first name
      * @param finalGrade final grade
+     *
+     * @throws NullPointerException if any of the parameters are null
      */
     public StudentRecord(String jmbag, String lastName, String firstName, String finalGrade) {
+        Objects.requireNonNull(jmbag, "JMBAG cannot be set to null.");
+        Objects.requireNonNull(lastName, "Last name cannot be set to null.");
+        Objects.requireNonNull(firstName, "First name cannot be set to null.");
+        Objects.requireNonNull(finalGrade, "Final grade cannot be set to null.");
+
         this.jmbag = jmbag;
         this.lastName = lastName;
         this.firstName = firstName;

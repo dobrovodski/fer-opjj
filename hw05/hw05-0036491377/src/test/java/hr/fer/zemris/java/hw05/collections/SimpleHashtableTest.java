@@ -274,6 +274,24 @@ public class SimpleHashtableTest {
     }
 
     @Test
+    public void Remove_ExistentValueNotFirstInSlot_Removed() {
+        int initialCapacity = 16;
+        int keyTemplate = 0;
+        int valueTemplate = 10;
+        int numberOfEntries = 5;
+        SimpleHashtable<Integer, Integer> ht = new SimpleHashtable<>(initialCapacity);
+
+        for (int i = 0; i < numberOfEntries; i++) {
+            ht.put(keyTemplate + i * initialCapacity, valueTemplate + i);
+        }
+
+        int offset = 2;
+        Assert.assertEquals(valueTemplate + offset, (int) ht.get(keyTemplate + offset * initialCapacity));
+        ht.remove(keyTemplate + offset * initialCapacity);
+        Assert.assertEquals(null, ht.get(keyTemplate + offset * initialCapacity));
+    }
+
+    @Test
     public void Remove_ALotOfValues_ContainsFalseSizeZero() {
         String keyTemplate = "key";
         String valueTemplate = "value";
@@ -610,7 +628,8 @@ public class SimpleHashtableTest {
 
     @Test
     public void TableEntryEquals_AllCombinations_True() {
-        SimpleHashtable.TableEntry<String, String> te1 = new SimpleHashtable.TableEntry<String, String>("key1", "value1");
+        SimpleHashtable.TableEntry<String, String> te1 = new SimpleHashtable.TableEntry<String, String>("key1",
+                "value1");
         SimpleHashtable.TableEntry<String, String> te2 = new TableEntry<String, String>("key1", "value2");
         Assert.assertEquals(true, te1.equals(te1));
         Assert.assertEquals(true, te2.equals(te2));
