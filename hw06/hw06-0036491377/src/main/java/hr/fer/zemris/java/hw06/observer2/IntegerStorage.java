@@ -1,4 +1,4 @@
-package observer2;
+package hr.fer.zemris.java.hw06.observer2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ public class IntegerStorage {
     private int value;
     private List<IntegerStorageObserver> observers;
     private List<IntegerStorageObserver> observersToRemove;
+
     public IntegerStorage(int initialValue) {
         this.value = initialValue;
         this.observers = new ArrayList<>();
@@ -32,17 +33,20 @@ public class IntegerStorage {
     public int getValue() {
         return value;
     }
+
     public void setValue(int value) {
         if(this.value!=value) {
-            this.value = value;
 
             if(observers!=null) {
                 checkToRemove();
 
+                IntegerStorageChange change = new IntegerStorageChange(this, this.value, value);
                 for(IntegerStorageObserver observer : observers) {
-                    observer.valueChanged(this);
+                    observer.valueChanged(change);
                 }
             }
+
+            this.value = value;
         }
     }
 

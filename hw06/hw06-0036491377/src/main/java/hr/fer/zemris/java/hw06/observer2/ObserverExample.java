@@ -1,4 +1,4 @@
-package observer2;
+package hr.fer.zemris.java.hw06.observer2;
 
 public class ObserverExample {
     public static void main(String[] args) {

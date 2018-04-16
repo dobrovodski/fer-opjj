@@ -1,4 +1,4 @@
-package observer2;
+package hr.fer.zemris.java.hw06.observer2;
 
 public class DoubleValue implements IntegerStorageObserver {
     private int n;
@@ -9,12 +9,12 @@ public class DoubleValue implements IntegerStorageObserver {
     }
 
     @Override
-    public void valueChanged(IntegerStorage istorage) {
+    public void valueChanged(IntegerStorageChange istorage) {
         counter++;
         if (counter <= this.n) {
-            System.out.printf("Double value: %d\n", istorage.getValue() * 2);
+            System.out.printf("Double value: %d\n", istorage.getNewValue() * 2);
         } else {
-            istorage.removeObserver(this);
+            istorage.getStorage().removeObserver(this);
         }
     }
 }
