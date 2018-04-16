@@ -30,6 +30,7 @@ public class PrimesCollection implements Iterable<Integer> {
             int nextPrime = lastPrime;
             int currentNumber = lastPrime;
 
+            //TODO: make this code prettier lol
             while (true) {
                 if (currentNumber == 2) {
                     currentNumber++;
