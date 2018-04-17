@@ -1,15 +1,26 @@
 package hr.fer.zemris.java.hw06.demo2;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
+/**
+ *
+ */
 public class PrimesCollection implements Iterable<Integer> {
+    /**
+     *
+     */
     private int numberOfPrimes;
 
+    /**
+     *
+     */
     public PrimesCollection(int numberOfPrimes) {
         this.numberOfPrimes = numberOfPrimes;
     }
 
+    /**
+     *
+     */
     private class IteratorImpl implements Iterator<Integer> {
         private int count;
         private int lastPrime;
@@ -48,6 +59,9 @@ public class PrimesCollection implements Iterable<Integer> {
             return nextPrime;
         }
 
+        /**
+         *
+         */
         private boolean isPrime(int n) {
             if (n == 2) {
                 return true;

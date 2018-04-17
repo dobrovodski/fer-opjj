@@ -1,5 +1,9 @@
 package hr.fer.zemris.java.hw06.observer2;
 
+/**
+ * Demo class for {@link IntegerStorage}. Shows basic functionality.
+ * @author matej
+ */
 public class ObserverExample {
     public static void main(String[] args) {
         IntegerStorage istorage = new IntegerStorage(20);

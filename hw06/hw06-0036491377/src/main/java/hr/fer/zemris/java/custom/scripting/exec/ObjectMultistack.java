@@ -3,34 +3,69 @@ package hr.fer.zemris.java.custom.scripting.exec;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class ObjectMultistack {
-    private Map entries;
+    /**
+     *
+     */
+    private Map<String, MultiStackEntry> entries;
 
+    /**
+     *
+     */
     public ObjectMultistack() {
-        this.entries = new HashMap();
+        this.entries = new HashMap<>();
     }
 
+    /**
+     *
+     */
     public void push(String name, ValueWrapper valueWrapper) {
+        MultiStackEntry entry = new MultiStackEntry(valueWrapper);
 
+        if (!entries.containsKey(name)) {
+            entries.put(name, entry);
+            return;
+        }
+
+        entry.next = entries.get(name);
+        entries.replace(name, entry);
     }
 
+    /**
+     *
+     */
     public ValueWrapper pop(String name) {
-        return null;
+        MultiStackEntry current = entries.get(name);
+        entries.replace(name, current.next);
+
+        return current.value;
     }
 
+    /**
+     *
+     */
     public ValueWrapper peek(String name) {
-        return null;
+        return entries.get(name).value;
     }
 
+    /**
+     *
+     */
     public boolean isEmpty(String name) {
-        return true;
+        return entries.size() == 0;
     }
 
+    /**
+     *
+     */
     private static class MultiStackEntry {
         private ValueWrapper value;
         private MultiStackEntry next;
 
-        public MultiStackEntry(ValueWrapper value) {
+        private MultiStackEntry(ValueWrapper value) {
             this.value = value;
         }
     }

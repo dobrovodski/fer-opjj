@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Demo class for using the Java Stream API. Provides some methods for manipulating student records.
+ * @author matej
+ */
 public class StudentDemo {
     public static void main(String[] args) {
         List<String> lines;
