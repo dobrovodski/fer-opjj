@@ -12,12 +12,12 @@ import java.util.Objects;
  */
 public class ObjectMultistack {
     /**
-     *
+     * Map that stores the different stacks.
      */
     private Map<String, MultiStackEntry> entries;
 
     /**
-     *
+     * Default constructor.
      */
     public ObjectMultistack() {
         this.entries = new HashMap<>();
@@ -25,9 +25,10 @@ public class ObjectMultistack {
 
     /**
      * Pushes the {@link ValueWrapper} onto the stack {@code name}.
+     *
      * @param name name of the stack to push to
-     * @param valueWrapper valueWrapper to store on stack
-     * * @throws NullPointerException if name or valueWrapper were null
+     * @param valueWrapper valueWrapper to store on stack * @throws NullPointerException if name or valueWrapper
+     *         were null
      */
     public void push(String name, ValueWrapper valueWrapper) {
         Objects.requireNonNull(name, "Cannot push to null key.");
@@ -46,8 +47,11 @@ public class ObjectMultistack {
 
     /**
      * Pops value from the stack {@code name}.
+     *
      * @param name name of the stack to pop from
+     *
      * @return {@link ValueWrapper} stored on top of stack
+     *
      * @throws NullPointerException if name was null
      */
     public ValueWrapper pop(String name) {
@@ -64,9 +68,11 @@ public class ObjectMultistack {
     }
 
     /**
+     * Returns the top value in the selected stack without removing it.
      *
-     * @param name
-     * @return
+     * @param name stack to peek
+     *
+     * @return {@link ValueWrapper} stored on top of selected stack
      */
     public ValueWrapper peek(String name) {
         Objects.requireNonNull(name, "Cannot peek from null key.");
@@ -80,9 +86,11 @@ public class ObjectMultistack {
     }
 
     /**
+     * Returns {@code true} if the selected stack is empty, {@code false otherwise}.
      *
-     * @param name
-     * @return
+     * @param name stack to check
+     *
+     * @return {@code true} if the selected stack is empty, {@code false otherwise}
      */
     public boolean isEmpty(String name) {
         Objects.requireNonNull(name, "Cannot check if null key is empty.");
@@ -99,6 +107,7 @@ public class ObjectMultistack {
          * Stores the value of the entry.
          */
         private ValueWrapper value;
+
         /**
          * Pointer to the next entry on the stack.
          */

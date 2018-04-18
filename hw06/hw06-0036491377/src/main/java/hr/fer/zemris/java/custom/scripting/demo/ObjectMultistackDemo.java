@@ -5,8 +5,6 @@ import hr.fer.zemris.java.custom.scripting.exec.ValueWrapper;
 
 /**
  * Demo class for {@link ObjectMultistack}. Shows basic functionality.
- *
- * @author matej
  */
 public class ObjectMultistackDemo {
     public static void main(String[] args) {
