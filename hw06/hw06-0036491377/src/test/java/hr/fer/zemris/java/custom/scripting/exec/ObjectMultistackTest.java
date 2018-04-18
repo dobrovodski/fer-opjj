@@ -1,3 +1,5 @@
+package hr.fer.zemris.java.custom.scripting.exec;
+
 import hr.fer.zemris.java.custom.scripting.exec.ObjectMultistack;
 import hr.fer.zemris.java.custom.scripting.exec.ValueWrapper;
 import org.junit.Assert;
