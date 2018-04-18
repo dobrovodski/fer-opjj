@@ -26,6 +26,7 @@ public class ValueWrapper {
 
     /**
      * Returns the value stored in the wrapper.
+     *
      * @return value stored in wrapper.
      */
     public Object getValue() {
@@ -34,6 +35,7 @@ public class ValueWrapper {
 
     /**
      * Sets the value of the wrapper. Any value is permitted, even {@code null}.
+     *
      * @param value value to store
      */
     public void setValue(Object value) {
@@ -42,6 +44,7 @@ public class ValueWrapper {
 
     /**
      * Adds stored value and {@code incValue} and stores the result.
+     *
      * @param incValue value to be added
      */
     public void add(Object incValue) {
@@ -50,6 +53,7 @@ public class ValueWrapper {
 
     /**
      * Subtracts stored value and {@code decValue} and stores the result.
+     *
      * @param decValue value to be subtracted
      */
     public void subtract(Object decValue) {
@@ -58,6 +62,7 @@ public class ValueWrapper {
 
     /**
      * Multiplies stored value and {@code mulValue} and stores the result.
+     *
      * @param mulValue value to multiplied with
      */
     public void multiply(Object mulValue) {
@@ -66,6 +71,7 @@ public class ValueWrapper {
 
     /**
      * Divides stored value and {@code divValue} and stores the result.
+     *
      * @param divValue value to divided with
      */
     public void divide(Object divValue) {
@@ -84,14 +90,17 @@ public class ValueWrapper {
     }
 
     /**
-     * Converts given object into a numerical value by the following rules: <br> - {@code null} is converted to an
-     * {@link Integer} with value of 0 <br> - {@link String} is converted into either an {@link Integer} or a {@link
-     * Double} <br> - instances of {@link Double} and {@link Integer} stay the same <br> - everything else throws an
-     * exception <p>
+     * Converts given object into a numerical value by the following rules: <br>
+     *     - {@code null} is converted to an {@link Integer} with value of 0 <br>
+     *     - {@link String} is converted into either an {@link Integer} or a {@link Double} <br>
+     *     - instances of {@link Double} and {@link Integer} stay the same <br>
+     *     - everything else throws an exception
      *
      * @param value value to be converted
      *
      * @return converted value
+     *
+     * @throws IllegalArgumentException if the {@code value} couldn't be converted by any rules
      */
     private Number convert(Object value) {
         if (!(value instanceof String || value instanceof Integer || value instanceof Double || value == null)) {
