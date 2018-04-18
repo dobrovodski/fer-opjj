@@ -27,8 +27,9 @@ public class ObjectMultistack {
      * Pushes the {@link ValueWrapper} onto the stack {@code name}.
      *
      * @param name name of the stack to push to
-     * @param valueWrapper valueWrapper to store on stack * @throws NullPointerException if name or valueWrapper
-     *         were null
+     * @param valueWrapper valueWrapper to store on stack
+     *
+     * @throws NullPointerException if name or valueWrapper were null
      */
     public void push(String name, ValueWrapper valueWrapper) {
         Objects.requireNonNull(name, "Cannot push to null key.");

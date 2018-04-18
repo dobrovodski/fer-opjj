@@ -77,9 +77,10 @@ public class PrimesCollection implements Iterable<Integer> {
                 throw new NoSuchElementException("No more elements in collection");
             }
 
-            int nextPrime = lastPrime;
+            int returnPrime = lastPrime;
             int currentNumber = lastPrime;
 
+            // Calculate next prime
             while (true) {
                 if (currentNumber == 2) {
                     currentNumber = 3;
@@ -94,7 +95,7 @@ public class PrimesCollection implements Iterable<Integer> {
                 }
             }
 
-            return nextPrime;
+            return returnPrime;
         }
     }
 
