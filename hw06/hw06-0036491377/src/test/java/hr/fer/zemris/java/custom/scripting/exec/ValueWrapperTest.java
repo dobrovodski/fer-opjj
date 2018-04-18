@@ -280,8 +280,8 @@ public class ValueWrapperTest {
 
     @Test
     public void Divide_TwoIntegers_CorrectResult() {
-        int a = 5;
-        int b = 10;
+        int a = 10;
+        int b = 3;
         ValueWrapper w = new ValueWrapper(a);
         w.divide(b);
         Assert.assertEquals(a / b, w.getValue());
