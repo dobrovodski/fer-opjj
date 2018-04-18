@@ -7,7 +7,7 @@ package hr.fer.zemris.java.hw06.observer2;
  */
 public interface IntegerStorageObserver {
     /**
-     * Method called every time a change occurs.
+     * Method called every time a change in {@link IntegerStorage} instance occurs.
      *
      * @param istorage instance which holds information about the change (i.e. reference to the instance being
      *         observer, previous value, current value)

@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw06.demo2;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Class used to generate prime numbers.
@@ -72,6 +73,10 @@ public class PrimesCollection implements Iterable<Integer> {
 
         @Override
         public Integer next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more elements in collection");
+            }
+
             int nextPrime = lastPrime;
             int currentNumber = lastPrime;
 
