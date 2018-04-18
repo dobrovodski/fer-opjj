@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Demo class for using the Java Stream API. Provides some methods for manipulating student records.
+ *
  * @author matej
  */
 public class StudentDemo {
@@ -47,24 +48,52 @@ public class StudentDemo {
         Map<Boolean, List<StudentRecord>> prolazNeprolaz = razvrstajProlazPad(records);
     }
 
+    /**
+     * Returns number of students with total score greater than 25.
+     *
+     * @param records list of students
+     *
+     * @return number of students with total score greater than 25
+     */
     private static long vratiBodovaViseOd25(List<StudentRecord> records) {
         return records.stream()
                       .filter(r -> r.getFinalExamScore() + r.getMidtermScore() + r.getLabScore() > 25)
                       .count();
     }
 
+    /**
+     * Returns number of students with grade 5.
+     *
+     * @param records list of students
+     *
+     * @return number of students with grade 5
+     */
     private static long vratiBrojOdlikasa(List<StudentRecord> records) {
         return records.stream()
                       .filter(r -> r.getGrade() == 5)
                       .count();
     }
 
+    /**
+     * Returns list of students with grade 5.
+     *
+     * @param records list of students
+     *
+     * @return list of students with grade 5
+     */
     private static List<StudentRecord> vratiListuOdlikasa(List<StudentRecord> records) {
         return records.stream()
                       .filter(r -> r.getGrade() == 5)
                       .collect(Collectors.toList());
     }
 
+    /**
+     * Returns list of students with grade 5 sorted according to their total score
+     *
+     * @param records list of students
+     *
+     * @return list of students with grade 5 sorted according to their total score
+     */
     private static List<StudentRecord> vratiSortiranuListuOdlikasa(List<StudentRecord> records) {
         return records.stream()
                       .filter(r -> r.getGrade() == 5)
@@ -76,6 +105,13 @@ public class StudentDemo {
                       .collect(Collectors.toList());
     }
 
+    /**
+     * Returns list of students that failed.
+     *
+     * @param records list of students
+     *
+     * @return list of students that failed
+     */
     private static List<String> vratiPopisNepolozenih(List<StudentRecord> records) {
         return records.stream()
                       .filter(r -> r.getGrade() == 1)
@@ -84,16 +120,37 @@ public class StudentDemo {
                       .collect(Collectors.toList());
     }
 
+    /**
+     * Returns map which maps grades to lists of students with that grade.
+     *
+     * @param records list of students
+     *
+     * @return map which maps grades to lists of students with that grade
+     */
     private static Map<Integer, List<StudentRecord>> razvrstajStudentePoOcjenama(List<StudentRecord> records) {
         return records.stream()
                       .collect(Collectors.groupingBy(StudentRecord::getGrade));
     }
 
+    /**
+     * Returns map which maps grades to number of students with that grade.
+     *
+     * @param records list of students
+     *
+     * @return map which maps grades to number of students with that grade
+     */
     private static Map<Integer, Integer> vratiBrojStudenataPoOcjenama(List<StudentRecord> records) {
         return records.stream()
                       .collect(Collectors.toMap(StudentRecord::getGrade, r -> 1, (a, b) -> a + b));
     }
 
+    /**
+     * Returns map which maps students depending on if they've passed or failed.
+     *
+     * @param records list of students
+     *
+     * @return map which maps students depending on if they've passed or failed
+     */
     private static Map<Boolean, List<StudentRecord>> razvrstajProlazPad(List<StudentRecord> records) {
         return records.stream()
                       .collect(Collectors.partitioningBy(s -> s.getGrade() > 1));

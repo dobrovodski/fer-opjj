@@ -86,9 +86,7 @@ public class ValueWrapper {
      * @return the value 0 if x == y; a value less than 0 if x < y; and a value greater than 0 if x > y
      */
     public int numCompare(Object withValue) {
-        double compared = calculate(this.value, withValue, Integer::compare, Double::compare).doubleValue();
-
-        return compared > 0 ? 1 : (compared < 0 ? -1 : 0);
+        return calculate(this.value, withValue, Integer::compare, Double::compare).intValue();
     }
 
     /**
