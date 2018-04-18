@@ -5,6 +5,7 @@ import hr.fer.zemris.java.custom.scripting.exec.ValueWrapper;
 
 /**
  * Demo class for {@link ObjectMultistack}. Shows basic functionality.
+ *
  * @author matej
  */
 public class ObjectMultistackDemo {
@@ -22,7 +23,7 @@ public class ObjectMultistackDemo {
         System.out.println("Current value for year: "
                            + multistack.peek("year").getValue());
         multistack.peek("year").setValue(
-                ((Integer)multistack.peek("year").getValue()).intValue() + 50
+                ((Integer) multistack.peek("year").getValue()).intValue() + 50
         );
         System.out.println("Current value for year: "
                            + multistack.peek("year").getValue());

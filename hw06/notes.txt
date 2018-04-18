@@ -1,0 +1,13 @@
+ValueWrapper
+- values can be any object
+- if you do arithmetic operations, that rule no longer applies
+- both this.value and other value have to be either: null, String, Integer, Double
+    - if null then convert to Integer with value of 0
+    - if String then convert to either Double or Integer
+    ^ these two handled by Number#convert
+    - if either are Double, both should be Double and result is Double
+    - if both are Integer, both should be Integer and result is Integer
+- for numCompare
+    - if both null, they are equal (return 0)
+    - if one is null, treat it as Integer 0
+    - otherwise promote both values to the same type like above and do comparison
