@@ -12,7 +12,7 @@ public class Util {
             char c1 = keyText.charAt(i);
             char c2 = keyText.charAt(i + 1);
             int b1 = Character.digit(c1, 16) * 16;
-            int b2 =  Character.digit(c2, 16);
+            int b2 = Character.digit(c2, 16);
 
             if (b1 == -1 || b2 == -1) {
                 throw new IllegalArgumentException("Could not convert to byte: " + c1 + c2);
