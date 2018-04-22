@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.hw06.crypto;
+package hr.fer.zemris.java.hw07.crypto;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -15,8 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Scanner;
-
-import static hr.fer.zemris.java.hw06.crypto.Util.bytetohex;
 
 public class Crypto {
     public static void main(String[] args) {
@@ -93,7 +91,7 @@ public class Crypto {
         }
         byte[] hash = md.digest();
 
-        return bytetohex(hash);
+        return Util.bytetohex(hash);
     }
 
     private static void checkSHA(Path path, String provided) {

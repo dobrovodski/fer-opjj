@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.hw06.crypto;
+package hr.fer.zemris.java.hw07.crypto;
 
 public class Util {
     public static byte[] hextobyte(String keyText) {

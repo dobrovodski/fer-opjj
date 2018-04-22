@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.hw06.crypto;
+package hr.fer.zemris.java.hw07.crypto;
 
 import org.junit.Assert;
 import org.junit.Test;
