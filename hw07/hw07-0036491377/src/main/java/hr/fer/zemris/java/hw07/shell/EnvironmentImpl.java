@@ -2,32 +2,67 @@ package hr.fer.zemris.java.hw07.shell;
 
 import hr.fer.zemris.java.hw07.shell.commands.ShellCommand;
 
+import java.io.*;
 import java.util.Scanner;
 import java.util.SortedMap;
 
 public class EnvironmentImpl implements Environment {
-    private Scanner sc;
-    private Character multilineSymbol;
-    private Character promptSymbol;
-    private Character morelinesSymbol;
+    private BufferedReader sc;
+    private BufferedWriter writer;
+    private Character multilineSymbol = '|';
+    private Character promptSymbol = '>';
+    private Character morelinesSymbol = '\\';
 
     public EnvironmentImpl() {
-        sc = new Scanner(System.in);
+        sc = new BufferedReader(new InputStreamReader(System.in));
+        writer = new BufferedWriter(new OutputStreamWriter(System.out));
     }
 
     @Override
     public String readLine() throws ShellIOException {
-        return sc.nextLine();
+        StringBuilder sb = new StringBuilder();
+        // write prompt
+        write(String.valueOf(promptSymbol + " "));
+        while (true) {
+            String next;
+            try {
+                next = sc.readLine();
+            } catch (IOException e) {
+                throw new ShellIOException("Could not read line.");
+            }
+
+            sb.append(next);
+            if (!next.endsWith(String.valueOf(morelinesSymbol))) {
+                break;
+            }
+            // write multilineSymbol
+            write(String.valueOf(multilineSymbol + " "));
+            // Remove morelinesSymbol
+            sb.setLength(sb.length() - 1);
+        }
+
+        return sb.toString();
     }
 
     @Override
     public void write(String text) throws ShellIOException {
-        System.out.print(text);
+        try {
+            writer.write(text);
+            writer.flush();
+        } catch (IOException e) {
+            throw new ShellIOException("Could not write to standard output.");
+        }
     }
 
     @Override
     public void writeln(String text) throws ShellIOException {
-        System.out.println(text);
+        // This is in try-catch because newLine can also throw an exception
+        try {
+            write(text);
+            writer.newLine();
+        } catch (IOException e) {
+            throw new ShellIOException("Could not write to standard output");
+        }
     }
 
     @Override
