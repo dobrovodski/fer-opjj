@@ -1,10 +1,10 @@
 package hr.fer.zemris.java.hw07.shell;
 
 import hr.fer.zemris.java.hw07.shell.commands.ShellCommand;
+import hr.fer.zemris.java.hw07.shell.commands.SymbolCommand;
 
 import java.io.*;
-import java.util.Scanner;
-import java.util.SortedMap;
+import java.util.*;
 
 public class EnvironmentImpl implements Environment {
     private BufferedReader sc;
@@ -12,10 +12,13 @@ public class EnvironmentImpl implements Environment {
     private Character multilineSymbol = '|';
     private Character promptSymbol = '>';
     private Character morelinesSymbol = '\\';
+    private SortedMap<String, ShellCommand> commands;
 
     public EnvironmentImpl() {
         sc = new BufferedReader(new InputStreamReader(System.in));
         writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        commands = new TreeMap<>();
+        commands.put("symbol", new SymbolCommand());
     }
 
     @Override
@@ -32,7 +35,7 @@ public class EnvironmentImpl implements Environment {
             }
 
             sb.append(next);
-            if (!next.endsWith(String.valueOf(morelinesSymbol))) {
+            if (!next.endsWith(String.valueOf(" " + morelinesSymbol))) {
                 break;
             }
             // write multilineSymbol
@@ -67,7 +70,7 @@ public class EnvironmentImpl implements Environment {
 
     @Override
     public SortedMap<String, ShellCommand> commands() {
-        return null;
+        return Collections.unmodifiableSortedMap(commands);
     }
 
     @Override
