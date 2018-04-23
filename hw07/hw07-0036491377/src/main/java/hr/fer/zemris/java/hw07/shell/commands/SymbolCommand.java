@@ -8,20 +8,20 @@ import java.util.List;
 public class SymbolCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
-        String[] split = arguments.replaceAll("\\s+", " ").split(" ");
-        int len = split.length;
+        String[] args = arguments.split("\\s+");
+        int len = args.length;
 
         if (len < 1 || len > 2) {
             String out = String.format("Invalid number of arguments for command '%s.'", getCommandName());
             env.writeln(out);
             return ShellStatus.CONTINUE;
         }
-        if (len == 2 && split[1].length() != 1) {
+        if (len == 2 && args[1].length() != 1) {
             env.writeln("Symbols can only be 1 character long");
             return ShellStatus.CONTINUE;
         }
 
-        String sym = split[0].toUpperCase();
+        String sym = args[0].toUpperCase();
         char curSym;
         switch (sym) {
             case "PROMPT":
@@ -44,7 +44,7 @@ public class SymbolCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        char newSym = split[1].charAt(0);
+        char newSym = args[1].charAt(0);
         String out = String.format("Symbol for %s changed from '%c' to '%c'.", sym, curSym, newSym);
         env.writeln(out);
 
