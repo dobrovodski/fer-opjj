@@ -11,13 +11,18 @@ public class MyShell {
         env.writeln("Welcome to MyShell v 1.0");
         while (true) {
             String in = env.readLine();
-            if (in.equals("exit")) {
+            if (in.toLowerCase().equals("exit")) {
                 break;
             }
 
             String[] split = in.split(" ", 2);
-            String command = split[0];
-            String arguments = split[1];
+            String command = split[0].toLowerCase();
+            String arguments;
+            if (split.length == 2) {
+                 arguments = split[1];
+            } else {
+                arguments = "";
+            }
             if (commands.keySet().contains(command)) {
                 ShellStatus status = commands.get(command).executeCommand(env, arguments);
                 if (status == ShellStatus.TERMINATE) {

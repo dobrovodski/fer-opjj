@@ -1,7 +1,6 @@
 package hr.fer.zemris.java.hw07.shell;
 
-import hr.fer.zemris.java.hw07.shell.commands.ShellCommand;
-import hr.fer.zemris.java.hw07.shell.commands.SymbolCommand;
+import hr.fer.zemris.java.hw07.shell.commands.*;
 
 import java.io.*;
 import java.util.*;
@@ -18,7 +17,38 @@ public class EnvironmentImpl implements Environment {
         sc = new BufferedReader(new InputStreamReader(System.in));
         writer = new BufferedWriter(new OutputStreamWriter(System.out));
         commands = new TreeMap<>();
-        commands.put("symbol", new SymbolCommand());
+
+        ShellCommand c;
+        c = new SymbolCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new CharsetsCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new CatCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new CopyCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new ExitCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new HelpCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new HexdumpCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new LsCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new MkdirCommand();
+        commands.put(c.getCommandName(), c);
+
+        c = new TreeCommand();
+        commands.put(c.getCommandName(), c);
+
     }
 
     @Override
