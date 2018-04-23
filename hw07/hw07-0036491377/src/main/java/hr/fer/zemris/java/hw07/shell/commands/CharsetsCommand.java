@@ -4,16 +4,28 @@ import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.SortedMap;
+import java.util.*;
 
 public class CharsetsCommand implements ShellCommand {
+    private static final String NAME = "charsets";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Lists available charsets.",
+                "",
+                "CHARSET"
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
+
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         SortedMap<String, Charset> charsets = Charset.availableCharsets();
 
-        for (SortedMap.Entry<String, Charset> cs : charsets.entrySet()) {
-            env.writeln(cs.getKey());
+        for (String cs : charsets.keySet()) {
+            env.writeln(cs);
         }
 
         return ShellStatus.CONTINUE;
@@ -21,11 +33,11 @@ public class CharsetsCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "charsets";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }

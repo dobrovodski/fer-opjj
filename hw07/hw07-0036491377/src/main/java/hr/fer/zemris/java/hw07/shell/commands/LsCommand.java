@@ -11,17 +11,30 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LsCommand implements ShellCommand {
+    private static final String NAME = "ls";
     private String regex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
     private Pattern p = Pattern.compile(regex);
+
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "List directory contents.",
+                "",
+                "LS [path]",
+                "",
+                "   path - path to directory."
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -83,11 +96,11 @@ public class LsCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "ls";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }

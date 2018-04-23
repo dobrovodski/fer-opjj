@@ -6,6 +6,7 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import java.util.List;
 
 public class TreeCommand implements ShellCommand {
+    private static final String NAME = "tree";
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         return null;
@@ -13,7 +14,7 @@ public class TreeCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "tree";
+        return NAME;
     }
 
     @Override

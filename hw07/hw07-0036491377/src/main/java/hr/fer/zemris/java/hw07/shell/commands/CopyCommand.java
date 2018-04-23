@@ -6,6 +6,8 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import java.util.List;
 
 public class CopyCommand implements ShellCommand {
+    private static final String NAME = "copy";
+
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         return null;
@@ -13,7 +15,7 @@ public class CopyCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "copy";
+        return NAME;
     }
 
     @Override

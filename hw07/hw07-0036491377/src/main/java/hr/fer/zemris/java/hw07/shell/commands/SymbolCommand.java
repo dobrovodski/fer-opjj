@@ -3,15 +3,34 @@ package hr.fer.zemris.java.hw07.shell.commands;
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SymbolCommand implements ShellCommand {
+    private static final String NAME = "symbol";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Displays selected symbol or changes it.",
+                "",
+                "SYMBOL [symbol]",
+                "SYMBOL [symbol] [replacement]",
+                "",
+                "   symbol - selected symbol (PROMPT, MULTILINE, MORELINES).",
+                "   replacement - character to replace selected symbol with."
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         String[] args = arguments.split("\\s+");
         int len = args.length;
 
-        if (len < 1 || len > 2) {
+        if (arguments.isEmpty() || len > 2) {
             String out = String.format("Invalid number of arguments for command '%s.'", getCommandName());
             env.writeln(out);
             return ShellStatus.CONTINUE;
@@ -68,11 +87,11 @@ public class SymbolCommand implements ShellCommand {
 
     @Override
     public String getCommandName() {
-        return "symbol";
+        return NAME;
     }
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }
