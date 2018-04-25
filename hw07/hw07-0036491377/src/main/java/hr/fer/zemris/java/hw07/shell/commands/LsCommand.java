@@ -58,7 +58,8 @@ public class LsCommand implements ShellCommand {
         try {
             files = Files.newDirectoryStream(dir);
         } catch (IOException e) {
-            throw new ShellIOException("Could not read directory.");
+            env.writeln("Could not read directory.");
+            return ShellStatus.CONTINUE;
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -11,9 +11,6 @@ public class MyShell {
         env.writeln("Welcome to MyShell v 1.0");
         while (true) {
             String in = env.readLine();
-            if (in.toLowerCase().equals("exit")) {
-                break;
-            }
 
             String[] split = in.split(" ", 2);
             String command = split[0].toLowerCase();

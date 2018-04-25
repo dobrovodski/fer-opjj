@@ -11,11 +11,9 @@ public class EnvironmentImpl implements Environment {
     private Character multilineSymbol = '|';
     private Character promptSymbol = '>';
     private Character morelinesSymbol = '\\';
-    private SortedMap<String, ShellCommand> commands;
+    private static SortedMap<String, ShellCommand> commands;
 
-    public EnvironmentImpl() {
-        sc = new BufferedReader(new InputStreamReader(System.in));
-        writer = new BufferedWriter(new OutputStreamWriter(System.out));
+    static {
         commands = new TreeMap<>();
 
         ShellCommand c;
@@ -48,7 +46,11 @@ public class EnvironmentImpl implements Environment {
 
         c = new TreeCommand();
         commands.put(c.getCommandName(), c);
+    }
 
+    public EnvironmentImpl() {
+        sc = new BufferedReader(new InputStreamReader(System.in));
+        writer = new BufferedWriter(new OutputStreamWriter(System.out));
     }
 
     @Override
@@ -65,7 +67,7 @@ public class EnvironmentImpl implements Environment {
             }
 
             sb.append(next);
-            if (!next.endsWith(String.valueOf(" " + morelinesSymbol))) {
+            if (!next.endsWith(String.valueOf(morelinesSymbol))) {
                 break;
             }
             // write multilineSymbol
