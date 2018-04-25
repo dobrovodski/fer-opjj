@@ -25,9 +25,14 @@ public class Util {
                 continue;
             }
 
-            // Don't append the character '\' if you're escaping a quote
-            if (c == '\\' && i < len - 1 && arguments.charAt(i + 1) == '"' && inQuotes) {
-                continue;
+            // Don't append the character '\' if you're escaping a quote or if its \\
+            if (c == '\\' && i < len - 1) {
+                if(arguments.charAt(i + 1) == '"' && inQuotes) {
+                    continue;
+                }
+                if (arguments.charAt(i + 1) == '\\') {
+                    continue;
+                }
             }
 
             // If entering a quote, just continue. If exiting a quote, add whatever you've got to the list
@@ -37,6 +42,12 @@ public class Util {
                     continue;
                 } else if (arguments.charAt(i - 1) != '\\') {
                     inQuotes = !inQuotes;
+                    // 'After the ending double-quote, either no more characters must be present or at least one
+                    // space character must be present'
+                    if (i < len - 1 && !Character.isWhitespace(arguments.charAt(i + 1))) {
+                        return null;
+                    }
+
                     if (sb.length() > 0) {
                         matches.add(sb.toString());
                         sb.setLength(0);

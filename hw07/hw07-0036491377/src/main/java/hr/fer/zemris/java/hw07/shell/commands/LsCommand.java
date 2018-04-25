@@ -40,8 +40,20 @@ public class LsCommand implements ShellCommand {
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);
+
+        if (args == null) {
+            env.writeln("Space required after ending quote.");
+            return ShellStatus.CONTINUE;
+        }
+
+        // By default look at current directory
+        // NOTE - this is not in the instructions, but I think it should be this way :)
+        if (args.size() == 0) {
+            args.add(".");
+        }
+
         if (args.size() != 1) {
-            env.writeln("Invalid number of arguments.");
+            env.writeln("Too many parameters - " + args.get(1));
             return ShellStatus.CONTINUE;
         }
 
@@ -49,7 +61,7 @@ public class LsCommand implements ShellCommand {
 
         Path dir = Paths.get(dirName);
         if (!Files.isDirectory(dir)) {
-            env.writeln("Invalid path - " + dirName + "\n");
+            env.writeln("Invalid path - " + dirName );
         }
 
         DirectoryStream<Path> files;

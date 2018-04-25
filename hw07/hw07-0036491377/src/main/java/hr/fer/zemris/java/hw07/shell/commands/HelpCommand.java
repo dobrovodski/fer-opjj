@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
+import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.util.*;
 
@@ -24,22 +25,27 @@ public class HelpCommand implements ShellCommand {
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
-        String[] args = arguments.split("\\s+");
+        List<String> args = Util.split(arguments);
 
-        if (args.length > 1) {
-            env.writeln("Help command takes up to 1 argument.");
+        if (args == null) {
+            env.writeln("Space required after ending quote.");
+            return ShellStatus.CONTINUE;
+        }
+
+        if (args.size() > 1) {
+            env.writeln("Too many parameters - " + args.get(1));
             return ShellStatus.CONTINUE;
         }
 
         SortedMap<String, ShellCommand> commands = env.commands();
-        if (arguments.isEmpty()) {
+        if (args.size() == 0) {
             for (String command : commands.keySet()) {
                 env.writeln(command);
             }
             return ShellStatus.CONTINUE;
         }
 
-        ShellCommand command = commands.get(args[0]);
+        ShellCommand command = commands.get(args.get(0));
         if (command == null) {
             env.writeln("Command doesn't exist.");
             return ShellStatus.CONTINUE;

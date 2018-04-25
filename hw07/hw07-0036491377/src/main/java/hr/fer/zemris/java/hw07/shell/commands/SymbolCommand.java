@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
+import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,20 +28,25 @@ public class SymbolCommand implements ShellCommand {
     }
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
-        String[] args = arguments.split("\\s+");
-        int len = args.length;
+        List<String> args = Util.split(arguments);
 
-        if (arguments.isEmpty() || len > 2) {
-            String out = String.format("Invalid number of arguments for command '%s.'", getCommandName());
-            env.writeln(out);
+        if (args == null) {
+            env.writeln("Space required after ending quote.");
             return ShellStatus.CONTINUE;
         }
-        if (len == 2 && args[1].length() != 1) {
+
+        int len = args.size();
+        if (len == 0 || len > 2) {
+            env.writeln("Invalid number of arguments");
+            return ShellStatus.CONTINUE;
+        }
+
+        if (len == 2 && args.get(1).length() != 1) {
             env.writeln("Symbols can only be 1 character long");
             return ShellStatus.CONTINUE;
         }
 
-        String sym = args[0].toUpperCase();
+        String sym = args.get(0).toUpperCase();
         char curSym;
         switch (sym) {
             case "PROMPT":
@@ -63,7 +69,7 @@ public class SymbolCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        char newSym = args[1].charAt(0);
+        char newSym = args.get(1).charAt(0);
         String out = String.format("Symbol for %s changed from '%c' to '%c'.", sym, curSym, newSym);
         env.writeln(out);
 
