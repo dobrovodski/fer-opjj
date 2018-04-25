@@ -59,9 +59,12 @@ public class LsCommand implements ShellCommand {
 
         String dirName = args.get(0);
 
-        Path dir = Paths.get(dirName);
-        if (!Files.isDirectory(dir)) {
-            env.writeln("Invalid path - " + dirName );
+        Path dir;
+        try {
+            dir = Paths.get(dirName);
+        } catch (InvalidPathException ex) {
+            env.writeln("Invalid path.");
+            return ShellStatus.CONTINUE;
         }
 
         DirectoryStream<Path> files;
