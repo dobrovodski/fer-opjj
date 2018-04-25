@@ -4,11 +4,10 @@ import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.List;
 
 public class HexdumpCommand implements ShellCommand {
@@ -30,58 +29,54 @@ public class HexdumpCommand implements ShellCommand {
         }
 
         String dirName = args.get(0);
-        Path dir;
-        try {
-            dir = Paths.get(dirName);
-        } catch (InvalidPathException ex) {
-            env.writeln("Invalid path.");
-            return ShellStatus.CONTINUE;
-        }
+        byte[] bytes = new byte[ROW_LEN];
 
-        byte[] bytes;
         try {
-            bytes = Files.readAllBytes(dir);
+
+            InputStream is = new BufferedInputStream(new FileInputStream(dirName));
+
+            StringBuilder leftEight = new StringBuilder();
+            StringBuilder rightEight = new StringBuilder();
+            StringBuilder converted = new StringBuilder();
+
+            int count;
+            int row = 0;
+            while ((count = is.read(bytes, 0, ROW_LEN)) != -1) {
+                for (int i = 0; i < count; i++) {
+                    if (bytes[i] >= 32 && bytes[i] < 127) {
+                        converted.append(String.valueOf((char) bytes[i]));
+                    } else {
+                        converted.append(".");
+                    }
+
+                    String fullNum = String.format("%2s", Integer.toHexString(bytes[i])).replace(" ", "0");
+                    String num = fullNum.substring(fullNum.length() - 2, fullNum.length()); // Cut off Fs for negatives
+                    if (i < ROW_LEN / 2) {
+                        leftEight.append(num).append(" ");
+                    } else {
+                        rightEight.append(num).append(" ");
+                    }
+                }
+
+                String rowNum = String.format("%8s", Integer.toHexString(ROW_LEN * row++)).replace(" ", "0")
+                                      .toUpperCase();
+
+                int width = ROW_LEN + ROW_LEN / 2 - 1;
+                String firstHex = padRightWithSpace(leftEight.toString().trim().toUpperCase(), width);
+                String secondHex = padRightWithSpace(rightEight.toString().trim().toUpperCase(), width);
+                String out = String.format("%8s: %s|%s | %s", rowNum, firstHex, secondHex, converted.toString());
+
+                // Reset StringBuilders
+                leftEight.setLength(0);
+                rightEight.setLength(0);
+                converted.setLength(0);
+
+                env.writeln(out);
+            }
+            is.close();
         } catch (IOException e) {
             env.writeln("Could not read file.");
             return ShellStatus.CONTINUE;
-        }
-
-        StringBuilder leftEight = new StringBuilder();
-        StringBuilder rightEight = new StringBuilder();
-        StringBuilder converted = new StringBuilder();
-
-        for (int i = 0; i < (double) bytes.length / ROW_LEN; i++) {
-            for (int j = 0; j < ROW_LEN; j++) {
-                if (i * ROW_LEN + j > bytes.length - 1) {
-                    break;
-                }
-                if (bytes[i * ROW_LEN + j] >= 32 && bytes[i * ROW_LEN + j] < 127) {
-                    converted.append(String.valueOf((char) bytes[i * ROW_LEN + j]));
-                } else {
-                    converted.append(".");
-                }
-
-                String fullNum = String.format("%2s", Integer.toHexString(bytes[i * ROW_LEN + j])).replace(" ", "0");
-                String num = fullNum.substring(fullNum.length() - 2, fullNum.length()); // Cut off Fs for negatives
-
-                if (j < ROW_LEN / 2) {
-                    leftEight.append(num).append(" ");
-                } else {
-                    rightEight.append(num).append(" ");
-                }
-            }
-
-            String rowNum = String.format("%8s", Integer.toHexString(i * ROW_LEN)).replace(" ", "0").toUpperCase();
-            String firstHex = padRightWithSpace(leftEight.toString().trim().toUpperCase(), ROW_LEN + (ROW_LEN / 2 - 1));
-            String secondHex = padRightWithSpace(rightEight.toString().trim().toUpperCase(), ROW_LEN + (ROW_LEN / 2 - 1));
-            String out = String.format("%8s: %s|%s | %s", rowNum, firstHex, secondHex, converted.toString());
-
-            // Reset StringBuilders
-            leftEight.setLength(0);
-            rightEight.setLength(0);
-            converted.setLength(0);
-
-            env.writeln(out);
         }
 
         return ShellStatus.CONTINUE;
