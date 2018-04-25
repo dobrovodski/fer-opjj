@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
+import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -12,27 +13,22 @@ import java.util.regex.Pattern;
 
 public class TreeCommand implements ShellCommand {
     private static final String NAME = "tree";
-    private String regex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-    private Pattern p = Pattern.compile(regex);
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
-        Matcher m = p.matcher(arguments);
-        if (!m.find()) {
-            env.writeln("Invalid number of parameters.");
+
+        List<String> args = Util.split(arguments);
+        if (args.size() != 1) {
+            env.writeln("Invalid number of arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        String dirName;
-        if (m.group(1) != null) {
-            dirName = m.group(1);
-        } else if (m.group(2) != null) {
-            dirName = m.group(2);
-        } else {
-            dirName = m.group();
-        }
+        String dirName = args.get(0);
 
         Path dir = Paths.get(dirName);
+        if (!Files.isDirectory(dir)) {
+            env.writeln("Invalid path - " + dirName + "\n");
+        }
 
         try {
             Files.walkFileTree(dir, new FileVisitor<>() {
@@ -41,7 +37,9 @@ public class TreeCommand implements ShellCommand {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                     depth += 2;
-                    env.writeln(String.format("%" + depth + "s%s", " ", dir.getFileName()));
+                    if (depth != 2) {
+                        env.writeln(String.format("%" + depth + "s%s", " ", dir.getFileName()));
+                    }
                     return FileVisitResult.CONTINUE;
                 }
 

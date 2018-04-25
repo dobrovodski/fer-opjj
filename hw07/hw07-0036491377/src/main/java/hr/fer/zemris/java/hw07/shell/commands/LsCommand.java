@@ -3,6 +3,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellIOException;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
+import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,22 +39,19 @@ public class LsCommand implements ShellCommand {
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
-        Matcher m = p.matcher(arguments);
-        if (!m.find()) {
-            env.writeln("Invalid number of parameters.");
+        List<String> args = Util.split(arguments);
+        if (args.size() != 1) {
+            env.writeln("Invalid number of arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        String dirName;
-        if (m.group(1) != null) {
-            dirName = m.group(1);
-        } else if (m.group(2) != null) {
-            dirName = m.group(2);
-        } else {
-            dirName = m.group();
-        }
+        String dirName = args.get(0);
 
         Path dir = Paths.get(dirName);
+        if (!Files.isDirectory(dir)) {
+            env.writeln("Invalid path - " + dirName + "\n");
+        }
+
         DirectoryStream<Path> files;
         try {
             files = Files.newDirectoryStream(dir);
