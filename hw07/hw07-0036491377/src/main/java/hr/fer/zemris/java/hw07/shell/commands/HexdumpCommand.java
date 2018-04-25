@@ -6,6 +6,7 @@ import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -31,10 +32,7 @@ public class HexdumpCommand implements ShellCommand {
         String dirName = args.get(0);
         byte[] bytes = new byte[ROW_LEN];
 
-        try {
-
-            InputStream is = new BufferedInputStream(new FileInputStream(dirName));
-
+        try (InputStream is = new BufferedInputStream(new FileInputStream(dirName))) {
             StringBuilder leftEight = new StringBuilder();
             StringBuilder rightEight = new StringBuilder();
             StringBuilder converted = new StringBuilder();
@@ -58,8 +56,8 @@ public class HexdumpCommand implements ShellCommand {
                     }
                 }
 
-                String rowNum = String.format("%8s", Integer.toHexString(ROW_LEN * row++)).replace(" ", "0")
-                                      .toUpperCase();
+                String hex = Integer.toHexString(ROW_LEN * row++);
+                String rowNum = String.format("%8s", hex).replace(" ", "0").toUpperCase();
 
                 int width = ROW_LEN + ROW_LEN / 2 - 1;
                 String firstHex = padRightWithSpace(leftEight.toString().trim().toUpperCase(), width);
@@ -73,7 +71,9 @@ public class HexdumpCommand implements ShellCommand {
 
                 env.writeln(out);
             }
-            is.close();
+        } catch (FileNotFoundException e) {
+            env.writeln("Could not find file.");
+            return ShellStatus.CONTINUE;
         } catch (IOException e) {
             env.writeln("Could not read file.");
             return ShellStatus.CONTINUE;

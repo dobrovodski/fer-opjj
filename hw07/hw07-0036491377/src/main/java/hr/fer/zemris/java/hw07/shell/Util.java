@@ -44,7 +44,7 @@ public class Util {
                     inQuotes = !inQuotes;
                     // 'After the ending double-quote, either no more characters must be present or at least one
                     // space character must be present'
-                    if (i < len - 1 && !Character.isWhitespace(arguments.charAt(i + 1))) {
+                    if (i < len && !inQuotes && !Character.isWhitespace(arguments.charAt(i + 1))) {
                         return null;
                     }
 

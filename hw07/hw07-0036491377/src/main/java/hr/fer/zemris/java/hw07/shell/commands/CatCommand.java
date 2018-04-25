@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.MalformedInputException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.*;
 import java.util.List;
@@ -64,6 +63,8 @@ public class CatCommand implements ShellCommand {
         }
 
         try {
+            // Files#lines does NOT put the entire file into memory, so it is okay to use it
+            // Internally, it uses a BufferedReader
             Stream<String> lines = Files.lines(dir, cs);
             lines.forEach(env::writeln);
         } catch (UncheckedIOException e) {
