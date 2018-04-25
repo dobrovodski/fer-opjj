@@ -20,6 +20,7 @@ public class MyShell {
             } else {
                 arguments = "";
             }
+
             if (commands.keySet().contains(command)) {
                 ShellStatus status = commands.get(command).executeCommand(env, arguments.trim());
                 if (status == ShellStatus.TERMINATE) {
