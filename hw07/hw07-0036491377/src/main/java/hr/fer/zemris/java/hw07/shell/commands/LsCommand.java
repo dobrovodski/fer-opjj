@@ -20,8 +20,6 @@ import java.util.stream.Stream;
 
 public class LsCommand implements ShellCommand {
     private static final String NAME = "ls";
-    private String regex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
-    private Pattern p = Pattern.compile(regex);
 
     private static final List<String> DESC;
 

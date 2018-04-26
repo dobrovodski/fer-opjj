@@ -9,11 +9,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HexdumpCommand implements ShellCommand {
     private static final String NAME = "hexdump";
     private static final int ROW_LEN = 16;
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Hexadecimal view of selected file.",
+                "",
+                "HEXDUMP [source]",
+                "",
+                "   source - file to hexdump"
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -98,6 +114,6 @@ public class HexdumpCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }

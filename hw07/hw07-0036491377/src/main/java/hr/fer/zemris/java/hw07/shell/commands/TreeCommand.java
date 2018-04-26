@@ -7,12 +7,28 @@ import hr.fer.zemris.java.hw07.shell.Util;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TreeCommand implements ShellCommand {
     private static final String NAME = "tree";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Graphically displays the folder structure of a drive or path.",
+                "",
+                "TREE [path]",
+                "",
+                "   path - path to the root file of the tree"
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -30,7 +46,7 @@ public class TreeCommand implements ShellCommand {
             args.add(".");
         }
 
-        // NOTE - this is how cmd behaves when you have too many parameters
+        // this is how cmd behaves when you have too many parameters
         if (args.size() != 1) {
             env.writeln("Too many parameters - " + args.get(1));
             return ShellStatus.CONTINUE;
@@ -91,7 +107,7 @@ public class TreeCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 
 }

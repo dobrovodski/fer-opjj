@@ -9,10 +9,26 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MkdirCommand implements ShellCommand {
     private static final String NAME = "mkdir";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Creates provided directory structure in current directory.",
+                "",
+                "MKDIR [structure]",
+                "",
+                "   structure - directory structure to create"
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -60,6 +76,6 @@ public class MkdirCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }

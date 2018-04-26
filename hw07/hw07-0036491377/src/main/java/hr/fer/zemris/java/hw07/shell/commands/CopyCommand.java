@@ -13,10 +13,27 @@ import java.io.IOException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CopyCommand implements ShellCommand {
     private static final String NAME = "copy";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Copies file from source to given destination. If the destination file exists, it asks for permission.",
+                "",
+                "COPY [source] [destination]",
+                "",
+                "   source - source file to copy",
+                "   destination - location to copy to"
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -82,6 +99,6 @@ public class CopyCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }

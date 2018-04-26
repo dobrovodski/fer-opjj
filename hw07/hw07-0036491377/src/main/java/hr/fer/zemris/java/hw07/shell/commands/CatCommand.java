@@ -10,11 +10,29 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class CatCommand implements ShellCommand {
     private static final String NAME = "cat";
+    private static final List<String> DESC;
+
+    static {
+        DESC = new ArrayList<>();
+        String[] descArr = {
+                "Opens given file and writes its content to console using the provided charset. If no charset is "
+                + "provided, it uses the default charset of the system.",
+                "",
+                "CAT",
+                "CAT [charset]",
+                "",
+                "   charset - charset to use",
+        };
+        DESC.addAll(Arrays.asList(descArr));
+    }
 
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -85,6 +103,6 @@ public class CatCommand implements ShellCommand {
 
     @Override
     public List<String> getCommandDescription() {
-        return null;
+        return Collections.unmodifiableList(DESC);
     }
 }
