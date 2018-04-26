@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 
 public class EnvironmentImpl implements Environment {
-    private BufferedReader sc;
+    private BufferedReader reader;
     private BufferedWriter writer;
     private Character multilineSymbol = '|';
     private Character promptSymbol = '>';
@@ -49,7 +49,7 @@ public class EnvironmentImpl implements Environment {
     }
 
     public EnvironmentImpl() {
-        sc = new BufferedReader(new InputStreamReader(System.in));
+        reader = new BufferedReader(new InputStreamReader(System.in));
         writer = new BufferedWriter(new OutputStreamWriter(System.out));
     }
 
@@ -61,7 +61,7 @@ public class EnvironmentImpl implements Environment {
         while (true) {
             String next;
             try {
-                next = sc.readLine();
+                next = reader.readLine();
             } catch (IOException e) {
                 throw new ShellIOException("Could not read line.");
             }

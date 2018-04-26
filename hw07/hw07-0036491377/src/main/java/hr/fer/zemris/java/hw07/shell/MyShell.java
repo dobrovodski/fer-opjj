@@ -4,7 +4,17 @@ import hr.fer.zemris.java.hw07.shell.commands.ShellCommand;
 
 import java.util.SortedMap;
 
+/**
+ * This is the entry point to the shell. Waits for the user to enter a command, executes it and waits for more input.
+ * The existent commands can be seen using the command "help" and "help [command]".
+ *
+ * @author matej
+ */
 public class MyShell {
+    /**
+     * Entry point.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Environment env = new EnvironmentImpl();
         SortedMap<String, ShellCommand> commands = env.commands();
@@ -15,6 +25,7 @@ public class MyShell {
             String[] split = in.split(" ", 2);
             String command = split[0].toLowerCase();
             String arguments;
+
             if (split.length == 2) {
                  arguments = split[1];
             } else {

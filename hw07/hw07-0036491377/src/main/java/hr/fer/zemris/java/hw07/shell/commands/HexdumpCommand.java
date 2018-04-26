@@ -14,9 +14,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This command displays the hexadecimal view of file.
+ *
+ * @author matej
+ */
 public class HexdumpCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "hexdump";
+    /**
+     * Length of a single hexdump row
+     */
     private static final int ROW_LEN = 16;
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

@@ -6,8 +6,19 @@ import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.util.*;
 
+/**
+ * This command displays all commands or provides help about selected command.
+ *
+ * @author matej
+ */
 public class HelpCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "help";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

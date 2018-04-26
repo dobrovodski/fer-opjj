@@ -18,9 +18,19 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * This command lists directory contents.
+ *
+ * @author matej
+ */
 public class LsCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "ls";
-
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

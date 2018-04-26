@@ -6,8 +6,19 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import java.nio.charset.Charset;
 import java.util.*;
 
+/**
+ * This command lists all charsets on the current system.
+ *
+ * @author matej
+ */
 public class CharsetsCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "charsets";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

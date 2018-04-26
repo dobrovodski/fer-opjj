@@ -9,8 +9,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This command displays character for selected symbol and provides ability to change it.
+ *
+ * @author matej
+ */
 public class SymbolCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "symbol";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {
@@ -26,6 +37,7 @@ public class SymbolCommand implements ShellCommand {
         };
         DESC.addAll(Arrays.asList(descArr));
     }
+
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

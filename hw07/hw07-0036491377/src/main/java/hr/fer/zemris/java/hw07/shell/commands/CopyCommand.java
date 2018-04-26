@@ -18,14 +18,27 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This command copies the selected file to the given destination and asks for permission to overwrite a possibly
+ * existent file.
+ *
+ * @author matej
+ */
 public class CopyCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "copy";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Copies file from source to given destination. If the destination file exists, it asks for permission.",
+                "Copies file from source to given destination. If the destination file exists, it asks for permission"
+                + " to overwrite the existent file.",
                 "",
                 "COPY [source] [destination]",
                 "",

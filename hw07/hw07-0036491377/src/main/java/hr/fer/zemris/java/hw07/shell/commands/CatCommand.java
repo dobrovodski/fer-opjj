@@ -16,15 +16,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * This command opens a file and writes its content to the standard output using provided charset.
+ *
+ * @author matej
+ */
 public class CatCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "cat";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Opens given file and writes its content to console using the provided charset. If no charset is "
-                + "provided, it uses the default charset of the system.",
+                "Opens given file and writes its content to the standard output using the provided charset. If no "
+                + "charset is provided, it uses the default charset of the system.",
                 "",
                 "CAT",
                 "CAT [charset]",

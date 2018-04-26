@@ -8,8 +8,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This command exits the shell.
+ *
+ * @author matej
+ */
 public class ExitCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "exit";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

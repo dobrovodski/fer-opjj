@@ -3,7 +3,20 @@ package hr.fer.zemris.java.hw07.shell;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class used to split a string into a list of arguments.
+ *
+ * @author matej
+ */
 public class Util {
+    /**
+     * Splits the given string into a list of arguments. Spaces in quotes are parsed normally, but out of quotes it
+     * separates arguments. Provides ability to escape quotes.
+     *
+     * @param arguments string to split into arguments
+     *
+     * @return list of arguments
+     */
     public static List<String> split(String arguments) {
         List<String> matches = new ArrayList<>();
 
@@ -27,7 +40,7 @@ public class Util {
 
             // Don't append the character '\' if you're escaping a quote or if its \\
             if (c == '\\' && i < len - 1) {
-                if(arguments.charAt(i + 1) == '"' && inQuotes) {
+                if (arguments.charAt(i + 1) == '"' && inQuotes) {
                     continue;
                 }
                 if (arguments.charAt(i + 1) == '\\') {

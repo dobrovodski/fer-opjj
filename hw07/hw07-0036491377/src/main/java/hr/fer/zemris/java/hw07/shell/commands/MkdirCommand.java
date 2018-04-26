@@ -14,8 +14,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This command creates the provided directory structure in the current directory.
+ *
+ * @author matej
+ */
 public class MkdirCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "mkdir";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {

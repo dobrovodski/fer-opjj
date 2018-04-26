@@ -14,8 +14,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This command graphically displays the folder structure of the selected path.
+ *
+ * @author matej
+ */
 public class TreeCommand implements ShellCommand {
+    /**
+     * Name of the command
+     */
     private static final String NAME = "tree";
+    /**
+     * Description of the command
+     */
     private static final List<String> DESC;
 
     static {
