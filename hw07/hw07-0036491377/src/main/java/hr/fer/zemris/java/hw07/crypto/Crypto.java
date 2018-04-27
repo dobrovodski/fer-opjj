@@ -16,64 +16,91 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Scanner;
 
+/**
+ * This class provides the ability to check a file's sha-256 digest and to encrypt/decrypt a file using the AES
+ * crypto-algorithm. The first command line argument determines what action to perform (checksha, encrypt, decrypt)
+ * while the second and third argument determine the input / output file.
+ *
+ * @author matej
+ */
 public class Crypto {
+    /**
+     * Entry point.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("NO :<");
+            System.out.println("This program requires two parameters.");
+            return;
         }
 
-        CryptoType type = CryptoType.getType(args[0]);
+        String type = args[0].toLowerCase();
         Path path = Paths.get(args[1]);
         Scanner sc = new Scanner(System.in);
 
-        switch (type) {
-            case CHECKSHA: {
-                System.out.format("Please provide expected sha-256 digest for %s: %n> ", path);
-                String provided = sc.nextLine();
-                checkSHA(path, provided);
-            }
-            case ENCRYPT:
-                if (args.length < 3) {
-                    System.out.println("Encryption requires an input and an output file.");
-                    return;
-                }
+        if (type.equals("checksha")) {
+            System.out.format("Please provide expected sha-256 digest for %s: %n> ", path);
+            String provided = sc.nextLine();
+            checkSHA(path, provided);
 
-            case DECRYPT:
-                if (args.length < 3) {
-                    System.out.println("Decryption requires an input and an output file.");
-                    return;
-                }
-
-                Path out = Paths.get(args[2]);
-                System.out.format("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits): %n> ");
-                String password = sc.nextLine();
-                System.out.format("Please provide initialization vector as hex-encoded text (32 hex-digits): %n> ");
-                String initVector = sc.nextLine();
-
-                SecretKeySpec keySpec = new SecretKeySpec(Util.hextobyte(password), "AES");
-                AlgorithmParameterSpec paramSpec = new IvParameterSpec(Util.hextobyte(initVector));
-                Cipher cipher;
-                try {
-                    cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-                    System.out.println("Could not instantiate cipher.");
-                    return;
-                }
-
-                try {
-                    cipher.init(false ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, paramSpec);
-                } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-                    System.out.println("Could not initialize cipher.");
-                    return;
-                }
-
-                encryptDecrypt(path, out, cipher);
-                break;
+            sc.close();
+            return;
         }
 
-        sc.close();
+        if (type.equals("encrypt") || type.equals("decrypt")) {
+            if (args.length < 3) {
+                System.out.println("Encryption and decryption require an input and an output file.");
+                return;
+            }
+
+            boolean encrypt = false;
+            if (type.equals("encrypt")) {
+                encrypt = true;
+            }
+
+            Path out = Paths.get(args[2]);
+            System.out.format("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits): %n> ");
+            String password = sc.nextLine();
+            System.out.format("Please provide initialization vector as hex-encoded text (32 hex-digits): %n> ");
+            String initVector = sc.nextLine();
+
+
+            SecretKeySpec keySpec = new SecretKeySpec(Util.hextobyte(password), "AES");
+            AlgorithmParameterSpec paramSpec = new IvParameterSpec(Util.hextobyte(initVector));
+            Cipher cipher;
+
+            try {
+                cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+                System.out.println("Could not instantiate cipher.");
+                return;
+            }
+
+            try {
+                cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, paramSpec);
+            } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+                System.out.println("Could not initialize cipher.");
+                return;
+            }
+
+            encipherDecipher(path, out, cipher);
+            type = type.substring(0, 1).toUpperCase() + type.substring(1);
+            System.out.format("%s completed. Generated file %s based on file %s", type, out, path);
+
+            sc.close();
+        }
     }
 
+    /**
+     * Returns the SHA-256 digest from provided InputStream.
+     *
+     * @param is input stream
+     *
+     * @return SHA-256 digest of stream
+     *
+     * @throws IOException if an error occurs while reading from the input stream
+     */
     private static String getDigest(InputStream is) throws IOException {
         MessageDigest md;
         byte[] bytes = new byte[4096];
@@ -94,6 +121,13 @@ public class Crypto {
         return Util.bytetohex(hash);
     }
 
+    /**
+     * Checks the provided SHA-256 digest with the calculated one. Returns {@code true} if they are the same, {@code
+     * false} otherwise.
+     *
+     * @param path path to file to check
+     * @param provided provided digest
+     */
     private static void checkSHA(Path path, String provided) {
         String digest;
 
@@ -102,7 +136,7 @@ public class Crypto {
             digest = getDigest(is);
             is.close();
         } catch (IOException ignored) {
-            //TODO
+            System.out.println("Could not open file: " + path.toString());
             return;
         }
 
@@ -115,7 +149,14 @@ public class Crypto {
         }
     }
 
-    private static void encryptDecrypt(Path in, Path out, Cipher cipher) {
+    /**
+     * Uses the provided cipher to either encrypt or decrypt the input file and stores the result to the output path.
+     *
+     * @param in input path of file to encrypt or decrypt
+     * @param out output path of file after the original has been encrypted or decrypted
+     * @param cipher cipher to use while encrypting or decrypting
+     */
+    private static void encipherDecipher(Path in, Path out, Cipher cipher) {
         byte[] bytes = new byte[4096];
         byte[] output;
 
@@ -128,8 +169,7 @@ public class Crypto {
                 os.write(output);
             }
         } catch (IOException ignored) {
-            //TODO
-            return;
+            System.err.println("Error while writing to output file.");
         }
     }
 }

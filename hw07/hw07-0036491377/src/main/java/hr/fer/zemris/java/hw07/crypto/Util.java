@@ -1,6 +1,18 @@
 package hr.fer.zemris.java.hw07.crypto;
 
+/**
+ * Utility class that provides methods for converting hex strings to byte arrays and the other way around.
+ *
+ * @author matej
+ */
 public class Util {
+    /**
+     * Converts given string of hex values to an array of bytes.
+     *
+     * @param keyText string to convert
+     *
+     * @return converted byte array
+     */
     public static byte[] hextobyte(String keyText) {
         int length = keyText.length();
         if (length % 2 != 0) {
@@ -24,10 +36,18 @@ public class Util {
         return byteArray;
     }
 
+    /**
+     * Converts given array of bytes into a hex string.
+     *
+     * @param bytearray array of bytes to convert
+     *
+     * @return converted hex string
+     */
     public static String bytetohex(byte[] bytearray) {
         StringBuilder sb = new StringBuilder();
         for (byte byteNum : bytearray) {
-            String converted = Integer.toHexString(byteNum & 0xFF);
+            //TODO: write own tohexstring?
+            String converted = Integer.toHexString(byteNum);
             if (converted.length() < 2) {
                 converted = '0' + converted;
             }
