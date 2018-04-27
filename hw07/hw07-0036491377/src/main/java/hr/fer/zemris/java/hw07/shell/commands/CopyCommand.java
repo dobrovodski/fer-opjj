@@ -4,15 +4,7 @@ import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -98,7 +90,7 @@ public class CopyCommand implements ShellCommand {
         }
 
         try {
-            Files.createFile(destPath);
+            destPath = Files.createFile(destPath);
             InputStream in = new BufferedInputStream(Files.newInputStream(srcPath));
             OutputStream out = new BufferedOutputStream(Files.newOutputStream(destPath));
 

@@ -3,7 +3,9 @@ package hr.fer.zemris.java.hw07.shell;
 import hr.fer.zemris.java.hw07.shell.commands.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class EnvironmentImpl implements Environment {
     private BufferedReader reader;

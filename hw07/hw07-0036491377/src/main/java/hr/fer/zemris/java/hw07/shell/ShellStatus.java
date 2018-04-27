@@ -11,7 +11,7 @@ public enum ShellStatus {
      */
     CONTINUE,
     /**
-     * Determines the end of the program either due to an IOException or the user exiting the shell
+     * Signifies the end of the program either due to an IOException or the user exiting the shell
      */
     TERMINATE
 }
