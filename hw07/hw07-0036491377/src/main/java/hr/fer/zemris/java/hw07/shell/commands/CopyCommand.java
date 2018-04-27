@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,6 +51,11 @@ public class CopyCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc}
+     * This command copies the selected file to the given destination and asks for permission to overwrite a possibly
+     * existent file. If the destination is a folder, the file is copied into it with the same name.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);
@@ -65,10 +73,15 @@ public class CopyCommand implements ShellCommand {
         String srcName = args.get(0);
         String destName = args.get(1);
 
-        File srcFile = new File(srcName);
-        File destFile = new File(destName);
+        Path srcPath = Paths.get(srcName);
+        Path destPath = Paths.get(destName);
 
-        if (destFile.exists()) {
+        if (Files.isDirectory(srcPath)) {
+            env.writeln("Can only copy files, not directories.");
+            return ShellStatus.CONTINUE;
+        }
+
+        if (Files.exists(destPath) && Files.isRegularFile(destPath)) {
             env.writeln("Destination file exists. Overwrite? (Y/N): ");
             String decision = env.readLine().trim();
             if (decision.length() > 1) {
@@ -80,10 +93,15 @@ public class CopyCommand implements ShellCommand {
             }
         }
 
+        if (Files.isDirectory(destPath)) {
+            env.writeln("Copying file to directory: " + destPath);
+            destPath = Paths.get(destName + "/" + srcName);
+        }
+
         try {
-            boolean created = destFile.createNewFile();
-            InputStream in = new BufferedInputStream(new FileInputStream(srcFile));
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(destFile));
+            Files.createFile(destPath);
+            InputStream in = new BufferedInputStream(Files.newInputStream(srcPath));
+            OutputStream out = new BufferedOutputStream(Files.newOutputStream(destPath));
 
             byte[] buf = new byte[1024];
             int len;
@@ -93,15 +111,15 @@ public class CopyCommand implements ShellCommand {
 
             in.close();
             out.close();
+            env.writeln("File successfully copied.");
         } catch (FileNotFoundException e) {
-            env.writeln("Source file not found.");
+            env.writeln("File not found.");
             return ShellStatus.CONTINUE;
         } catch (IOException e) {
-            env.writeln("Exception while reading or writing the file.");
+            env.writeln("Exception occurred while reading or writing the file.");
             return ShellStatus.CONTINUE;
         }
 
-        env.writeln("File successfully copied.");
         return ShellStatus.CONTINUE;
     }
 
