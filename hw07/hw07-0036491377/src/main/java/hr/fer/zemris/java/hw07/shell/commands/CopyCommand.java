@@ -52,9 +52,8 @@ public class CopyCommand implements ShellCommand {
     }
 
     /**
-     * {@inheritDoc}
-     * This command copies the selected file to the given destination and asks for permission to overwrite a possibly
-     * existent file. If the destination is a folder, the file is copied into it with the same name.
+     * {@inheritDoc} This command copies the selected file to the given destination and asks for permission to overwrite
+     * a possibly existent file. If the destination is a folder, the file is copied into it with the same name.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {

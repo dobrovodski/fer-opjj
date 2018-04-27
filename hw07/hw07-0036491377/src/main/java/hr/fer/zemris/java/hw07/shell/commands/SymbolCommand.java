@@ -38,6 +38,9 @@ public class SymbolCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command displays character for selected symbol and provides ability to change it.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

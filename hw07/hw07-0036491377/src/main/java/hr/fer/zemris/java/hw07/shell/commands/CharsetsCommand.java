@@ -31,6 +31,9 @@ public class CharsetsCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command lists all charsets on the current system.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         SortedMap<String, Charset> charsets = Charset.availableCharsets();

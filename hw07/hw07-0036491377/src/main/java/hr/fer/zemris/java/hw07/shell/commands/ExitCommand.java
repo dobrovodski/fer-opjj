@@ -33,6 +33,9 @@ public class ExitCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command exits the shell.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         return ShellStatus.TERMINATE;

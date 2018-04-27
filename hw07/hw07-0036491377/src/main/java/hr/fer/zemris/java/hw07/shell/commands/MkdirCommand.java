@@ -41,6 +41,9 @@ public class MkdirCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command creates the provided directory structure in the current directory.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

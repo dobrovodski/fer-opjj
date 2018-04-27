@@ -41,6 +41,9 @@ public class TreeCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command graphically displays the folder structure of the selected path.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
 

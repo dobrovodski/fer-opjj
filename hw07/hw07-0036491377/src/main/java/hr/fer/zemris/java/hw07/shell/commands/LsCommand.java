@@ -45,6 +45,9 @@ public class LsCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command lists directory contents.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

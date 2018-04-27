@@ -34,6 +34,9 @@ public class HelpCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command displays all commands or provides help about selected command.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

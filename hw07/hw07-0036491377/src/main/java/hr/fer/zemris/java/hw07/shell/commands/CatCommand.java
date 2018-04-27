@@ -45,6 +45,9 @@ public class CatCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command opens a file and writes its content to the standard output using provided charset.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

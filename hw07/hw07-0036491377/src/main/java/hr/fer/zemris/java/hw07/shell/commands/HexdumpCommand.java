@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This command displays the hexadecimal view of file.
+ * This command displays the hexadecimal view of given file.
  *
  * @author matej
  */
@@ -45,6 +45,9 @@ public class HexdumpCommand implements ShellCommand {
         DESC.addAll(Arrays.asList(descArr));
     }
 
+    /**
+     * {@inheritDoc} This command displays the hexadecimal view of given file.
+     */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

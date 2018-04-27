@@ -13,21 +13,30 @@ import java.util.SortedMap;
 public class MyShell {
     /**
      * Entry point.
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {
         Environment env = new EnvironmentImpl();
         SortedMap<String, ShellCommand> commands = env.commands();
-        env.writeln("Welcome to MyShell v 1.0");
+
+        try {
+            env.writeln("Welcome to MyShell v 1.0");
+        } catch (ShellIOException e) {
+            System.err.println("Shell couldn't write to output.");
+            return;
+        }
+
         while (true) {
             String in = env.readLine();
 
-            String[] split = in.split(" ", 2);
+            // Everything after the first whitespace is considered as the arguments
+            String[] split = in.split("\\s+", 2);
             String command = split[0].toLowerCase();
             String arguments;
 
             if (split.length == 2) {
-                 arguments = split[1];
+                arguments = split[1];
             } else {
                 arguments = "";
             }
@@ -41,6 +50,5 @@ public class MyShell {
                 env.writeln("Not a valid command: " + command);
             }
         }
-
     }
 }
