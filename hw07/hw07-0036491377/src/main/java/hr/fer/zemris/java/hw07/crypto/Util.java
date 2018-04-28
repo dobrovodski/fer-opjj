@@ -12,13 +12,15 @@ public class Util {
      * @param keyText string to convert
      *
      * @return converted byte array
+     *
+     * @throws IllegalArgumentException if the hex string isn't convertible to bytes
      */
     public static byte[] hextobyte(String keyText) {
         int length = keyText.length();
         keyText = keyText.toLowerCase();
 
         if (length % 2 != 0) {
-            throw new IllegalArgumentException("Hex cannot have an odd length.");
+            throw new IllegalArgumentException("Hex string cannot have an odd length.");
         }
 
         byte[] byteArray = new byte[length / 2];
@@ -66,15 +68,15 @@ public class Util {
     /**
      * Converts given array of bytes into a hex string.
      *
-     * @param bytearray array of bytes to convert
+     * @param byteArray array of bytes to convert
      *
      * @return converted hex string
      */
-    public static String bytetohex(byte[] bytearray) {
+    public static String bytetohex(byte[] byteArray) {
         StringBuilder sb = new StringBuilder();
         char[] charMap = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-        for (byte byteNum : bytearray) {
+        for (byte byteNum : byteArray) {
             char c1 = (char) ((byteNum >> 4) & 0xF);
             char c2 = (char) ((byteNum) & 0xF);
 
