@@ -43,7 +43,7 @@ public class CatCommand implements ShellCommand {
                 "CAT",
                 "CAT [charset]",
                 "",
-                "   charset - charset to use",
+                "   charset - charset to use.",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
@@ -102,6 +102,7 @@ public class CatCommand implements ShellCommand {
             // Internally, it uses a BufferedReader
             Stream<String> lines = Files.lines(dir, cs);
             lines.forEach(env::writeln);
+            lines.close();
         } catch (UncheckedIOException e) {
             env.writeln("Malformed input - wrong charset.");
             return ShellStatus.CONTINUE;

@@ -51,6 +51,7 @@ public class Crypto {
         if (type.equals("encrypt") || type.equals("decrypt")) {
             if (args.length < 3) {
                 System.out.println("Encryption and decryption require an input and an output file.");
+                sc.close();
                 return;
             }
 
@@ -65,15 +66,23 @@ public class Crypto {
             System.out.format("Please provide initialization vector as hex-encoded text (32 hex-digits): %n> ");
             String initVector = sc.nextLine();
 
+            SecretKeySpec keySpec;
+            AlgorithmParameterSpec paramSpec;
+            try {
+                keySpec = new SecretKeySpec(Util.hextobyte(password), "AES");
+                paramSpec = new IvParameterSpec(Util.hextobyte(initVector));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                sc.close();
+                return;
+            }
 
-            SecretKeySpec keySpec = new SecretKeySpec(Util.hextobyte(password), "AES");
-            AlgorithmParameterSpec paramSpec = new IvParameterSpec(Util.hextobyte(initVector));
             Cipher cipher;
-
             try {
                 cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
                 System.out.println("Could not instantiate cipher.");
+                sc.close();
                 return;
             }
 
@@ -81,6 +90,7 @@ public class Crypto {
                 cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, keySpec, paramSpec);
             } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
                 System.out.println("Could not initialize cipher.");
+                sc.close();
                 return;
             }
 
@@ -89,6 +99,10 @@ public class Crypto {
             System.out.format("%s completed. Generated file %s based on file %s", type, out, path);
 
             sc.close();
+        } else {
+            System.out.println("This function only supports the operations checksha, encrypt and decrypt");
+            sc.close();
+            return;
         }
     }
 

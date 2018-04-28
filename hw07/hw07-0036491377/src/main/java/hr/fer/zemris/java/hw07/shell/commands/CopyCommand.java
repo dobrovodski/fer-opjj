@@ -37,8 +37,8 @@ public class CopyCommand implements ShellCommand {
                 "",
                 "COPY [source] [destination]",
                 "",
-                "   source - source file to copy",
-                "   destination - location to copy to"
+                "   source - source file to copy.",
+                "   destination - location to copy to."
         };
         DESC.addAll(Arrays.asList(descArr));
     }

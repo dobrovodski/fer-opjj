@@ -5,6 +5,13 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+/**
+ * JUnit tests for SimpleHashtable.
+ *
+ * @author matej
+ * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
+ *         tests </a>
+ */
 public class UtilTest {
     @Test
     public void Hextobyte_SimpleExample_CorrectArray() {

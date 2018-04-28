@@ -7,12 +7,35 @@ import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * The concrete implementation of {@link Environment}.
+ *
+ * @author matej
+ */
 public class EnvironmentImpl implements Environment {
+    /**
+     * Reader for reading user input.
+     */
     private BufferedReader reader;
+    /**
+     * Writer for writing to the user.
+     */
     private BufferedWriter writer;
+    /**
+     * Multiline symbol.
+     */
     private Character multilineSymbol = '|';
+    /**
+     * Prompt symbol.
+     */
     private Character promptSymbol = '>';
+    /**
+     * More lines symbol.
+     */
     private Character morelinesSymbol = '\\';
+    /**
+     * Sorted map of all commands.
+     */
     private static SortedMap<String, ShellCommand> commands;
 
     static {
@@ -50,6 +73,9 @@ public class EnvironmentImpl implements Environment {
         commands.put(c.getCommandName(), c);
     }
 
+    /**
+     * Default constructor.
+     */
     public EnvironmentImpl() {
         reader = new BufferedReader(new InputStreamReader(System.in));
         writer = new BufferedWriter(new OutputStreamWriter(System.out));

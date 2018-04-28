@@ -36,7 +36,7 @@ public class HexdumpCommand implements ShellCommand {
                 "",
                 "HEXDUMP [source]",
                 "",
-                "   source - file to hexdump"
+                "   source - file to hexdump."
         };
         DESC.addAll(Arrays.asList(descArr));
     }

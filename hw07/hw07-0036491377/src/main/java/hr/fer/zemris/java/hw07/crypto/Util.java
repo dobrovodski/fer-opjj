@@ -6,6 +6,7 @@ package hr.fer.zemris.java.hw07.crypto;
  * @author matej
  */
 public class Util {
+
     /**
      * Converts given string of hex values to an array of bytes.
      *

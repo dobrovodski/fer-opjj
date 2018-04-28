@@ -36,7 +36,7 @@ public class MkdirCommand implements ShellCommand {
                 "",
                 "MKDIR [structure]",
                 "",
-                "   structure - directory structure to create"
+                "   structure - directory structure to create."
         };
         DESC.addAll(Arrays.asList(descArr));
     }

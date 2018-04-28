@@ -34,7 +34,7 @@ public class TreeCommand implements ShellCommand {
                 "",
                 "TREE [path]",
                 "",
-                "   path - path to the root file of the tree"
+                "   path - path to the root file of the tree."
         };
         DESC.addAll(Arrays.asList(descArr));
     }
