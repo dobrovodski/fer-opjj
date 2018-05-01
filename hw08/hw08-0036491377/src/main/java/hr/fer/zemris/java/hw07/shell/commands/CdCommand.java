@@ -34,7 +34,7 @@ public class CdCommand implements ShellCommand {
                 "",
                 "CD [path]",
                 "",
-                "   path - path to change the current directory to",
+                "   path - path to change the current directory to.",
         };
         DESC.addAll(Arrays.asList(descArr));
     }

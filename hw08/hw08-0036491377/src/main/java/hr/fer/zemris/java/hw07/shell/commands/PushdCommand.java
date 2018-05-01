@@ -11,7 +11,7 @@ import java.util.*;
 
 
 /**
- * This command pushes the current directory on the stack and changes the current directory to the provided one.
+ * This command stores the current directory for use by the POPD command, then changes to the specified directory.
  *
  * @author matej
  */
@@ -28,18 +28,18 @@ public class PushdCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Pushes the current directory onto the stack and changes the current directory.",
+                "Stores the current directory for use by the POPD command, then changes to the specified directory.",
                 "",
                 "PUSHD [path]",
                 "",
-                "   path - path to change the current directory to",
+                "   path - specifies the directory to make the current directory.",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command pushes the current directory on the stack and changes the current directory to the
-     * provided one.
+     * {@inheritDoc} This command stores the current directory for use by the POPD command, then changes to the
+     * specified directory.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {

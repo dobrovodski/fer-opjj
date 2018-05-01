@@ -1,19 +1,16 @@
 package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
+import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
- * This command changes the current directory to the provided one.
+ * This command prints all the directories stored by the PUSHD command.
  *
  * @author matej
  */
@@ -21,7 +18,7 @@ public class ListdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "cd";
+    private static final String NAME = "listd";
     /**
      * Description of the command
      */
@@ -30,17 +27,15 @@ public class ListdCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Changes the current directory.",
+                "Prints all the directories stored by the PUSHD command.",
                 "",
-                "CD [path]",
-                "",
-                "   path - path to change the current directory to",
+                "LISTD",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command prints the current working directory.
+     * {@inheritDoc} This command prints all the directories stored by the PUSHD command.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -51,25 +46,19 @@ public class ListdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        if (args.size() != 1) {
-            env.writeln("This command takes one argument - the path to the new current directory.");
+        if (args.size() != 0) {
+            env.writeln("This command takes no arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        Path path;
-        try {
-            path = env.getCurrentDirectory().resolve(args.get(0));
-        } catch (InvalidPathException ex) {
-            env.writeln("Invalid path.");
+        Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
+        if (stack == null || stack.size() == 0) {
+            env.writeln("No directory stored.");
             return ShellStatus.CONTINUE;
         }
 
-        try {
-            path = env.getCurrentDirectory().resolve(path).normalize();
-            env.setCurrentDirectory(path);
-            env.writeln("Changed current directory to " + env.getCurrentDirectory().toString());
-        } catch (IllegalArgumentException ex) {
-            env.writeln(ex.getMessage());
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            env.writeln(stack.get(i).toString());
         }
 
         return ShellStatus.CONTINUE;

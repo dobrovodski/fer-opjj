@@ -12,7 +12,7 @@ import java.util.*;
 
 
 /**
- * This command changes the current directory to the provided one.
+ * This command changes to the directory stored by the PUSHD command.
  *
  * @author matej
  */
@@ -29,17 +29,15 @@ public class PopdCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Changes the current directory.",
+                "Changes to the directory stored by the PUSHD command.",
                 "",
-                "CD [path]",
-                "",
-                "   path - path to change the current directory to",
+                "POPD",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command prints the current working directory.
+     * {@inheritDoc} This command changes to the directory stored by the PUSHD command.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
