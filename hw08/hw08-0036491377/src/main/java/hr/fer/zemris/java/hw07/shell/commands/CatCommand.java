@@ -86,7 +86,7 @@ public class CatCommand implements ShellCommand {
 
         Path dir;
         try {
-            dir = Paths.get(dirName);
+            dir = env.getCurrentDirectory().resolve(dirName);
         } catch (InvalidPathException ex) {
             env.writeln("Invalid path.");
             return ShellStatus.CONTINUE;

@@ -35,3 +35,10 @@ Shell checklist
 + If user provides invalid or wrong argument for any of commands, appropriate message should be written and your shell should be prepared to accept a new command from user
 
 + Shell terminates when user gives exit command
+
+Shell Test
+help
+help (all commands)
+ls / ls . / ls src / ls pom.xml / ls .. / ls C:\[ ] / ls C:\ 
+cd / cd . / cd .. / cd hw08-0036491377 / cd hw08-0036491377 / cd pom.xml 
+copy src k / copy / copy a / copy a a a / copy a b / copy pom.xml pom2.xml / copy pom.xml pom2.xml / copy pom.xml test / copy pom.xml test (after mkdir test) / copy pom.xml test

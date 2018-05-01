@@ -49,39 +49,24 @@ public class EnvironmentImpl implements Environment {
     static {
         commands = new TreeMap<>();
 
-        ShellCommand c;
-        c = new SymbolCommand();
-        commands.put(c.getCommandName(), c);
+        ShellCommand[] commandsToAdd = {
+                new SymbolCommand(),
+                new CharsetsCommand(),
+                new CatCommand(),
+                new CopyCommand(),
+                new ExitCommand(),
+                new HelpCommand(),
+                new HexdumpCommand(),
+                new LsCommand(),
+                new MkdirCommand(),
+                new TreeCommand(),
+                new PwdCommand(),
+                new CdCommand()
+        };
 
-        c = new CharsetsCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new CatCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new CopyCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new ExitCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new HelpCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new HexdumpCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new LsCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new MkdirCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new TreeCommand();
-        commands.put(c.getCommandName(), c);
-
-        c = new PwdCommand();
-        commands.put(c.getCommandName(), c);
+        for (ShellCommand c : commandsToAdd) {
+            commands.put(c.getCommandName(), c);
+        }
     }
 
     /**
@@ -184,7 +169,8 @@ public class EnvironmentImpl implements Environment {
     @Override
     public void setCurrentDirectory(Path path) {
         if (Files.notExists(path) || !Files.isDirectory(path)) {
-            throw new IllegalArgumentException("This path does not exist or it is not a valid directory.");
+            throw new IllegalArgumentException("This path does not exist or it is not a valid directory: "
+                                               + path.toString());
         }
 
         currentDirectory = path.toAbsolutePath();

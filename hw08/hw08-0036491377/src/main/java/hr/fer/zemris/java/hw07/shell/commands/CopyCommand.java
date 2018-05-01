@@ -6,6 +6,7 @@ import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -64,12 +65,30 @@ public class CopyCommand implements ShellCommand {
         String srcName = args.get(0);
         String destName = args.get(1);
 
-        Path srcPath = Paths.get(srcName);
-        Path destPath = Paths.get(destName);
+        Path srcPath;
+        Path destPath;
+
+        try {
+            srcPath = env.getCurrentDirectory().resolve(srcName);
+            destPath = env.getCurrentDirectory().resolve(destName);
+        } catch (InvalidPathException ex) {
+            env.writeln("Invalid path.");
+            return ShellStatus.CONTINUE;
+        }
 
         if (Files.isDirectory(srcPath)) {
             env.writeln("Can only copy files, not directories.");
             return ShellStatus.CONTINUE;
+        }
+
+        if (Files.notExists(srcPath)) {
+            env.writeln("Cannot find the file specified.");
+            return ShellStatus.CONTINUE;
+        }
+
+        if (Files.isDirectory(destPath)) {
+            env.writeln("Copying file to directory: " + destPath);
+            destPath = Paths.get(destPath.toString() + "/" + srcName);
         }
 
         if (Files.exists(destPath) && Files.isRegularFile(destPath)) {
@@ -84,13 +103,11 @@ public class CopyCommand implements ShellCommand {
             }
         }
 
-        if (Files.isDirectory(destPath)) {
-            env.writeln("Copying file to directory: " + destPath);
-            destPath = Paths.get(destName + "/" + srcName);
-        }
-
         try {
-            destPath = Files.createFile(destPath);
+            if (!Files.exists(destPath)) {
+                destPath = Files.createFile(destPath);
+            }
+
             InputStream in = new BufferedInputStream(Files.newInputStream(srcPath));
             OutputStream out = new BufferedOutputStream(Files.newOutputStream(destPath));
 

@@ -4,23 +4,25 @@ import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
-import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
- * This command creates the provided directory structure in the current directory.
+ * This command changes the current directory to the provided one.
  *
  * @author matej
  */
-public class MkdirCommand implements ShellCommand {
+public class CdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "mkdir";
+    private static final String NAME = "cd";
     /**
      * Description of the command
      */
@@ -29,17 +31,17 @@ public class MkdirCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Creates provided directory structure in current directory.",
+                "Changes the current directory.",
                 "",
-                "MKDIR [structure]",
+                "CD [path]",
                 "",
-                "   structure - directory structure to create."
+                "   path - path to change the current directory to",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command creates the provided directory structure in the current directory.
+     * {@inheritDoc} This command prints the current working directory.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -51,35 +53,26 @@ public class MkdirCommand implements ShellCommand {
         }
 
         if (args.size() != 1) {
-            env.writeln("Too many parameters - " + args.get(1));
+            env.writeln("This command takes one argument - the path to the new current directory.");
             return ShellStatus.CONTINUE;
         }
 
-        String dirName = args.get(0);
-        Path dir;
+        Path path;
         try {
-            dir = env.getCurrentDirectory().resolve(dirName);
+            path = env.getCurrentDirectory().resolve(args.get(0));
         } catch (InvalidPathException ex) {
             env.writeln("Invalid path.");
             return ShellStatus.CONTINUE;
         }
 
-        if (Files.isDirectory(dir)) {
-            env.writeln("Directory already exists.");
-            return ShellStatus.CONTINUE;
-        }
-
         try {
-            Files.createDirectories(dir);
-        } catch (FileAlreadyExistsException ex) {
-            env.writeln("There is already a file with the same name specified, specify a different name for the "
-                        + "directory.");
-        } catch (IOException ex) {
-            env.writeln("Could not create directory: " + dirName);
-            return ShellStatus.CONTINUE;
+            path = env.getCurrentDirectory().resolve(path).normalize();
+            env.setCurrentDirectory(path);
+            env.writeln("Changed current directory to " + env.getCurrentDirectory().toString());
+        } catch (IllegalArgumentException ex) {
+            env.writeln(ex.getMessage());
         }
 
-        env.writeln("Directory created: " + dirName);
         return ShellStatus.CONTINUE;
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- * This command displays all commands or provides help about selected command.
+ * This command prints the current working directory.
  *
  * @author matej
  */
