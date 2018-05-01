@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.*;
@@ -49,38 +50,24 @@ public class PopdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        if (args.size() != 1) {
-            env.writeln("This command takes one argument - the path to the new current directory.");
+        if (args.size() != 0) {
+            env.writeln("This command takes no arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        Path path;
-        try {
-            path = env.getCurrentDirectory().resolve(args.get(0));
-        } catch (InvalidPathException ex) {
-            env.writeln("Invalid path.");
+        Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
+        if (stack == null || stack.size() == 0) {
+            env.writeln("Stack is empty - current directory is unchanged.");
             return ShellStatus.CONTINUE;
         }
 
-        Path previous = env.getCurrentDirectory();
-        try {
-            path = path.normalize();
-            env.setCurrentDirectory(path);
-            env.writeln("Changed current directory to " + env.getCurrentDirectory().toString());
-        } catch (IllegalArgumentException ex) {
-            env.writeln(ex.getMessage());
-            return ShellStatus.CONTINUE;
+        Path current = stack.pop();
+        if (Files.notExists(current)) {
+            env.writeln("Path no longer exists - removed from stack.");
         }
 
-        Stack<Path> stack;
-        if (env.getSharedData(EnvironmentImpl.STACK_NAME) == null) {
-            stack = new Stack<>();
-            env.setSharedData(EnvironmentImpl.STACK_NAME, stack);
-        } else {
-            stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
-        }
-
-        stack.push(previous);
+        env.setCurrentDirectory(current);
+        env.writeln("Changed current directory to " + env.getCurrentDirectory().toString());
         return ShellStatus.CONTINUE;
     }
 
