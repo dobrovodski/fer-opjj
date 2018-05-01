@@ -1,15 +1,13 @@
 package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
+import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -17,11 +15,11 @@ import java.util.List;
  *
  * @author matej
  */
-public class CdCommand implements ShellCommand {
+public class PopdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "cd";
+    private static final String NAME = "popd";
     /**
      * Description of the command
      */
@@ -40,7 +38,7 @@ public class CdCommand implements ShellCommand {
     }
 
     /**
-     * {@inheritDoc} This command changes the current directory to the provided one.
+     * {@inheritDoc} This command prints the current working directory.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -64,6 +62,7 @@ public class CdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        Path previous = env.getCurrentDirectory();
         try {
             path = path.normalize();
             env.setCurrentDirectory(path);
@@ -73,6 +72,15 @@ public class CdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        Stack<Path> stack;
+        if (env.getSharedData(EnvironmentImpl.STACK_NAME) == null) {
+            stack = new Stack<>();
+            env.setSharedData(EnvironmentImpl.STACK_NAME, stack);
+        } else {
+            stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
+        }
+
+        stack.push(previous);
         return ShellStatus.CONTINUE;
     }
 

@@ -46,6 +46,8 @@ public class EnvironmentImpl implements Environment {
 
     private HashMap<String, Object> sharedData;
 
+    public final static String STACK_NAME = "cdstack";
+
     static {
         commands = new TreeMap<>();
 
@@ -61,7 +63,11 @@ public class EnvironmentImpl implements Environment {
                 new MkdirCommand(),
                 new TreeCommand(),
                 new PwdCommand(),
-                new CdCommand()
+                new CdCommand(),
+                new PushdCommand(),
+                new PopdCommand(),
+                new DropdCommand(),
+                new ListdCommand()
         };
 
         for (ShellCommand c : commandsToAdd) {

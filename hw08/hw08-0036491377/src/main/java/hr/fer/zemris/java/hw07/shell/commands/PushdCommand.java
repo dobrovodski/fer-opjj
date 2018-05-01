@@ -1,27 +1,25 @@
 package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
+import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
- * This command changes the current directory to the provided one.
+ * This command pushes the current directory on the stack and changes the current directory to the provided one.
  *
  * @author matej
  */
-public class CdCommand implements ShellCommand {
+public class PushdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "cd";
+    private static final String NAME = "pushd";
     /**
      * Description of the command
      */
@@ -30,9 +28,9 @@ public class CdCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Changes the current directory.",
+                "Pushes the current directory onto the stack and changes the current directory.",
                 "",
-                "CD [path]",
+                "PUSHD [path]",
                 "",
                 "   path - path to change the current directory to",
         };
@@ -40,7 +38,8 @@ public class CdCommand implements ShellCommand {
     }
 
     /**
-     * {@inheritDoc} This command changes the current directory to the provided one.
+     * {@inheritDoc} This command pushes the current directory on the stack and changes the current directory to the
+     * provided one.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -64,6 +63,7 @@ public class CdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        Path previous = env.getCurrentDirectory();
         try {
             path = path.normalize();
             env.setCurrentDirectory(path);
@@ -73,6 +73,15 @@ public class CdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        Stack<Path> stack;
+        if (env.getSharedData(EnvironmentImpl.STACK_NAME) == null) {
+            stack = new Stack<>();
+            env.setSharedData(EnvironmentImpl.STACK_NAME, stack);
+        } else {
+            stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
+        }
+
+        stack.push(previous);
         return ShellStatus.CONTINUE;
     }
 

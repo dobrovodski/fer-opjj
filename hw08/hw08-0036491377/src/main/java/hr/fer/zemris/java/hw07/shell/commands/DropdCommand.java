@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author matej
  */
-public class CdCommand implements ShellCommand {
+public class DropdCommand implements ShellCommand {
     /**
      * Name of the command
      */
@@ -40,7 +40,7 @@ public class CdCommand implements ShellCommand {
     }
 
     /**
-     * {@inheritDoc} This command changes the current directory to the provided one.
+     * {@inheritDoc} This command prints the current working directory.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -65,12 +65,11 @@ public class CdCommand implements ShellCommand {
         }
 
         try {
-            path = path.normalize();
+            path = env.getCurrentDirectory().resolve(path).normalize();
             env.setCurrentDirectory(path);
             env.writeln("Changed current directory to " + env.getCurrentDirectory().toString());
         } catch (IllegalArgumentException ex) {
             env.writeln(ex.getMessage());
-            return ShellStatus.CONTINUE;
         }
 
         return ShellStatus.CONTINUE;
