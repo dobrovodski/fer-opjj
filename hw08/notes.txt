@@ -42,3 +42,6 @@ help (all commands)
 ls / ls . / ls src / ls pom.xml / ls .. / ls C:\[ ] / ls C:\ 
 cd / cd . / cd .. / cd hw08-0036491377 / cd hw08-0036491377 / cd pom.xml 
 copy src k / copy / copy a / copy a a a / copy a b / copy pom.xml pom2.xml / copy pom.xml pom2.xml / copy pom.xml test / copy pom.xml test (after mkdir test) / copy pom.xml test
+cat pom.xml / cat target / (some file thats not in the default charset)
+hexdump pom.xml / hexdump (a very large file) / hexdump src
+mkdir test / mkdir src / mkdir o*o
