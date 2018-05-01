@@ -1,0 +1,37 @@
+Shell checklist
++ When started, your program should write a greeting message to user
++ write a prompt symbol and wait for the user to enter a command
++ PROMPTSYMBOL and MORELINESSYMBOL
++ each line that is part of multi-line command (except for the first one) a shell must write MULTILINESYMBOL at the beginning followed by a single whitespace
++ must provide a command symbol that can be used to change these symbols
+
++ charsets takes no arguments and lists names of supported charsets for your Java platform
++ single charset name is written per line
+
++ cat takes one or two arguments
++ The first argument is path to some file and is mandatory
++ The second argument is charset name that should be used to interpret chars from bytes
++ If not provided, a default platform charset should be used
++ This command opens given file and writes its content to console
+
++ ls takes a single argument – directory – and writes a directory listing (not recursive)
++ Output should be formatted as in following example
+
++ tree command expects a single argument: directory name and prints a tree
++ each directory level shifts output two charatcers to the right
+
++ copy command expects two arguments: source file name and destination file name (i.e. paths and names)
++ if destination file exists, ask user if allowed to overwrite
++ copy command must work only with files (no directories)
++ if the second argument is directory, you should assume that user wants to copy the original file into that directory using the original file name
++  must implement copying yourself: you are not allowed to simply call copy methods from Files class
+
++ mkdir command takes a single argument: directory name, and creates the appropriate directory structure
+ 
++ the hexdump command expects a single argument: file name, and produces hex-output as illustrated
+
++ command where a file-path is expected, you must support quotes to allow paths with spaces (such as "Documents and Settings").
+
++ If user provides invalid or wrong argument for any of commands, appropriate message should be written and your shell should be prepared to accept a new command from user
+
++ Shell terminates when user gives exit command
