@@ -68,7 +68,7 @@ public class HelpCommand implements ShellCommand {
             env.writeln(s);
         }
 
-        return null;
+        return ShellStatus.CONTINUE;
     }
 
     @Override

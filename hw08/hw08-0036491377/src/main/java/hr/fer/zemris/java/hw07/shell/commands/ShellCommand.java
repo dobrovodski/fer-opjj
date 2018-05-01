@@ -18,7 +18,7 @@ public interface ShellCommand {
      * @param env environment in which the command is executed
      * @param arguments arguments passed to the command through the shell
      *
-     * @return TERMINATE if an IOException occurs while reading or writing to the user, CONTINUE otherwise
+     * @return TERMINATE if the shell is instructed to exit, CONTINUE otherwise
      */
     ShellStatus executeCommand(Environment env, String arguments);
 

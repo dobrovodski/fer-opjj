@@ -42,8 +42,15 @@ public class MyShell {
             }
 
             if (commands.keySet().contains(command)) {
-                ShellStatus status = commands.get(command).executeCommand(env, arguments.trim());
+                ShellStatus status;
+                try {
+                    status = commands.get(command).executeCommand(env, arguments.trim());
+                } catch (ShellIOException ex) {
+                    break;
+                }
+
                 if (status == ShellStatus.TERMINATE) {
+                    env.writeln("Shell exiting...");
                     break;
                 }
             } else {

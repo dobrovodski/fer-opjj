@@ -79,6 +79,9 @@ public class EnvironmentImpl implements Environment {
 
         c = new TreeCommand();
         commands.put(c.getCommandName(), c);
+
+        c = new PwdCommand();
+        commands.put(c.getCommandName(), c);
     }
 
     /**
@@ -184,7 +187,7 @@ public class EnvironmentImpl implements Environment {
             throw new IllegalArgumentException("This path does not exist or it is not a valid directory.");
         }
 
-        currentDirectory = path;
+        currentDirectory = path.toAbsolutePath();
     }
 
     @Override
