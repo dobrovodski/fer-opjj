@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw07.shell;
 
 import hr.fer.zemris.java.hw07.shell.commands.ShellCommand;
 
+import java.nio.file.Path;
 import java.util.SortedMap;
 
 /**
@@ -86,4 +87,30 @@ public interface Environment {
      * @param symbol character to set the morelines symbol to
      */
     void setMorelinesSymbol(Character symbol);
+
+    /**
+     *
+     * @return
+     */
+    Path getCurrentDirectory();
+
+    /**
+     *
+     * @param path
+     */
+    void setCurrentDirectory(Path path);
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    Object getSharedData(String key);
+
+    /**
+     *
+     * @param key
+     * @param value
+     */
+    void setSharedData(String key, Object value);
 }

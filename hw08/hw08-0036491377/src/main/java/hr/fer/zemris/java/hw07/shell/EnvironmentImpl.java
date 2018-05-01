@@ -3,7 +3,11 @@ package hr.fer.zemris.java.hw07.shell;
 import hr.fer.zemris.java.hw07.shell.commands.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -37,6 +41,10 @@ public class EnvironmentImpl implements Environment {
      * Sorted map of all commands.
      */
     private static SortedMap<String, ShellCommand> commands;
+
+    private Path currentDirectory;
+
+    private HashMap<String, Object> sharedData;
 
     static {
         commands = new TreeMap<>();
@@ -79,6 +87,8 @@ public class EnvironmentImpl implements Environment {
     public EnvironmentImpl() {
         reader = new BufferedReader(new InputStreamReader(System.in));
         writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        currentDirectory = Paths.get(".").toAbsolutePath().normalize();
+        sharedData = new HashMap<>();
     }
 
     @Override
@@ -161,5 +171,29 @@ public class EnvironmentImpl implements Environment {
     @Override
     public void setMorelinesSymbol(Character symbol) {
         this.morelinesSymbol = symbol;
+    }
+
+    @Override
+    public Path getCurrentDirectory() {
+        return currentDirectory;
+    }
+
+    @Override
+    public void setCurrentDirectory(Path path) {
+        if (Files.notExists(path) || !Files.isDirectory(path)) {
+            throw new IllegalArgumentException("This path does not exist or it is not a valid directory.");
+        }
+
+        currentDirectory = path;
+    }
+
+    @Override
+    public Object getSharedData(String key) {
+        return sharedData.get(key);
+    }
+
+    @Override
+    public void setSharedData(String key, Object value) {
+        sharedData.put(key, value);
     }
 }
