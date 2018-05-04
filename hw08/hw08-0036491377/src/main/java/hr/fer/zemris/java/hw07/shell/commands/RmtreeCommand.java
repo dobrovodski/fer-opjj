@@ -7,7 +7,6 @@ import hr.fer.zemris.java.hw07.shell.Util;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,7 +58,7 @@ public class RmtreeCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        Path directory = Paths.get(args.get(0));
+        Path directory = env.getCurrentDirectory().resolve(args.get(0));
 
         if (!Files.isDirectory(directory) || Files.notExists(directory)) {
             env.writeln("Not a valid directory.");

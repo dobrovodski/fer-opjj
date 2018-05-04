@@ -119,9 +119,9 @@ public class CopyCommand implements ShellCommand {
 
             in.close();
             out.close();
-            env.writeln("File successfully copied.");
+            env.writeln("File successfully copied: " + srcPath.toString());
         } catch (FileNotFoundException e) {
-            env.writeln("File not found.");
+            env.writeln("File not found: " + srcPath.toString());
             return ShellStatus.CONTINUE;
         } catch (IOException e) {
             env.writeln("Exception occurred while reading or writing the file.");
