@@ -1,7 +1,6 @@
 package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
-import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -83,7 +81,7 @@ public class MassrenameCommand implements ShellCommand {
         Pattern mask;
 
         try {
-            mask = Pattern.compile(args.get(3));
+            mask = Pattern.compile(args.get(3), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
         } catch (PatternSyntaxException ex) {
             env.writeln("Invalid regular expression: " + args.get(3));
             return ShellStatus.CONTINUE;
@@ -91,22 +89,34 @@ public class MassrenameCommand implements ShellCommand {
 
         switch (command.toLowerCase()) {
             case "filter":
-                return filter(env, dir1, mask);
+                return filter(env, dir1, mask, false);
+            case "groups":
+                return filter(env, dir1, mask, true);
             default:
-                env.writeln("Non-existent sub-command: " +  command);
+                env.writeln("Non-existent sub-command: " + command);
                 return ShellStatus.CONTINUE;
         }
 
         //return ShellStatus.CONTINUE;
     }
 
-    private ShellStatus filter(Environment env, Path dir1, Pattern mask) {
+    private ShellStatus filter(Environment env, Path dir1, Pattern mask, boolean groups) {
         try {
             Files.walk(dir1).forEach((file) -> {
                 if (Files.exists(file)) {
                     Matcher m = mask.matcher(file.getFileName().toString());
+
                     if (m.matches()) {
-                        env.writeln(file.getFileName().toString());
+                        env.write(file.getFileName().toString());
+
+                        if (groups) {
+                            int count = m.groupCount();
+                            for (int i = 0; i <= count; i++) {
+                                env.write(String.format(" %d: %s", i, m.group(i)));
+                            }
+                        }
+
+                        env.writeln("");
                     }
                 }
             });
@@ -114,6 +124,7 @@ public class MassrenameCommand implements ShellCommand {
             env.writeln("Could not walk through directory: " + dir1);
             return ShellStatus.CONTINUE;
         }
+
         return ShellStatus.CONTINUE;
     }
 
