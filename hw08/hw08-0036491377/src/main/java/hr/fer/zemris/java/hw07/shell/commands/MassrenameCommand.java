@@ -92,6 +92,13 @@ public class MassrenameCommand implements ShellCommand {
                 return filter(env, dir1, mask, false);
             case "groups":
                 return filter(env, dir1, mask, true);
+            case "show":
+                if (args.size() != 5) {
+                    env.writeln("Wrong number of arguments for subcommand");
+                    return ShellStatus.CONTINUE;
+                }
+                String expression = args.get(4);
+                return show(env, dir1, mask, expression);
             default:
                 env.writeln("Non-existent sub-command: " + command);
                 return ShellStatus.CONTINUE;
@@ -125,6 +132,10 @@ public class MassrenameCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        return ShellStatus.CONTINUE;
+    }
+
+    private ShellStatus show(Environment env, Path dir1, Pattern mask, String expression) {
         return ShellStatus.CONTINUE;
     }
 
