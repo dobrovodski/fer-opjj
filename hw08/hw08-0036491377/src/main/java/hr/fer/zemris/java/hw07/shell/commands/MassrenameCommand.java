@@ -5,12 +5,22 @@ import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 
 /**
- * This command removes the last directory stored by the PUSHD command.
+ * This command batch renames/moves files within the provided source directory to the destination directory. It supports
+ * selecting files using regular expressions and offers certain sub-commands for easier use.
  *
  * @author matej
  */
@@ -27,15 +37,31 @@ public class MassrenameCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Removes the last directory stored by the PUSHD command.",
+                "Batch renames/moves files within the provided source directory to the destination directory. It "
+                + "supports selecting files using regular expressions and offers certain sub-commands for easier use.",
                 "",
-                "DROPD",
+                "MASSRENAME [source] [destination] [command] [mask] [expression]",
+                "   source - source path to files",
+                "",
+                "   destination - destination path",
+                "",
+                "   command - FILTER -- lists files selected by regular expression in [mask]",
+                "             GROUPS -- lists groups selected by regular expression in [mask]",
+                "             SHOW -- lists pairs of current-name:new-name as defined by [expression] that will be "
+                + "used to rename selected files",
+                "             EXECUTE -- performs the action of moving/copying the selected files",
+
+                "",
+                "   mask - regular expression used in FILTER, GROUPS and SHOW",
+                "",
+                "   expression - regular expression used in SHOW",
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command removes the last directory stored by the PUSHD command.
+     * {@inheritDoc} This command batch renames/moves files within the provided source directory to the destination
+     * directory. It supports selecting files using regular expressions and offers certain sub-commands for easier use.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -46,18 +72,48 @@ public class MassrenameCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        if (args.size() != 0) {
-            env.writeln("This command takes no arguments.");
+        if (args.size() < 3) {
+            env.writeln("This command takes at least 4 arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
-        if (stack == null || stack.size() == 0) {
-            env.writeln("No directory stored.");
+        Path dir1 = env.getCurrentDirectory().resolve(args.get(0));
+        Path dir2 = env.getCurrentDirectory().resolve(args.get(1));
+        String command = args.get(2);
+        Pattern mask;
+
+        try {
+            mask = Pattern.compile(args.get(3));
+        } catch (PatternSyntaxException ex) {
+            env.writeln("Invalid regular expression: " + args.get(3));
             return ShellStatus.CONTINUE;
         }
 
-        env.writeln("Removed directory " + stack.pop().toString());
+        switch (command.toLowerCase()) {
+            case "filter":
+                return filter(env, dir1, mask);
+            default:
+                env.writeln("Non-existent sub-command: " +  command);
+                return ShellStatus.CONTINUE;
+        }
+
+        //return ShellStatus.CONTINUE;
+    }
+
+    private ShellStatus filter(Environment env, Path dir1, Pattern mask) {
+        try {
+            Files.walk(dir1).forEach((file) -> {
+                if (Files.exists(file)) {
+                    Matcher m = mask.matcher(file.getFileName().toString());
+                    if (m.matches()) {
+                        env.writeln(file.getFileName().toString());
+                    }
+                }
+            });
+        } catch (IOException e) {
+            env.writeln("Could not walk through directory: " + dir1);
+            return ShellStatus.CONTINUE;
+        }
         return ShellStatus.CONTINUE;
     }
 

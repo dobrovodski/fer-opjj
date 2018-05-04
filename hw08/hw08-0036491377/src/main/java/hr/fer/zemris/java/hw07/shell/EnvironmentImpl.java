@@ -2,7 +2,11 @@ package hr.fer.zemris.java.hw07.shell;
 
 import hr.fer.zemris.java.hw07.shell.commands.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,7 +73,8 @@ public class EnvironmentImpl implements Environment {
                 new DropdCommand(),
                 new ListdCommand(),
                 new RmtreeCommand(),
-                new CptreeCommand()
+                new CptreeCommand(),
+                new MassrenameCommand()
         };
 
         for (ShellCommand c : commandsToAdd) {
