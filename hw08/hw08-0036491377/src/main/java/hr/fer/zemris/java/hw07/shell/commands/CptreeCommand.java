@@ -10,7 +10,7 @@ import java.util.*;
 
 
 /**
- * This command removes the last directory stored by the PUSHD command.
+ * This command copies a directory structure into the destination.
  *
  * @author matej
  */
@@ -18,7 +18,7 @@ public class CptreeCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "dropd";
+    private static final String NAME = Commands.CPTREE.getName();
     /**
      * Description of the command
      */
@@ -27,15 +27,18 @@ public class CptreeCommand implements ShellCommand {
     static {
         DESC = new ArrayList<>();
         String[] descArr = {
-                "Removes the last directory stored by the PUSHD command.",
+                "Copies a directory structure into the destination.",
                 "",
-                "DROPD",
+                "CPTREE [source] [destination]",
+                "",
+                "   source - path to directory to copy",
+                "   destination - destination path to copy to"
         };
         DESC.addAll(Arrays.asList(descArr));
     }
 
     /**
-     * {@inheritDoc} This command removes the last directory stored by the PUSHD command.
+     * {@inheritDoc} This command copies a directory structure into the destination.
      */
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
@@ -46,18 +49,13 @@ public class CptreeCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
-        if (args.size() != 0) {
-            env.writeln("This command takes no arguments.");
+        if (args.size() != 2) {
+            env.writeln("This command requires two arguments.");
             return ShellStatus.CONTINUE;
         }
 
-        Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
-        if (stack == null || stack.size() == 0) {
-            env.writeln("No directory stored.");
-            return ShellStatus.CONTINUE;
-        }
 
-        env.writeln("Removed directory " + stack.pop().toString());
+
         return ShellStatus.CONTINUE;
     }
 

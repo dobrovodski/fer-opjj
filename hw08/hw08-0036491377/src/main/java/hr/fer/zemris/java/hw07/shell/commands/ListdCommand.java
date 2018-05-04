@@ -18,7 +18,7 @@ public class ListdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "listd";
+    private static final String NAME = Commands.LISTD.getName();
     /**
      * Description of the command
      */

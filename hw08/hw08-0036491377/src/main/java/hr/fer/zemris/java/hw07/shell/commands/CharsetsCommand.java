@@ -19,7 +19,7 @@ public class CharsetsCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "charsets";
+    private static final String NAME = Commands.CHARSETS.getName();
     /**
      * Description of the command
      */

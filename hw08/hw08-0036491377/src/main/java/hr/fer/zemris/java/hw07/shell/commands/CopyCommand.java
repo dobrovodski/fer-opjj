@@ -24,7 +24,7 @@ public class CopyCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "copy";
+    private static final String NAME = Commands.COPY.getName();
     /**
      * Description of the command
      */

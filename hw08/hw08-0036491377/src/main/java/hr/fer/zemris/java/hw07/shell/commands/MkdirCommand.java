@@ -20,7 +20,7 @@ public class MkdirCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "mkdir";
+    private static final String NAME = Commands.MKDIR.getName();
     /**
      * Description of the command
      */

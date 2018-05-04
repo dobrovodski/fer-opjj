@@ -19,7 +19,7 @@ public class HexdumpCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "hexdump";
+    private static final String NAME = Commands.HEXDUMP.getName();
     /**
      * Length of a single hexdump row
      */

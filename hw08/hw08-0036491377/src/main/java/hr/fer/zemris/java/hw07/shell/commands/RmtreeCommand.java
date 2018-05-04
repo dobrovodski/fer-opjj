@@ -1,17 +1,18 @@
 package hr.fer.zemris.java.hw07.shell.commands;
 
 import hr.fer.zemris.java.hw07.shell.Environment;
-import hr.fer.zemris.java.hw07.shell.EnvironmentImpl;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -23,7 +24,7 @@ public class RmtreeCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "rmtree";
+    private static final String NAME = Commands.RMTREE.getName();
     /**
      * Description of the command
      */

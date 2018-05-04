@@ -19,7 +19,7 @@ public class PushdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "pushd";
+    private static final String NAME = Commands.PUSHD.getName();
     /**
      * Description of the command
      */

@@ -21,7 +21,7 @@ public class CdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "cd";
+    private static final String NAME = Commands.CD.getName();
     /**
      * Description of the command
      */

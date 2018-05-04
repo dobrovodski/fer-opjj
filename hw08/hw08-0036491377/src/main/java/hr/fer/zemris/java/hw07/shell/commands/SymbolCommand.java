@@ -18,7 +18,7 @@ public class SymbolCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "symbol";
+    private static final String NAME = Commands.SYMBOL.getName();
     /**
      * Description of the command
      */

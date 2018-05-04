@@ -18,7 +18,7 @@ public class PwdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "pwd";
+    private static final String NAME = Commands.PWD.getName();
     /**
      * Description of the command
      */

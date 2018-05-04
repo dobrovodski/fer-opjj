@@ -19,7 +19,7 @@ public class DropdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "dropd";
+    private static final String NAME = Commands.DROPD.getName();
     /**
      * Description of the command
      */

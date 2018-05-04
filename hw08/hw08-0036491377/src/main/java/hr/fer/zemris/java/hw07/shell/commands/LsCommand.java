@@ -22,7 +22,7 @@ public class LsCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "ls";
+    private static final String NAME = Commands.LS.getName();
     /**
      * Description of the command
      */

@@ -18,7 +18,7 @@ public class MassrenameCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "dropd";
+    private static final String NAME = Commands.MASSRENAME.getName();
     /**
      * Description of the command
      */

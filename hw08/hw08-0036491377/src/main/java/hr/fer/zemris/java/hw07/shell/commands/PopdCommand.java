@@ -20,7 +20,7 @@ public class PopdCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "popd";
+    private static final String NAME = Commands.POPD.getName();
     /**
      * Description of the command
      */

@@ -17,7 +17,7 @@ public class ExitCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "exit";
+    private static final String NAME = Commands.EXIT.getName();
     /**
      * Description of the command
      */

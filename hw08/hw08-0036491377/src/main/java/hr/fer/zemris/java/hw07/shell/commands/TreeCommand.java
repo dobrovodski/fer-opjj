@@ -21,7 +21,7 @@ public class TreeCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "tree";
+    private static final String NAME = Commands.TREE.getName();
     /**
      * Description of the command
      */

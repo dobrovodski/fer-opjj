@@ -28,7 +28,7 @@ public class CatCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "cat";
+    private static final String NAME = Commands.CAT.getName();
     /**
      * Description of the command
      */

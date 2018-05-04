@@ -15,7 +15,7 @@ public class HelpCommand implements ShellCommand {
     /**
      * Name of the command
      */
-    private static final String NAME = "help";
+    private static final String NAME = Commands.HELP.getName();
     /**
      * Description of the command
      */
