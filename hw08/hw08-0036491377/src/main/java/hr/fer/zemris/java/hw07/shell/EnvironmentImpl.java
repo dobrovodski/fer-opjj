@@ -67,7 +67,8 @@ public class EnvironmentImpl implements Environment {
                 new PushdCommand(),
                 new PopdCommand(),
                 new DropdCommand(),
-                new ListdCommand()
+                new ListdCommand(),
+                new RmtreeCommand()
         };
 
         for (ShellCommand c : commandsToAdd) {
