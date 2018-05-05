@@ -12,8 +12,9 @@ import java.util.Arrays;
  * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
  *         tests </a>
  */
+@SuppressWarnings("javadoc")
 public class UtilTest {
-    @Test
+	@Test
     public void Hextobyte_SimpleExample_CorrectArray() {
         String hex = "01aE22";
         byte[] correct = new byte[]{1, -82, 34};

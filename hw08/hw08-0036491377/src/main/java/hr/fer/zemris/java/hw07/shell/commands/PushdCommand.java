@@ -45,6 +45,7 @@ public class PushdCommand implements ShellCommand {
      * {@inheritDoc} This command stores the current directory for use by the POPD command, then changes to the
      * specified directory.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ShellStatus executeCommand(Environment env, String arguments) {
         List<String> args = Util.split(arguments);

@@ -52,6 +52,7 @@ public class PopdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        @SuppressWarnings("unchecked")
         Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
         if (stack == null || stack.size() == 0) {
             env.writeln("Stack is empty - current directory is unchanged.");

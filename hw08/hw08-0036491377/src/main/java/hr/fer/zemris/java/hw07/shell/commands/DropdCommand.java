@@ -55,6 +55,7 @@ public class DropdCommand implements ShellCommand {
             return ShellStatus.CONTINUE;
         }
 
+        @SuppressWarnings("unchecked")
         Stack<Path> stack = (Stack<Path>) env.getSharedData(EnvironmentImpl.STACK_NAME);
         if (stack == null || stack.size() == 0) {
             env.writeln("No directory stored.");
