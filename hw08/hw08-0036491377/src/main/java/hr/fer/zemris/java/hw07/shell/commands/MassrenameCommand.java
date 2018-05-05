@@ -14,7 +14,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -104,17 +106,18 @@ public class MassrenameCommand implements ShellCommand {
                 return group(env, dir1, mask);
             case "show": {
                 if (args.size() != 5) {
-                    env.writeln("Wrong number of arguments for subcommand");
+                    env.writeln("Wrong number of arguments for sub-command");
                     return ShellStatus.CONTINUE;
                 }
                 String expression = args.get(4);
-                return show(env, dir1, mask, expression);
+                return show(env, dir1, dir2, mask, expression);
             }
             case "execute": {
                 if (args.size() != 5) {
-                    env.writeln("Wrong number of arguments for subcommand");
+                    env.writeln("Wrong number of arguments for sub-command");
                     return ShellStatus.CONTINUE;
                 }
+
                 if (!Files.isDirectory(dir2)) {
                     env.writeln("Destination directory does not exist: " + dir2);
                     return ShellStatus.CONTINUE;
@@ -129,14 +132,42 @@ public class MassrenameCommand implements ShellCommand {
         }
     }
 
+    /**
+     * Filters the result with respect to the regex pattern without printing out the capturing groups.
+     *
+     * @param env environment
+     * @param dir1 directory whose files to walk through (non-recursively)
+     * @param mask regex pattern used to match the names of the files
+     *
+     * @return ShellStatus.CONTINUE
+     */
     private ShellStatus filter(Environment env, Path dir1, Pattern mask) {
         return writePatternTestResult(env, dir1, mask, false);
     }
 
+    /**
+     * Filters the result with respect to the regex pattern while also printing out the capturing groups.
+     *
+     * @param env environment
+     * @param dir1 directory whose files to walk through (non-recursively)
+     * @param mask regex pattern used to match the names of the files
+     *
+     * @return ShellStatus.CONTINUE
+     */
     private ShellStatus group(Environment env, Path dir1, Pattern mask) {
         return writePatternTestResult(env, dir1, mask, true);
     }
 
+    /**
+     * Writes the results of matching the pattern against the files in the provided directory.
+     *
+     * @param env environment
+     * @param dir1 source directory
+     * @param mask pattern mask to match against
+     * @param writeGroups flag to decide if the capturing groups should also be included
+     *
+     * @return ShellStatus.CONTINUE
+     */
     private ShellStatus writePatternTestResult(Environment env, Path dir1, Pattern mask, boolean writeGroups) {
         try {
             Files.walk(dir1).forEach((file) -> {
@@ -165,7 +196,19 @@ public class MassrenameCommand implements ShellCommand {
         return ShellStatus.CONTINUE;
     }
 
-    private ShellStatus show(Environment env, Path dir1, Pattern mask, String expression) {
+    /**
+     * This method maps old paths that were matched with new paths to be created when the original files move there.
+     *
+     * @param dir1 source path
+     * @param dir2 destination path
+     * @param mask pattern mask
+     * @param expression substitution expression
+     *
+     * @return a HashMap of the pairs of paths
+     */
+    private HashMap<Path, Path> mapOldToNew(Path dir1, Path dir2, Pattern mask, String expression) {
+        HashMap<Path, Path> map = new HashMap<>();
+
         try {
             NameBuilderParser parser = new NameBuilderParser(expression);
             MultipleNameBuilder builder = parser.getNameBuilder();
@@ -184,55 +227,81 @@ public class MassrenameCommand implements ShellCommand {
                 builder.execute(info);
                 String newName = info.getStringBuilder().toString();
 
-                env.writeln(String.format("%s => %s", file.toString(), newName));
+                Path absoluteSource = dir1.resolve(file);
+                Path absoluteDestination = dir2.resolve(newName);
+                map.put(absoluteSource, absoluteDestination);
+                //env.writeln(String.format("%s => %s", file.toString(), newName));
             });
         } catch (IOException e) {
-            env.writeln("Could not walk directory: " + dir1);
-            return ShellStatus.CONTINUE;
+            throw new IllegalArgumentException("Could not walk directory: " + dir1);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        return map;
+    }
+
+    /**
+     * This method executes the mass renaming show sub-command as described in the description.
+     *
+     * @param env envrionment
+     * @param dir1 source path
+     * @param dir2 destination path
+     * @param mask pattern mask
+     * @param expression substitution expression
+     *
+     * @return ShellStatus.CONTINUE if no I/O exception occurs between the user and the shell
+     */
+    private ShellStatus show(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
+        HashMap<Path, Path> map;
+        try {
+            map = mapOldToNew(dir1, dir2, mask, expression);
         } catch (IllegalArgumentException e) {
             env.writeln(e.getMessage());
             return ShellStatus.CONTINUE;
         }
 
+        for (Map.Entry<Path, Path> entry : map.entrySet()) {
+            env.writeln(String.format("%s => %s", dir1.relativize(entry.getKey()), dir2.relativize(entry.getValue())));
+        }
+
         return ShellStatus.CONTINUE;
     }
 
+    /**
+     * This method executes the mass renaming command as described in the description.
+     *
+     * @param env envrionment
+     * @param dir1 source path
+     * @param dir2 destination path
+     * @param mask pattern mask
+     * @param expression substitution expression
+     *
+     * @return ShellStatus.CONTINUE if no I/O exception occurs between the user and the shell
+     */
     private ShellStatus execute(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
+        HashMap<Path, Path> map;
         try {
-            NameBuilderParser parser = new NameBuilderParser(expression);
-            MultipleNameBuilder builder = parser.getNameBuilder();
-
-            Files.walk(dir1, 1).forEach((file) -> {
-                if (!Files.isRegularFile(file)) {
-                    return;
-                }
-                file = dir1.relativize(file);
-
-                Matcher matcher = mask.matcher(file.getFileName().toString());
-                if (!matcher.find()) {
-                    return;
-                }
-
-                NameBuilderInfo info = new NameBuilderInfoImpl(matcher);
-                builder.execute(info);
-                String newName = info.getStringBuilder().toString();
-
-                try {
-                    Path absoluteSource = dir1.resolve(file);
-                    Path absoluteDestination = dir2.resolve(newName);
-                    Files.move(absoluteSource, absoluteDestination);
-                    env.writeln(String.format("%s/%s => %s/%s", dir1.getFileName().toString(), file, dir2.getFileName
-                            ().toString(), newName));
-                } catch (IOException e) {
-                    env.writeln("Could not copy file: " + file.toString() + " to: " + newName);
-                }
-            });
-        } catch (IOException e) {
-            env.writeln("Could not walk directory: " + dir1);
-            return ShellStatus.CONTINUE;
+            map = mapOldToNew(dir1, dir2, mask, expression);
         } catch (IllegalArgumentException e) {
             env.writeln(e.getMessage());
             return ShellStatus.CONTINUE;
+        }
+
+        for (Map.Entry<Path, Path> entry : map.entrySet()) {
+            Path absoluteSource = entry.getKey();
+            Path absoluteDestination = entry.getValue();
+
+            try {
+                Files.move(absoluteSource, absoluteDestination);
+            } catch (IOException e) {
+                env.writeln("Could not copy files from " + absoluteSource + " to " + absoluteDestination);
+                return ShellStatus.CONTINUE;
+            }
+
+            env.writeln(String.format("%s/%s => %s/%s",
+                    dir1.getFileName().toString(), dir1.relativize(absoluteSource),
+                    dir2.getFileName().toString(), dir2.relativize(absoluteDestination)));
         }
 
         return ShellStatus.CONTINUE;
