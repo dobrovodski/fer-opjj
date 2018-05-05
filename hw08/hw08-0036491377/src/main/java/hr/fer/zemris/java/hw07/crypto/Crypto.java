@@ -37,6 +37,11 @@ public class Crypto {
 
         String type = args[0].toLowerCase();
         Path path = Paths.get(args[1]);
+        if (!Files.isRegularFile(path)) {
+            System.err.println("Cannot find specified file.");
+            return;
+        }
+        
         Scanner sc = new Scanner(System.in);
 
         if (type.equals("checksha")) {
