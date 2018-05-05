@@ -5,5 +5,5 @@ import java.util.regex.Matcher;
 public interface NameBuilderInfo {
     StringBuilder getStringBuilder();
     String getGroup(int index);
-    Matcher getMatcher();
+    int getGroupCount();
 }

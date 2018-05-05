@@ -21,7 +21,7 @@ public class NameBuilderInfoImpl implements NameBuilderInfo {
         return matcher.group(index);
     }
 
-    public Matcher getMatcher() {
-        return matcher;
+    public int getGroupCount() {
+        return matcher.groupCount();
     }
 }

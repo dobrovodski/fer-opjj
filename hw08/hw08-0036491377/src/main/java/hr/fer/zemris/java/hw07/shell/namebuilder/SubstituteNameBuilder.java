@@ -11,16 +11,16 @@ public class SubstituteNameBuilder implements NameBuilder {
     public void execute(NameBuilderInfo info) {
         String[] split = substitution.split(",");
         if (split.length != 2 && split.length != 1) {
-            throw new IllegalArgumentException("Substitution has too many commas: " + substitution);
+            throw new IllegalArgumentException("Substitution has too many separators: " + substitution);
         }
 
         int groupNum = Integer.parseInt(split[0]);
 
-        if (groupNum > info.getMatcher().groupCount()) {
-            throw new IllegalArgumentException("There are only " + info.getMatcher().groupCount() + " groups.");
+        if (groupNum > info.getGroupCount()) {
+            throw new IllegalArgumentException("There are only " + info.getGroupCount() + " groups.");
         }
 
-        String group = info.getMatcher().group(groupNum);
+        StringBuilder group = new StringBuilder(info.getGroup(groupNum));
 
         if (split.length == 2) {
             String additionalBehaviour = split[1];
@@ -28,12 +28,12 @@ public class SubstituteNameBuilder implements NameBuilder {
                 additionalBehaviour = additionalBehaviour.substring(1);
                 int n = Integer.parseInt(additionalBehaviour);
                 while (group.length() != n) {
-                    group = "0" + group;
+                    group.insert(0, "0");
                 }
             } else {
                 int n = Integer.parseInt(additionalBehaviour);
                 while (group.length() != n) {
-                    group = " " + group;
+                    group.insert(0, " ");
                 }
             }
         }

@@ -4,7 +4,6 @@ import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
 import hr.fer.zemris.java.hw07.shell.namebuilder.MultipleNameBuilder;
-import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilder;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderInfo;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderInfoImpl;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderParser;
@@ -95,16 +94,16 @@ public class MassrenameCommand implements ShellCommand {
 
         switch (command.toLowerCase()) {
             case "filter":
-                return filter(env, dir1, mask, false);
+                return filter(env, dir1, mask);
             case "groups":
-                return filter(env, dir1, mask, true);
+                return group(env, dir1, mask);
             case "show": {
                 if (args.size() != 5) {
                     env.writeln("Wrong number of arguments for subcommand");
                     return ShellStatus.CONTINUE;
                 }
                 String expression = args.get(4);
-                return show(env, dir1, dir2, mask, expression);
+                return show(env, dir1, mask, expression);
             }
             case "execute": {
                 if (args.size() != 5) {
@@ -118,11 +117,17 @@ public class MassrenameCommand implements ShellCommand {
                 env.writeln("Non-existent sub-command: " + command);
                 return ShellStatus.CONTINUE;
         }
-
-        //return ShellStatus.CONTINUE;
     }
 
-    private ShellStatus filter(Environment env, Path dir1, Pattern mask, boolean groups) {
+    private ShellStatus filter(Environment env, Path dir1, Pattern mask) {
+        return writePatternTestResult(env, dir1, mask, false);
+    }
+
+    private ShellStatus group(Environment env, Path dir1, Pattern mask) {
+        return writePatternTestResult(env, dir1, mask, true);
+    }
+
+    private ShellStatus writePatternTestResult(Environment env, Path dir1, Pattern mask, boolean writeGroups) {
         try {
             Files.walk(dir1).forEach((file) -> {
                 if (Files.exists(file)) {
@@ -131,7 +136,7 @@ public class MassrenameCommand implements ShellCommand {
                     if (m.matches()) {
                         env.write(file.getFileName().toString());
 
-                        if (groups) {
+                        if (writeGroups) {
                             int count = m.groupCount();
                             for (int i = 0; i <= count; i++) {
                                 env.write(String.format(" %d: %s", i, m.group(i)));
@@ -150,7 +155,7 @@ public class MassrenameCommand implements ShellCommand {
         return ShellStatus.CONTINUE;
     }
 
-    private ShellStatus show(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
+    private ShellStatus show(Environment env, Path dir1, Pattern mask, String expression) {
         NameBuilderParser parser = new NameBuilderParser(expression);
         MultipleNameBuilder builder = parser.getNameBuilder();
 
@@ -198,14 +203,20 @@ public class MassrenameCommand implements ShellCommand {
                 NameBuilderInfo info = new NameBuilderInfoImpl(matcher);
                 builder.execute(info);
                 String newName = info.getStringBuilder().toString();
+
                 try {
-                    Files.move(file, Paths.get(newName));
+                    Path absoluteSource = dir1.resolve(file);
+                    Path absoluteDestination = dir2.resolve(newName);
+                    Files.move(absoluteSource, absoluteDestination);
                 } catch (IOException e) {
                     env.writeln("Could not copy file: " + file.toString() + " to: " + newName);
                 }
             });
         } catch (IOException e) {
             env.writeln("Could not walk directory: " + dir1);
+            return ShellStatus.CONTINUE;
+        } catch (IllegalArgumentException e) {
+            env.writeln(e.getMessage());
             return ShellStatus.CONTINUE;
         }
 
