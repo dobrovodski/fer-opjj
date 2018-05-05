@@ -89,28 +89,33 @@ public interface Environment {
     void setMorelinesSymbol(Character symbol);
 
     /**
+     * Returns the current directory of the shell.
      *
-     * @return
+     * @return current directory of the shell
      */
     Path getCurrentDirectory();
 
     /**
+     * Sets the current directory of the shell.
      *
-     * @param path
+     * @param path path of the new directory
      */
     void setCurrentDirectory(Path path);
 
     /**
+     * Returns the data stored under the provided key.
      *
-     * @param key
-     * @return
+     * @param key key to the data
+     *
+     * @return data found stored at provided key
      */
     Object getSharedData(String key);
 
     /**
+     * Sets the shared data for the given key.
      *
-     * @param key
-     * @param value
+     * @param key key to store the data under
+     * @param value data to store
      */
     void setSharedData(String key, Object value);
 }

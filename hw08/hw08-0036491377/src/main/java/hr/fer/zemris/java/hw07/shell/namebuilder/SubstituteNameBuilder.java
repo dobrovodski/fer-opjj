@@ -1,12 +1,32 @@
 package hr.fer.zemris.java.hw07.shell.namebuilder;
 
+/**
+ * This builder builds the non-constant part of substitution expressions.
+ *
+ * @author matej
+ */
 public class SubstituteNameBuilder implements NameBuilder {
+    /**
+     * Substitution part of the expression.
+     */
     private String substitution;
 
+    /**
+     * Constructor.
+     *
+     * @param substitution substitution part of the expression
+     */
     public SubstituteNameBuilder(String substitution) {
         this.substitution = substitution;
     }
 
+    /**
+     * {@inheritDoc} Creates and appends a string to the info object. Substitution parts in the form of {number} insert
+     * the n-th capturing group at that location whereas the form {number, 0number} and {number, number} left-pad the
+     * capturing group with either zeroes or spaces.
+     *
+     * @param info builder information object
+     */
     @Override
     public void execute(NameBuilderInfo info) {
         String[] split = substitution.split(",");

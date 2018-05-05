@@ -3,18 +3,46 @@ package hr.fer.zemris.java.hw07.shell.namebuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to parse a string substitution expression and return a list of {@link NameBuilder}s.
+ *
+ * @author matej
+ */
 public class NameBuilderParser {
+    /**
+     * Stores the expression.
+     */
     private String expression;
 
+    /**
+     * Constructor for NameBuilderParser.
+     *
+     * @param expression expression to parse using the parse method
+     */
     public NameBuilderParser(String expression) {
         this.expression = expression;
     }
 
+    /**
+     * Returns a {@link MultipleNameBuilder} created from the given expression.
+     *
+     * @return {@link MultipleNameBuilder} created from the given expression
+     */
     public MultipleNameBuilder getNameBuilder() {
         List<NameBuilder> builders = parse(expression);
         return new MultipleNameBuilder(builders);
     }
 
+    /**
+     * This method parses the given expression into a list of {@link NameBuilder}s which can either represent a constant
+     * of the expression or a substitution to be replaced later on.
+     *
+     * @param expression expression to parse
+     *
+     * @return list of created {@link NameBuilder}s
+     *
+     * @throws IllegalArgumentException if there is an error in the expression
+     */
     private List<NameBuilder> parse(String expression) {
         List<NameBuilder> builders = new ArrayList<>();
 

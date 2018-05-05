@@ -46,10 +46,19 @@ public class EnvironmentImpl implements Environment {
      */
     private static SortedMap<String, ShellCommand> commands;
 
+    /**
+     * Keeps track of the current directory.
+     */
     private Path currentDirectory;
 
+    /**
+     * Shared data between commands.
+     */
     private HashMap<String, Object> sharedData;
 
+    /**
+     * Name of the stack in the HashMap.
+     */
     public final static String STACK_NAME = "cdstack";
 
     static {
