@@ -3,6 +3,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 import hr.fer.zemris.java.hw07.shell.Environment;
 import hr.fer.zemris.java.hw07.shell.ShellStatus;
 import hr.fer.zemris.java.hw07.shell.Util;
+import hr.fer.zemris.java.hw07.shell.namebuilder.MultipleNameBuilder;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilder;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderInfo;
 import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderInfoImpl;
@@ -151,10 +152,15 @@ public class MassrenameCommand implements ShellCommand {
 
     private ShellStatus show(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
         NameBuilderParser parser = new NameBuilderParser(expression);
-        NameBuilder builder = parser.getNameBuilder();
+        MultipleNameBuilder builder = parser.getNameBuilder();
 
         try {
-            Files.walk(dir1).forEach((file) -> {
+            Files.walk(dir1, 1).forEach((file) -> {
+                if (!Files.isRegularFile(file)) {
+                    return;
+                }
+                file = dir1.relativize(file);
+
                 Matcher matcher = mask.matcher(file.getFileName().toString());
                 if (!matcher.find()) {
                     return;
@@ -163,7 +169,6 @@ public class MassrenameCommand implements ShellCommand {
                 NameBuilderInfo info = new NameBuilderInfoImpl(matcher);
                 builder.execute(info);
                 String newName = info.getStringBuilder().toString();
-
                 env.writeln(String.format("%s => %s", file.toString(), newName));
             });
         } catch (IOException e) {
@@ -176,10 +181,15 @@ public class MassrenameCommand implements ShellCommand {
 
     private ShellStatus execute(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
         NameBuilderParser parser = new NameBuilderParser(expression);
-        NameBuilder builder = parser.getNameBuilder();
+        MultipleNameBuilder builder = parser.getNameBuilder();
 
         try {
-            Files.walk(dir1).forEach((file) -> {
+            Files.walk(dir1, 1).forEach((file) -> {
+                if (!Files.isRegularFile(file)) {
+                    return;
+                }
+                file = dir1.relativize(file);
+
                 Matcher matcher = mask.matcher(file.getFileName().toString());
                 if (!matcher.find()) {
                     return;

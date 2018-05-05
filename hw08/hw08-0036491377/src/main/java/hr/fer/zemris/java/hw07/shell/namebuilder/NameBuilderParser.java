@@ -10,8 +10,9 @@ public class NameBuilderParser {
         this.expression = expression;
     }
 
-    public NameBuilder getNameBuilder() {
+    public MultipleNameBuilder getNameBuilder() {
         List<NameBuilder> builders = parse(expression);
+
 
 
         return new MultipleNameBuilder(builders);

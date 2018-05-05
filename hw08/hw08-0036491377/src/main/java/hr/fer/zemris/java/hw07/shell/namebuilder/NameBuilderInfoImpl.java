@@ -8,6 +8,7 @@ public class NameBuilderInfoImpl implements NameBuilderInfo {
 
     public NameBuilderInfoImpl(Matcher matcher) {
         this.matcher = matcher;
+        sb = new StringBuilder();
     }
 
     @Override
@@ -18,5 +19,9 @@ public class NameBuilderInfoImpl implements NameBuilderInfo {
     @Override
     public String getGroup(int index) {
         return matcher.group(index);
+    }
+
+    public Matcher getMatcher() {
+        return matcher;
     }
 }
