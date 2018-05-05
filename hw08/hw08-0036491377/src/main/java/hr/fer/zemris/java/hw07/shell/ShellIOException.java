@@ -19,11 +19,4 @@ public class ShellIOException extends RuntimeException {
     public ShellIOException(String message) {
         super(message);
     }
-
-    /**
-     * Constructs a new runtime exception with null as its detail message.
-     */
-    public ShellIOException() {
-        super();
-    }
 }

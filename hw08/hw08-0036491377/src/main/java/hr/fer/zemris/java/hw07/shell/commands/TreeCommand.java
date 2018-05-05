@@ -75,7 +75,7 @@ public class TreeCommand implements ShellCommand {
         }
 
         try {
-            Files.walkFileTree(dir, new FileVisitor<>() {
+            Files.walkFileTree(dir, new SimpleFileVisitor<>() {
                 int depth = 0;
 
                 @Override
@@ -90,11 +90,6 @@ public class TreeCommand implements ShellCommand {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     env.writeln(String.format("%" + (depth + 2) + "s%s", " ", file.getFileName()));
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFileFailed(Path file, IOException exc) {
                     return FileVisitResult.CONTINUE;
                 }
 

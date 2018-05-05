@@ -102,7 +102,6 @@ public class Crypto {
         } else {
             System.out.println("This function only supports the operations checksha, encrypt and decrypt");
             sc.close();
-            return;
         }
     }
 
