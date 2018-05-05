@@ -11,7 +11,6 @@ import hr.fer.zemris.java.hw07.shell.namebuilder.NameBuilderParser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,6 +81,12 @@ public class MassrenameCommand implements ShellCommand {
 
         Path dir1 = env.getCurrentDirectory().resolve(args.get(0));
         Path dir2 = env.getCurrentDirectory().resolve(args.get(1));
+
+        if (!Files.isDirectory(dir1)) {
+            env.writeln("Source directory does not exist: " + dir1);
+            return ShellStatus.CONTINUE;
+        }
+
         String command = args.get(2);
         Pattern mask;
 
@@ -110,6 +115,11 @@ public class MassrenameCommand implements ShellCommand {
                     env.writeln("Wrong number of arguments for subcommand");
                     return ShellStatus.CONTINUE;
                 }
+                if (!Files.isDirectory(dir2)) {
+                    env.writeln("Destination directory does not exist: " + dir2);
+                    return ShellStatus.CONTINUE;
+                }
+
                 String expression = args.get(4);
                 return execute(env, dir1, dir2, mask, expression);
             }
@@ -156,10 +166,9 @@ public class MassrenameCommand implements ShellCommand {
     }
 
     private ShellStatus show(Environment env, Path dir1, Pattern mask, String expression) {
-        NameBuilderParser parser = new NameBuilderParser(expression);
-        MultipleNameBuilder builder = parser.getNameBuilder();
-
         try {
+            NameBuilderParser parser = new NameBuilderParser(expression);
+            MultipleNameBuilder builder = parser.getNameBuilder();
             Files.walk(dir1, 1).forEach((file) -> {
                 if (!Files.isRegularFile(file)) {
                     return;
@@ -174,10 +183,14 @@ public class MassrenameCommand implements ShellCommand {
                 NameBuilderInfo info = new NameBuilderInfoImpl(matcher);
                 builder.execute(info);
                 String newName = info.getStringBuilder().toString();
+
                 env.writeln(String.format("%s => %s", file.toString(), newName));
             });
         } catch (IOException e) {
             env.writeln("Could not walk directory: " + dir1);
+            return ShellStatus.CONTINUE;
+        } catch (IllegalArgumentException e) {
+            env.writeln(e.getMessage());
             return ShellStatus.CONTINUE;
         }
 
@@ -185,10 +198,10 @@ public class MassrenameCommand implements ShellCommand {
     }
 
     private ShellStatus execute(Environment env, Path dir1, Path dir2, Pattern mask, String expression) {
-        NameBuilderParser parser = new NameBuilderParser(expression);
-        MultipleNameBuilder builder = parser.getNameBuilder();
-
         try {
+            NameBuilderParser parser = new NameBuilderParser(expression);
+            MultipleNameBuilder builder = parser.getNameBuilder();
+
             Files.walk(dir1, 1).forEach((file) -> {
                 if (!Files.isRegularFile(file)) {
                     return;
@@ -208,6 +221,8 @@ public class MassrenameCommand implements ShellCommand {
                     Path absoluteSource = dir1.resolve(file);
                     Path absoluteDestination = dir2.resolve(newName);
                     Files.move(absoluteSource, absoluteDestination);
+                    env.writeln(String.format("%s/%s => %s/%s", dir1.getFileName().toString(), file, dir2.getFileName
+                            ().toString(), newName));
                 } catch (IOException e) {
                     env.writeln("Could not copy file: " + file.toString() + " to: " + newName);
                 }

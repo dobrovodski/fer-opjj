@@ -7,11 +7,11 @@ package hr.fer.zemris.java.hw07.shell;
  */
 public class ShellIOException extends RuntimeException {
     /**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+     * Default serialVersionUID.
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
+    /**
      * Constructs a new runtime exception with the specified detail message.
      *
      * @param message the detail message

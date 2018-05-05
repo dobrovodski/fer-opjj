@@ -22,6 +22,7 @@ public enum Commands {
     TREE("tree");
 
     private String name;
+
     Commands(String name) {
         this.name = name;
     }

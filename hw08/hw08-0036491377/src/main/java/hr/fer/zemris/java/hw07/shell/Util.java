@@ -11,8 +11,8 @@ import java.util.List;
 public class Util {
     /**
      * Splits the given string into a list of arguments. Spaces in quotes are parsed normally, but out of quotes it
-     * separates arguments. Provides ability to escape quotes. Returns null if there are non-whitespace characters
-     * after an ending quotation mark.
+     * separates arguments. Provides ability to escape quotes. Returns null if there are non-whitespace characters after
+     * an ending quotation mark.
      *
      * @param arguments string to split into arguments
      *
