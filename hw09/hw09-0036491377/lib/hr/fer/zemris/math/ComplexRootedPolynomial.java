@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ComplexRootedPolynomial {
-    Complex[] roots;
+    private Complex[] roots;
 
     public ComplexRootedPolynomial(Complex ...roots) {
         Objects.requireNonNull(roots, "Roots cannot be null.");
