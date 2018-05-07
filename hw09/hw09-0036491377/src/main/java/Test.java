@@ -1,3 +1,4 @@
+import hr.fer.zemris.math.Complex;
 import hr.fer.zemris.math.Vector3;
 
 public class Test {
@@ -16,5 +17,9 @@ public class Test {
         System.out.println(l.dot(j));
         System.out.println(i.add(new Vector3(0,1,0)).cosAngle(l));
 
+        Complex c1 = new Complex(0, 1);
+        c1.root(3);
+        Complex c2 = new Complex(69.69, -69.69);
+        c2.root(12);
     }
 }
