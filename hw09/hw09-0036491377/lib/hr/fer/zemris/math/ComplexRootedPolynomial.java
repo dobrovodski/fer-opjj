@@ -1,11 +1,12 @@
 package hr.fer.zemris.math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ComplexRootedPolynomial {
-    List<Complex> roots;
+    Complex[] roots;
 
     public ComplexRootedPolynomial(Complex ...roots) {
         Objects.requireNonNull(roots, "Roots cannot be null.");
@@ -13,10 +14,7 @@ public class ComplexRootedPolynomial {
             throw new IllegalArgumentException("Polynomial needs to have at least one root");
         }
 
-        this.roots = new ArrayList<>();
-        for (Complex root : roots) {
-            this.roots.add(root);
-        }
+        this.roots = roots;
     }
 
     public Complex apply(Complex z) {
@@ -40,8 +38,8 @@ public class ComplexRootedPolynomial {
         int closest = 0;
         double smallestDistance = 0;
 
-        for (int i = 0; i < roots.size(); i++) {
-            Complex c = roots.get(i);
+        for (int i = 0; i < roots.length; i++) {
+            Complex c = roots[i];
             double dist = c.sub(z).module();
             if (dist < smallestDistance) {
                 closest = i;

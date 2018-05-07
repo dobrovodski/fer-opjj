@@ -1,4 +1,5 @@
 import hr.fer.zemris.math.Complex;
+import hr.fer.zemris.math.ComplexPolynomial;
 import hr.fer.zemris.math.Vector3;
 
 public class Test {
@@ -21,5 +22,13 @@ public class Test {
         c1.root(3);
         Complex c2 = new Complex(69.69, -69.69);
         c2.root(12);
+
+        ComplexPolynomial cp = new ComplexPolynomial(
+                new Complex(1, 0),
+                new Complex(5, 0),
+                new Complex(2, 0),
+                new Complex(7, 2)
+        );
+        cp.derive();
     }
 }

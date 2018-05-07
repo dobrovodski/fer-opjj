@@ -32,11 +32,12 @@ public class Complex {
     }
 
     public Complex multiply(Complex other) {
-        return new Complex(re * other.re, im * other.im);
+        return new Complex(re * other.re - im * other.im, re * other.im + im * other.re);
     }
 
     public Complex divide(Complex other) {
-        return new Complex(re / other.re, im / other.im);
+        double divisor = other.modulus() * other.modulus();
+        return new Complex((re * other.re + im * other.im) / divisor, (im * other.re - re * other.im) / divisor);
     }
 
     public Complex add(Complex other) {
