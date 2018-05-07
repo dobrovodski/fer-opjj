@@ -1,9 +1,9 @@
 package hr.fer.zemris.math;
 
 public class Vector3 {
-    double x;
-    double y;
-    double z;
+    private double x;
+    private double y;
+    private double z;
 
     public Vector3(double x, double y, double z) {
         this.x = x;
@@ -64,6 +64,7 @@ public class Vector3 {
         return new double[]{x, y, z};
     }
 
+    @Override
     public String toString() {
         return String.format("(%f, %f, %f)", x, y, z);
     }
