@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ComplexRootedPolynomial {
     private Complex[] roots;
 
-    public ComplexRootedPolynomial(Complex ...roots) {
+    public ComplexRootedPolynomial(Complex... roots) {
         Objects.requireNonNull(roots, "Roots cannot be null.");
         if (roots.length == 0) {
             throw new IllegalArgumentException("Polynomial needs to have at least one root");
@@ -31,17 +31,22 @@ public class ComplexRootedPolynomial {
     }
 
     private ComplexPolynomial toComplexPolynomial() {
-        return null;
+        ComplexPolynomial cp = new ComplexPolynomial(Complex.ONE);
+        for (Complex root : roots) {
+            cp = cp.multiply(new ComplexPolynomial(Complex.ONE, root.negate()));
+        }
+        
+        return cp;
     }
 
     public int indexOfClosestRootFor(Complex z, double threshold) {
         int closest = 0;
-        double smallestDistance = 0;
+        double smallestDistance = -1;
 
         for (int i = 0; i < roots.length; i++) {
             Complex c = roots[i];
             double dist = c.sub(z).module();
-            if (dist < smallestDistance) {
+            if (dist < smallestDistance || smallestDistance == -1) {
                 closest = i;
                 smallestDistance = dist;
             }
