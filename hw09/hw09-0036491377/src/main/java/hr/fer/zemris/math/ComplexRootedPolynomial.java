@@ -18,7 +18,7 @@ public class ComplexRootedPolynomial {
     }
 
     public Complex apply(Complex z) {
-        Complex result = new Complex(1, 0);
+        Complex result = Complex.ONE;
         for (Complex root : roots) {
             result = result.multiply(z.sub(root));
         }
