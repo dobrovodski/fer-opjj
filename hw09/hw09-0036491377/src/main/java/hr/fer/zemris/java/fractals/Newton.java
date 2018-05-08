@@ -14,6 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Newton {
+    private static ComplexRootedPolynomial rootedPolynomial;
+    private static ComplexPolynomial polynomial;
+    private static final double CONV_THRESHOLD = 1E-3;
+    private static final double ROOT_THRESHOLD = 2E-3;
+    private static final int MAX_ITERATIONS = 16;
+
     public static void main(String[] args) {
         System.out.println("Welcome to the Newton-Raphson iteration-based fractal viewer.");
         System.out.println("Please enter at least two roots, one root per line. Enter 'done' when done.");
@@ -37,9 +43,13 @@ public class Newton {
                 continue;
             }
 
+            System.out.println(parseComplex(root));
             rootCount++;
         }
 
+        Complex[] rootsArr = roots.toArray(new Complex[0]);
+        rootedPolynomial = new ComplexRootedPolynomial(rootsArr);
+        polynomial = rootedPolynomial.toComplexPolynom();
         FractalViewer.show(new FractalProducer());
     }
 
@@ -53,16 +63,10 @@ public class Newton {
         }
 
         // Good luck
-        //1
-        //i, -i
-        //3i, -3i
-        //0 - i1
-        //-3 + i3
-        //3.0
         String regex = "^(?<imaginaryNoCoef>(-)?i)?$|" // Matches complex numbers "i" or "-i"
-                + "^(?<onlyImaginary>(-)?i([0-9]++(\\.[0-9]+)?)?)?$|" // Only imaginary, i.e. "i3" or "-i2.2"
-                + "^(?<real>([+\\-])?[0-9]+(\\.[0-9]+)?)?(\\+)?" // Matches the real part of the number
-                + "(?<imaginary>(([+\\-])?i([0-9]++(\\.[0-9]+)?)?))?$"; // Matches the imaginary part of number
+                       + "^(?<onlyImaginary>(-)?i([0-9]++(\\.[0-9]+)?)?)?$|" // Only imaginary, i.e. "i3" or "-i2.2"
+                       + "^(?<real>([+\\-])?[0-9]+(\\.[0-9]+)?)?(\\+)?" // Matches the real part of the number
+                       + "(?<imaginary>(([+\\-])?i([0-9]*(\\.[0-9]+)?)?))?$"; // Matches the imaginary part of number
 
         Pattern p = Pattern.compile(regex);
         str = str.replaceAll("\\s+", "");
@@ -85,7 +89,10 @@ public class Newton {
         }
 
         if (imaginaryGroup != null) {
-            imaginaryGroup = imaginaryGroup.replace("i", "");
+            imaginaryGroup = imaginaryGroup.replace("i", "").trim();
+            if (imaginaryGroup.equals("") || imaginaryGroup.equals("-")) {
+                imaginaryGroup += "1";
+            }
             imaginary = Double.parseDouble(imaginaryGroup);
         }
 
@@ -99,7 +106,7 @@ public class Newton {
         }
 
         if (onlyImaginaryGroup != null) {
-            onlyImaginaryGroup = onlyImaginaryGroup.replace("i", "");
+            onlyImaginaryGroup = onlyImaginaryGroup.replace("i", "").trim();
             imaginary = Double.parseDouble(onlyImaginaryGroup);
         }
 
@@ -109,35 +116,26 @@ public class Newton {
     public static class FractalProducer implements IFractalProducer {
         @Override
         public void produce(double reMin, double reMax, double imMin, double imMax,
-                            int width, int height, long requestNo, IFractalResultObserver observer) {
-
-            System.out.println("Zapocinjem izracun...");
+                int width, int height, long requestNo, IFractalResultObserver observer) {
 
             short[] data = new short[width * height];
 
-            Newton.calculate(reMin, reMax, imMin, imMax, width, height, 4, 0, height - 1, data);
-
-            observer.acceptResult(data, (short) 5, requestNo);
+            Newton.calculate(reMin, reMax, imMin, imMax, width, height, polynomial.order(), 0, height - 1, data);
+            observer.acceptResult(data, (short) (polynomial.order() + 1), requestNo);
         }
     }
 
     public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height, int
-            m, int ymin, int ymax, short[] data) {
-        int offset = ymin * width;
+            m, int yMin, int yMax, short[] data) {
+        int offset = yMin * width;
 
-        for (int y = ymin; y <= ymax; ++y) {
-            for (int x = 0; x < width; ++x) {
+        for (int y = yMin; y <= yMax; y++) {
+            for (int x = 0; x < width; x++) {
                 double cre = (double) x / ((double) width - 1.0D) * (reMax - reMin) + reMin;
                 double cim = (double) (height - 1 - y) / ((double) height - 1.0D) * (imMax - imMin) + imMin;
                 Complex zn = new Complex(cre, cim);
-                ComplexRootedPolynomial polynomial = new ComplexRootedPolynomial(
-                        new Complex(1, 0),
-                        new Complex(-1, 0),
-                        new Complex(0, 1),
-                        new Complex(0, -1)
-                );
-                ComplexPolynomial derived = polynomial.toComplexPolynom().derive();
-                int iters = 0;
+                ComplexPolynomial derived = polynomial.derive();
+                int iterations = 0;
                 double modulus;
 
                 do {
@@ -147,12 +145,11 @@ public class Newton {
                     Complex zn1 = zn.sub(fraction);
                     modulus = zn1.sub(zn).module();
                     zn = zn1;
-                    ++iters;
-                } while (iters < 16 && modulus > 1e-3);
+                    iterations++;
+                } while (iterations < MAX_ITERATIONS && modulus > CONV_THRESHOLD);
 
-                int index = polynomial.indexOfClosestRootFor(zn, 1e-3);
-                data[offset] = (short) (index + 1);
-                ++offset;
+                int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
+                data[offset++] = (short) (index + 1);
             }
         }
     }
