@@ -1,6 +1,5 @@
 package hr.fer.zemris.math;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class ComplexPolynomial {
@@ -38,8 +37,12 @@ public class ComplexPolynomial {
     private ComplexPolynomial differentiate() {
         Complex[] newFactors = new Complex[this.order()];
 
-        for (int i = 1; i < factors.length; i++) {
-            newFactors[i - 1] = factors[i].multiply(new Complex(i, 0));
+        for (int i = 0; i < factors.length - 1; i++) {
+            // zx * z^n ->  n * zx * z^(n-1)
+            // factors[i] = zx -> newFactors[i] = n * zx
+            // i can stay the same, what matters is that the order is preserved
+            // factors.length - 1 because the last one must be a constant (there cannot be gaps between factors)
+            newFactors[i] = factors[i].multiply(new Complex(i, 0));
         }
 
         return new ComplexPolynomial(newFactors);
@@ -48,8 +51,13 @@ public class ComplexPolynomial {
     public Complex apply(Complex z) {
         Objects.requireNonNull(z, "Cannot apply polynomial to null.");
         Complex sum = new Complex(0, 0);
-        for (Complex factor : factors) {
-            sum = sum.add(z.power(0).multiply(factor));
+
+        for (int i = 0; i < factors.length; i++) {
+            // i = 0 -> highest power
+            // pow = order - i;
+            // (za, zb, zc) -> za * z^2 + zb * z + zc
+            Complex applied = z.power(order() - i).multiply(factors[i]);
+            sum = sum.add(applied);
         }
 
         return sum;
