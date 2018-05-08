@@ -17,11 +17,11 @@ public class ComplexPolynomial {
 
     public ComplexPolynomial multiply(ComplexPolynomial p) {
         Objects.requireNonNull(p, "Cannot multiply with null.");
-        Complex[] newFactors = new Complex[factors.length];
+        Complex[] newFactors = new Complex[order() + p.order() + 1];
 
         for (int i = 0; i < factors.length; i++) {
             for (int j = 0; j < p.factors.length; j++) {
-                int index = i * j;
+                int index = i + j;
                 Complex mul = factors[i].multiply(p.factors[j]);
                 newFactors[index] = newFactors[index] == null ? mul : newFactors[index].add(mul);
             }
@@ -42,7 +42,7 @@ public class ComplexPolynomial {
             // factors[i] = zx -> newFactors[i] = n * zx
             // i can stay the same, what matters is that the order is preserved
             // factors.length - 1 because the last one must be a constant (there cannot be gaps between factors)
-            newFactors[i] = factors[i].multiply(new Complex(i, 0));
+            newFactors[i] = factors[i].multiply(new Complex(order() - i, 0));
         }
 
         return new ComplexPolynomial(newFactors);
@@ -69,11 +69,11 @@ public class ComplexPolynomial {
 
         for (int i = 0; i < factors.length; i++) {
             Complex c = factors[i];
-            String exp = i > 0 ? "*z^" + i : "";
+            String exp = i < factors.length - 1 ? "*z^" + (factors.length - 1 - i) : "";
             sb.append(String.format("(%s)%s + ", c.toString(), exp));
         }
 
-        sb.setLength(sb.length() - 1);
+        sb.setLength(sb.length() - 2);
         return sb.toString();
     }
 }

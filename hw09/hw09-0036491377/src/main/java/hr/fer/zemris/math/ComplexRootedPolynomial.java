@@ -30,7 +30,9 @@ public class ComplexRootedPolynomial {
     private ComplexPolynomial toComplexPolynomial() {
         ComplexPolynomial cp = new ComplexPolynomial(Complex.ONE);
         for (Complex root : roots) {
-            cp = cp.multiply(new ComplexPolynomial(Complex.ONE, root.negate()));
+            // (1*z + (-1)*(root))
+            ComplexPolynomial rootComplexPolynomial = new ComplexPolynomial(Complex.ONE, root.negate());
+            cp = cp.multiply(rootComplexPolynomial);
         }
 
         return cp;
