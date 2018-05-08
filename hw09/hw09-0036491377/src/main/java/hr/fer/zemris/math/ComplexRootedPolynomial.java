@@ -35,12 +35,12 @@ public class ComplexRootedPolynomial {
         for (Complex root : roots) {
             cp = cp.multiply(new ComplexPolynomial(Complex.ONE, root.negate()));
         }
-        
+
         return cp;
     }
 
     public int indexOfClosestRootFor(Complex z, double threshold) {
-        int closest = 0;
+        int closest = -1;
         double smallestDistance = -1;
 
         for (int i = 0; i < roots.length; i++) {
@@ -60,7 +60,7 @@ public class ComplexRootedPolynomial {
         StringBuilder sb = new StringBuilder();
 
         for (Complex c : roots) {
-            sb.append(String.format("(z - com(%s)) * ", c.toString()));
+            sb.append(String.format("(z - (%s)) * ", c.toString()));
         }
 
         sb.setLength(sb.length() - 1);

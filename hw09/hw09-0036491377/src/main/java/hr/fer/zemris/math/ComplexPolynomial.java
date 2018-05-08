@@ -27,6 +27,7 @@ public class ComplexPolynomial {
                 newFactors[index] = newFactors[index] == null ? mul : newFactors[index].add(mul);
             }
         }
+
         return new ComplexPolynomial(newFactors);
     }
 
@@ -57,12 +58,14 @@ public class ComplexPolynomial {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < factors.length; i++) {
             Complex c = factors[i];
-            String exp = i > 0 ? "z^" + i : "";
-            sb.append(String.format("(%s)%s", c.toString(), exp));
+            String exp = i > 0 ? "*z^" + i : "";
+            sb.append(String.format("(%s)%s + ", c.toString(), exp));
         }
 
+        sb.setLength(sb.length() - 1);
         return sb.toString();
     }
 }
