@@ -120,13 +120,13 @@ public class Newton {
 
             short[] data = new short[width * height];
 
-            Newton.calculate(reMin, reMax, imMin, imMax, width, height, polynomial.order(), 0, height - 1, data);
+            Newton.calculate(reMin, reMax, imMin, imMax, width, height, 0, height - 1, data);
             observer.acceptResult(data, (short) (polynomial.order() + 1), requestNo);
         }
     }
 
     public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height, int
-            m, int yMin, int yMax, short[] data) {
+            yMin, int yMax, short[] data) {
         int offset = yMin * width;
 
         for (int y = yMin; y <= yMax; y++) {
