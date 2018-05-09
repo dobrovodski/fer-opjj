@@ -2,6 +2,8 @@ package hr.fer.zemris.math;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Complex {
     private double re;
@@ -82,6 +84,70 @@ public class Complex {
     @Override
     public String toString() {
         char sign = im < 0 ? '-' : '+';
-        return String.format("%f %c %fi", re, sign, Math.abs(im));
+        return String.format("%f %c i%f", re, sign, Math.abs(im));
+    }
+
+    public static Complex fromString(String str) {
+        if (str == null) {
+            throw new NullPointerException("String cannot be null.");
+        }
+
+        if (str.isEmpty()) {
+            throw new IllegalArgumentException("Cannot parse empty string as complex number");
+        }
+
+        // Good luck
+        String regex = "^(?<imaginaryNoCoef>(-)?i)?$|" // Matches complex numbers "i" or "-i"
+                       + "^(?<onlyImaginary>(-)?i([0-9]++(\\.[0-9]+)?)?)?$|" // Only imaginary, i.e. "i3" or "-i2.2"
+                       + "^(?<real>([+\\-])?[0-9]+(\\.[0-9]+)?)?(\\+)?" // Matches the real part of the number
+                       + "(?<imaginary>(([+\\-])?i([0-9]*(\\.[0-9]+)?)?))?$"; // Matches the imaginary part of number
+
+        Pattern p = Pattern.compile(regex);
+        // We remove all whitespace here for the sake of simplicity
+        // That means that stuff like 1 . 3 + i 1 0 will work
+        str = str.replaceAll("\\s+", "");
+        Matcher m = p.matcher(str);
+
+        double real = 0;
+        double imaginary = 0;
+
+        if (!m.find()) {
+            throw new IllegalArgumentException("Could not parse string as complex number. Input: " + str);
+        }
+
+        String realGroup = m.group("real");
+        String imaginaryGroup = m.group("imaginary");
+        String noCoefImaginaryGroup = m.group("imaginaryNoCoef");
+        String onlyImaginaryGroup = m.group("onlyImaginary");
+
+        if (realGroup != null) {
+            real = Double.parseDouble(realGroup);
+        }
+
+        if (imaginaryGroup != null) {
+            imaginaryGroup = imaginaryGroup.replace("i", "").trim();
+            if (imaginaryGroup.equals("") || imaginaryGroup.equals("-")) {
+                imaginaryGroup += "1";
+            }
+
+            imaginary = Double.parseDouble(imaginaryGroup);
+        }
+
+        if (noCoefImaginaryGroup != null) {
+            noCoefImaginaryGroup = noCoefImaginaryGroup.replace("i", "");
+
+            if (noCoefImaginaryGroup.startsWith("-")) {
+                imaginary = -1.0;
+            } else {
+                imaginary = 1.0;
+            }
+        }
+
+        if (onlyImaginaryGroup != null) {
+            onlyImaginaryGroup = onlyImaginaryGroup.replace("i", "").trim();
+            imaginary = Double.parseDouble(onlyImaginaryGroup);
+        }
+
+        return new Complex(real, imaginary);
     }
 }

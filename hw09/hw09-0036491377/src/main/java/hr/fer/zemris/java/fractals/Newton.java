@@ -10,8 +10,11 @@ import hr.fer.zemris.math.ComplexRootedPolynomial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Newton {
     private static ComplexRootedPolynomial rootedPolynomial;
@@ -37,90 +40,89 @@ public class Newton {
             }
 
             try {
-                roots.add(parseComplex(root));
+                Complex c = Complex.fromString(root);
+                roots.add(c);
+                System.out.println(c);
             } catch (IllegalArgumentException ex) {
                 System.out.println("Could not parse as complex number: " + root);
                 continue;
             }
 
-            System.out.println(parseComplex(root));
             rootCount++;
         }
 
         Complex[] rootsArr = roots.toArray(new Complex[0]);
         rootedPolynomial = new ComplexRootedPolynomial(rootsArr);
         polynomial = rootedPolynomial.toComplexPolynom();
+
         FractalViewer.show(new FractalProducer());
     }
 
-    private static Complex parseComplex(String str) {
-        if (str == null) {
-            throw new NullPointerException("String cannot be null.");
+    public static class Task implements Callable<Void> {
+        double reMin;
+        double reMax;
+        double imMin;
+        double imMax;
+        int width;
+        int height;
+        int yMin;
+        int yMax;
+        short[] data;
+
+        public Task(double reMin, double reMax, double imMin, double imMax,
+                int width, int height, int yMin, int yMax, short[] data) {
+            this.reMin = reMin;
+            this.reMax = reMax;
+            this.imMin = imMin;
+            this.imMax = imMax;
+            this.width = width;
+            this.height = height;
+            this.yMin = yMin;
+            this.yMax = yMax;
+            this.data = data;
         }
 
-        if (str.isEmpty()) {
-            throw new IllegalArgumentException("Cannot parse empty string as complex number");
+        @Override
+        public Void call() {
+            Newton.calculate(reMin, reMax, imMin, imMax, width, height, yMin, yMax, data);
+            return null;
         }
-
-        // Good luck
-        String regex = "^(?<imaginaryNoCoef>(-)?i)?$|" // Matches complex numbers "i" or "-i"
-                       + "^(?<onlyImaginary>(-)?i([0-9]++(\\.[0-9]+)?)?)?$|" // Only imaginary, i.e. "i3" or "-i2.2"
-                       + "^(?<real>([+\\-])?[0-9]+(\\.[0-9]+)?)?(\\+)?" // Matches the real part of the number
-                       + "(?<imaginary>(([+\\-])?i([0-9]*(\\.[0-9]+)?)?))?$"; // Matches the imaginary part of number
-
-        Pattern p = Pattern.compile(regex);
-        str = str.replaceAll("\\s+", "");
-        Matcher m = p.matcher(str);
-
-        double real = 0;
-        double imaginary = 0;
-
-        if (!m.find()) {
-            throw new IllegalArgumentException("Could not parse string as complex number. Input: " + str);
-        }
-
-        String realGroup = m.group("real");
-        String imaginaryGroup = m.group("imaginary");
-        String noCoefImaginaryGroup = m.group("imaginaryNoCoef");
-        String onlyImaginaryGroup = m.group("onlyImaginary");
-
-        if (realGroup != null) {
-            real = Double.parseDouble(realGroup);
-        }
-
-        if (imaginaryGroup != null) {
-            imaginaryGroup = imaginaryGroup.replace("i", "").trim();
-            if (imaginaryGroup.equals("") || imaginaryGroup.equals("-")) {
-                imaginaryGroup += "1";
-            }
-            imaginary = Double.parseDouble(imaginaryGroup);
-        }
-
-        if (noCoefImaginaryGroup != null) {
-            noCoefImaginaryGroup = noCoefImaginaryGroup.replace("i", "");
-            if (noCoefImaginaryGroup.startsWith("-")) {
-                imaginary = -1.0;
-            } else {
-                imaginary = 1.0;
-            }
-        }
-
-        if (onlyImaginaryGroup != null) {
-            onlyImaginaryGroup = onlyImaginaryGroup.replace("i", "").trim();
-            imaginary = Double.parseDouble(onlyImaginaryGroup);
-        }
-
-        return new Complex(real, imaginary);
     }
 
     public static class FractalProducer implements IFractalProducer {
+        private ExecutorService pool;
+        private static final int TASK_COUNT = Runtime.getRuntime().availableProcessors() * 8;
+
+        FractalProducer() {
+            this.pool = Executors.newFixedThreadPool(TASK_COUNT);
+        }
+
         @Override
         public void produce(double reMin, double reMax, double imMin, double imMax,
                 int width, int height, long requestNo, IFractalResultObserver observer) {
 
             short[] data = new short[width * height];
+            List<Future<Void>> results = new ArrayList<>();
 
-            Newton.calculate(reMin, reMax, imMin, imMax, width, height, 0, height - 1, data);
+            int yCount = (int) Math.ceil(1.0 * height / TASK_COUNT);
+            for (int i = 0; i <= TASK_COUNT; i++) {
+                int yMin = i * yCount;
+                int yMax = (i + 1) * yCount;
+                if (i == TASK_COUNT - 1) {
+                    yMax = height - 1;
+                }
+
+                Task task = new Task(reMin, reMax, imMin, imMax, width, height, yMin, yMax, data);
+                results.add(pool.submit(task));
+            }
+
+            for (Future<Void> task : results) {
+                try {
+                    task.get();
+                } catch (InterruptedException | ExecutionException ignored) {
+                }
+            }
+
             observer.acceptResult(data, (short) (polynomial.order() + 1), requestNo);
         }
     }
