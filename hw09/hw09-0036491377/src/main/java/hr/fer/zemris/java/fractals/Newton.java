@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 public class Newton {
     private static ComplexRootedPolynomial rootedPolynomial;
@@ -95,7 +96,11 @@ public class Newton {
         private static final int TASK_COUNT = Runtime.getRuntime().availableProcessors() * 8;
 
         FractalProducer() {
-            this.pool = Executors.newFixedThreadPool(TASK_COUNT);
+            this.pool = Executors.newFixedThreadPool(TASK_COUNT, r -> {
+                Thread t = new Thread(r);
+                t.setDaemon(true);
+                return t;
+            });
         }
 
         @Override
