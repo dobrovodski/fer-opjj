@@ -36,6 +36,7 @@ public class Newton {
 
             if (root.equals("done")) {
                 System.out.println("Image of the fractal will appear shortly.");
+                sc.close();
                 break;
             }
 
