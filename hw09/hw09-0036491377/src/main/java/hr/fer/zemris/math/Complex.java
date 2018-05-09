@@ -2,6 +2,7 @@ package hr.fer.zemris.math;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,6 +88,7 @@ public class Complex {
      * @return this and other multiplied together
      */
     public Complex multiply(Complex other) {
+        Objects.requireNonNull(other, "Other vector cannot be null.");
         return new Complex(re * other.re - im * other.im, re * other.im + im * other.re);
     }
 
@@ -98,6 +100,7 @@ public class Complex {
      * @return this divided by other
      */
     public Complex divide(Complex other) {
+        Objects.requireNonNull(other, "Other vector cannot be null.");
         double divisor = other.modulus() * other.modulus();
         return new Complex((re * other.re + im * other.im) / divisor, (im * other.re - re * other.im) / divisor);
     }
@@ -110,6 +113,7 @@ public class Complex {
      * @return this and other added together
      */
     public Complex add(Complex other) {
+        Objects.requireNonNull(other, "Other vector cannot be null.");
         return new Complex(re + other.re, im + other.im);
     }
 
@@ -121,6 +125,7 @@ public class Complex {
      * @return this subtracted by other
      */
     public Complex sub(Complex other) {
+        Objects.requireNonNull(other, "Other vector cannot be null.");
         return new Complex(re - other.re, im - other.im);
     }
 
@@ -153,8 +158,13 @@ public class Complex {
      * @param n root to take
      *
      * @return list of roots
+     *
+     * @throws IllegalArgumentException if root is less than 1
      */
     public List<Complex> root(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("Root cannot be less than 1.");
+        }
         double arg = arg();
         double r = Math.pow(module(), 1.0 / n);
         List<Complex> roots = new ArrayList<>();
@@ -193,9 +203,7 @@ public class Complex {
      * @return this and other multiplied together
      */
     public static Complex fromString(String str) {
-        if (str == null) {
-            throw new NullPointerException("String cannot be null.");
-        }
+        Objects.requireNonNull(str, "String cannot be null.");
 
         if (str.isEmpty()) {
             throw new IllegalArgumentException("Cannot parse empty string as complex number");
