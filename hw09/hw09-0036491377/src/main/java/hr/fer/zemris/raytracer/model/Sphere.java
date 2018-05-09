@@ -5,7 +5,7 @@ import hr.fer.zemris.java.raytracer.model.Point3D;
 import hr.fer.zemris.java.raytracer.model.Ray;
 import hr.fer.zemris.java.raytracer.model.RayIntersection;
 
-public class Sphere extends GraphicalObject{
+public class Sphere extends GraphicalObject {
     private Point3D center;
     private double radius;
     private double kdr;
