@@ -22,7 +22,7 @@ public class Newton {
     private static ComplexPolynomial polynomial;
     private static final double CONV_THRESHOLD = 1E-3;
     private static final double ROOT_THRESHOLD = 2E-3;
-    private static final int MAX_ITERATIONS = 16;
+    private static final int MAX_ITERATIONS = 16 * 16 * 16;
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Newton-Raphson iteration-based fractal viewer.");
@@ -111,14 +111,12 @@ public class Newton {
             List<Future<Void>> results = new ArrayList<>();
 
             int yCount = (int) Math.ceil(1.0 * height / TASK_COUNT);
-            System.out.println(yCount);
             for (int i = 0; i < TASK_COUNT; i++) {
                 int yMin = i * yCount;
                 int yMax = (i + 1) * yCount;
                 if (i == TASK_COUNT - 1) {
                     yMax = height - 1;
                 }
-                System.out.println(yMax);
 
                 Task task = new Task(reMin, reMax, imMin, imMax, width, height, yMin, yMax, data);
                 results.add(pool.submit(task));
@@ -159,7 +157,12 @@ public class Newton {
                 } while (iterations < MAX_ITERATIONS && modulus > CONV_THRESHOLD);
 
                 int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
-                data[offset++] = (short) (index + 1);
+
+                if (index == -1) {
+                    data[offset++] = 0;
+                } else {
+                    data[offset++] = (short) (index + 1);
+                }
             }
         }
     }
