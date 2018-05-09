@@ -126,7 +126,7 @@ public class Sphere extends GraphicalObject {
 
         @Override
         public double getKrn() {
-            return 20;
+            return krn;
         }
     }
 }
