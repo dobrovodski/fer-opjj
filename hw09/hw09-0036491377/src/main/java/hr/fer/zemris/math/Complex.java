@@ -5,55 +5,141 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is used for representing complex numbers. It provides useful methods for unary and binary operations
+ * performed on complex numbers.
+ *
+ * @author matej
+ */
 public class Complex {
+    /**
+     * Real part of the number.
+     */
     private double re;
+    /**
+     * Imaginary part of the number.
+     */
     private double im;
 
+    /**
+     * Represents the complex number 0 + 0i.
+     */
     public static final Complex ZERO = new Complex(0, 0);
+    /**
+     * Represents the complex number 1 + 0i.
+     */
     public static final Complex ONE = new Complex(1, 0);
+    /**
+     * Represents the complex number -1 + 0i.
+     */
     public static final Complex ONE_NEG = new Complex(-1, 0);
+    /**
+     * Represents the complex number 0 + 1i.
+     */
     public static final Complex IM = new Complex(0, 1);
+    /**
+     * Represents the complex number 0 - 1i.
+     */
     public static final Complex IM_NEG = new Complex(0, -1);
 
+    /**
+     * Constructor for Complex.
+     *
+     * @param re real part of the number
+     * @param im imaginary part of the number
+     */
     public Complex(double re, double im) {
         this.re = re;
         this.im = im;
     }
 
+    /**
+     * Default constructor. Sets both real and imaginary part to 0.
+     */
     public Complex() {
         this.re = 0;
         this.im = 0;
     }
 
+    /**
+     * Calculates the modulus of this number.
+     *
+     * @return modulus of this number
+     */
     public double module() {
         return modulus();
     }
 
+    /**
+     * Calculates the modulus of this number.
+     *
+     * @return modulus of this number
+     */
     private double modulus() {
         return Math.sqrt(re * re + im * im);
     }
 
+    /**
+     * Multiplies this complex number with the given one and returns a new one.
+     *
+     * @param other complex number to multiply with
+     *
+     * @return this and other multiplied together
+     */
     public Complex multiply(Complex other) {
         return new Complex(re * other.re - im * other.im, re * other.im + im * other.re);
     }
 
+    /**
+     * Divides this complex number with the given one and returns a new one.
+     *
+     * @param other complex number to divide with
+     *
+     * @return this divided by other
+     */
     public Complex divide(Complex other) {
         double divisor = other.modulus() * other.modulus();
         return new Complex((re * other.re + im * other.im) / divisor, (im * other.re - re * other.im) / divisor);
     }
 
+    /**
+     * Adds this complex number with the given one and returns a new one.
+     *
+     * @param other complex number to add with
+     *
+     * @return this and other added together
+     */
     public Complex add(Complex other) {
         return new Complex(re + other.re, im + other.im);
     }
 
+    /**
+     * Subtracts given complex number from this and returns a new one.
+     *
+     * @param other complex number to subtract from this
+     *
+     * @return this subtracted by other
+     */
     public Complex sub(Complex other) {
         return new Complex(re - other.re, im - other.im);
     }
 
+    /**
+     * Returns the the negated form of this complex number.
+     *
+     * @return this number negated
+     */
     public Complex negate() {
         return new Complex(-re, -im);
     }
 
+    /**
+     * Returns this complex number to the n-th power.
+     *
+     * @param n power to raise this number by
+     *
+     * @return this number raised to the n-th power
+     */
     public Complex power(int n) {
         double arg = arg();
         double r = Math.pow(module(), n);
@@ -61,6 +147,13 @@ public class Complex {
         return new Complex(r * Math.cos(n * arg), r * Math.sin(n * arg));
     }
 
+    /**
+     * Takes the n-th root from the complex number and returns all possible roots in a list.
+     *
+     * @param n root to take
+     *
+     * @return list of roots
+     */
     public List<Complex> root(int n) {
         double arg = arg();
         double r = Math.pow(module(), 1.0 / n);
@@ -77,6 +170,11 @@ public class Complex {
         return roots;
     }
 
+    /**
+     * Returns the argument of the complex number.
+     *
+     * @return argument of complex number
+     */
     private double arg() {
         return Math.atan2(im, re);
     }
@@ -87,6 +185,13 @@ public class Complex {
         return String.format("%f %c i%f", re, sign, Math.abs(im));
     }
 
+    /**
+     * Multiplies this complex number with the given one and returns a new one with the multiplied values.
+     *
+     * @param str complex number to multiply with
+     *
+     * @return this and other multiplied together
+     */
     public static Complex fromString(String str) {
         if (str == null) {
             throw new NullPointerException("String cannot be null.");

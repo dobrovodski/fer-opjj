@@ -51,6 +51,6 @@ public class RayCaster {
     }
 
     private static void tracer(Scene scene, Ray ray, short[] rgb) {
-        
+
     }
 }
