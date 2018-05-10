@@ -17,13 +17,39 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
+/**
+ * This class is used to demonstrate Newton-Raphson fractal generation. The user provides complex-valued roots of a
+ * polynomial and the algorithm displays the fractal calculated through repeated iteration.
+ *
+ * @author matej
+ */
 public class Newton {
+    /**
+     * Complex rooted polynomial.
+     */
     private static ComplexRootedPolynomial rootedPolynomial;
+    /**
+     * Complex polynomial.
+     */
     private static ComplexPolynomial polynomial;
+    /**
+     * Convergence threshold.
+     */
     private static final double CONV_THRESHOLD = 1E-3;
+    /**
+     * Closest root threshold.
+     */
     private static final double ROOT_THRESHOLD = 2E-3;
+    /**
+     * Maximum iteration count.
+     */
     private static final int MAX_ITERATIONS = 16 * 16 * 16;
 
+    /**
+     * Main entry point.
+     *
+     * @param args cl arguments
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to the Newton-Raphson iteration-based fractal viewer.");
         System.out.println("Please enter at least two roots, one root per line. Enter 'done' when done.");
@@ -60,17 +86,62 @@ public class Newton {
         FractalViewer.show(new FractalProducer());
     }
 
+    /**
+     * A single task that the thread needs to calculate - a band bound by a lower and upper y value.
+     *
+     * @author matej.
+     */
     public static class Task implements Callable<Void> {
+        /**
+         * Minimum real value.
+         */
         double reMin;
+        /**
+         * Maximum real value.
+         */
         double reMax;
+        /**
+         * Minimum imaginary value.
+         */
         double imMin;
+        /**
+         * Maximum imaginary value.
+         */
         double imMax;
+        /**
+         * Total width.
+         */
         int width;
+        /**
+         * Total height.
+         */
         int height;
+        /**
+         * Lower y bound.
+         */
         int yMin;
+        /**
+         * Upper y bound.
+         */
         int yMax;
+        /**
+         * Data.
+         */
         short[] data;
 
+        /**
+         * Constructor for the task
+         *
+         * @param reMin min real value
+         * @param reMax max real value
+         * @param imMin min imag value
+         * @param imMax max imag value
+         * @param width width
+         * @param height height
+         * @param yMin min y bound
+         * @param yMax max y bound
+         * @param data image data
+         */
         public Task(double reMin, double reMax, double imMin, double imMax,
                 int width, int height, int yMin, int yMax, short[] data) {
             this.reMin = reMin;
@@ -91,10 +162,24 @@ public class Newton {
         }
     }
 
+    /**
+     * Implementation of {@link IFractalProducer}.
+     *
+     * @author matej
+     */
     public static class FractalProducer implements IFractalProducer {
+        /**
+         * Thread pool.
+         */
         private ExecutorService pool;
+        /**
+         * Task count = 8 * available_processors.
+         */
         private static final int TASK_COUNT = Runtime.getRuntime().availableProcessors() * 8;
 
+        /**
+         * Constructor.
+         */
         FractalProducer() {
             this.pool = Executors.newFixedThreadPool(TASK_COUNT, r -> {
                 Thread t = new Thread(r);
@@ -133,6 +218,9 @@ public class Newton {
         }
     }
 
+    /**
+     * Fills the data array with calculated values.
+     */
     public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height, int
             yMin, int yMax, short[] data) {
         int offset = yMin * width;

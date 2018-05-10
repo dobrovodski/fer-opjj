@@ -286,7 +286,7 @@ public class RayCasterParallel {
      */
     private static void calculateSpecularComponent(short[] rgb, LightSource ls, RayIntersection s, Ray vRay) {
         Point3D l = s.getPoint().sub(ls.getPoint()).normalize();
-        Point3D n = s.getNormal().normalize();
+        Point3D n = s.getNormal();
 
         double ln = l.scalarProduct(n);
 
