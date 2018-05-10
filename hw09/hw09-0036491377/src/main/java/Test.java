@@ -4,8 +4,8 @@ import hr.fer.zemris.math.Vector3;
 
 public class Test {
     public static void main(String[] args) {
-        Vector3 i = new Vector3(1,0,0);
-        Vector3 j = new Vector3(0,1,0);
+        Vector3 i = new Vector3(1, 0, 0);
+        Vector3 j = new Vector3(0, 1, 0);
         Vector3 k = i.cross(j);
         Vector3 l = k.add(j).scale(5);
         Vector3 m = l.normalized();
@@ -16,7 +16,7 @@ public class Test {
         System.out.println(l.norm());
         System.out.println(m);
         System.out.println(l.dot(j));
-        System.out.println(i.add(new Vector3(0,1,0)).cosAngle(l));
+        System.out.println(i.add(new Vector3(0, 1, 0)).cosAngle(l));
 
         Complex c1 = new Complex(0, 1);
         c1.root(3);

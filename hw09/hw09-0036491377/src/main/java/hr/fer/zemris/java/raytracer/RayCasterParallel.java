@@ -9,12 +9,15 @@ import hr.fer.zemris.java.raytracer.model.RayIntersection;
 import hr.fer.zemris.java.raytracer.model.Scene;
 import hr.fer.zemris.java.raytracer.viewer.RayTracerViewer;
 
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+
 /**
  * This class performs and displays a ray casted scene using only a single thread.
  *
  * @author matej
  */
-public class RayCaster {
+public class RayCasterParallel {
     /**
      * Tolerance for comparing two intersections.
      */
@@ -31,6 +34,134 @@ public class RayCaster {
                 new Point3D(0, 0, 0),
                 new Point3D(0, 0, 10),
                 20, 20);
+    }
+
+    private static class Task extends RecursiveAction {
+
+        /**
+         * Fork threshold.
+         */
+        private final static int THRESHOLD = 16;
+
+        // screen information
+        /**
+         * Screen width.
+         */
+        private int width;
+        /**
+         * Screen height.
+         */
+        private int height;
+        /**
+         * Horizontal width of observed space.
+         */
+        private double horizontal;
+        /**
+         * Vertical height of observed space.
+         */
+        private double vertical;
+
+        // range to draw
+        /**
+         * Lower bound.
+         */
+        private int yMin;
+        /**
+         * Upper bound
+         */
+        private int yMax;
+
+        // scene information
+        /**
+         * Scene.
+         */
+        private Scene scene;
+        /**
+         * Screen corner.
+         */
+        private Point3D screenCorner;
+        /**
+         * Y axis direction vector.
+         */
+        private Point3D yAxis;
+        /**
+         * X axis direction vector.
+         */
+        private Point3D xAxis;
+        /**
+         * Observer position.
+         */
+        private Point3D eye;
+
+        // color data
+        /**
+         * Red component.
+         */
+        private short[] red;
+        /**
+         * Green component.
+         */
+        private short[] green;
+        /**
+         * Blue component.
+         */
+        private short[] blue;
+
+        private Task(int width, int height, double horizontal, double vertical, int yMin, int yMax, Scene scene,
+                Point3D screenCorner, Point3D yAxis, Point3D xAxis, Point3D eye, short[] red, short[] green, short[]
+                blue) {
+            this.width = width;
+            this.height = height;
+            this.horizontal = horizontal;
+            this.vertical = vertical;
+            this.yMin = yMin;
+            this.yMax = yMax;
+            this.scene = scene;
+            this.screenCorner = screenCorner;
+            this.yAxis = yAxis;
+            this.xAxis = xAxis;
+            this.eye = eye;
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+        }
+
+        @Override
+        protected void compute() {
+            if (yMax - yMin + 1 <= THRESHOLD) {
+                System.out.println(yMax);
+                System.out.println(yMin);
+                computeDirect();
+                return;
+            }
+            invokeAll(
+                    new Task(width, height, horizontal, vertical, yMin, yMin + (yMax - yMin) / 2, scene,
+                            screenCorner, yAxis, xAxis, eye, red, green, blue),
+                    new Task(width, height, horizontal, vertical, yMin + (yMax - yMin) / 2 + 1, yMax, scene,
+                            screenCorner, yAxis, xAxis, eye, red, green, blue)
+            );
+        }
+
+        private void computeDirect() {
+            short[] rgb = new short[3];
+            int offset = yMin * width;
+            for (int y = yMin; y <= yMax; y++) {
+                for (int x = 0; x < width; x++) {
+                    Point3D screenPoint = screenCorner.add(xAxis.scalarMultiply(horizontal * x / (width - 1)))
+                                                      .sub(yAxis.scalarMultiply(vertical * y / (height - 1)));
+
+                    Ray ray = Ray.fromPoints(eye, screenPoint);
+                    tracer(scene, ray, rgb);
+
+                    red[offset] = rgb[0] > 255 ? 255 : rgb[0];
+                    green[offset] = rgb[1] > 255 ? 255 : rgb[1];
+                    blue[offset] = rgb[2] > 255 ? 255 : rgb[2];
+
+                    offset++;
+                }
+            }
+        }
+
     }
 
     /**
@@ -61,24 +192,11 @@ public class RayCaster {
                                        .add(yAxis.scalarMultiply(vertical / 2));
             Scene scene = RayTracerViewer.createPredefinedScene();
 
-            short[] rgb = new short[3];
-            int offset = 0;
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    // position of point in the screen space
-                    Point3D screenPoint = screenCorner.add(xAxis.scalarMultiply(horizontal * x / (width - 1)))
-                                                      .sub(yAxis.scalarMultiply(vertical * y / (height - 1)));
 
-                    Ray ray = Ray.fromPoints(eye, screenPoint);
-                    tracer(scene, ray, rgb);
-
-                    red[offset] = rgb[0] > 255 ? 255 : rgb[0];
-                    green[offset] = rgb[1] > 255 ? 255 : rgb[1];
-                    blue[offset] = rgb[2] > 255 ? 255 : rgb[2];
-
-                    offset++;
-                }
-            }
+            ForkJoinPool pool = new ForkJoinPool();
+            pool.invoke(new Task(width, height, horizontal, vertical, 0, height - 1, scene, screenCorner, yAxis,
+                    xAxis, eye, red, green, blue));
+            pool.shutdown();
 
             System.out.println("Izračuni gotovi...");
             observer.acceptResult(red, green, blue, requestNo);

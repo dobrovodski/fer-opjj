@@ -83,8 +83,20 @@ public class Sphere extends GraphicalObject {
         );
     }
 
+    /**
+     * {@link RayIntersection} implementation.
+     *
+     * @author matej
+     */
     private class RayIntersectionImpl extends RayIntersection {
 
+        /**
+         * Constructor for RayIntersectionImpl.
+         *
+         * @param point point of intersection
+         * @param distance distance of intersection
+         * @param outer true if the intersection is on the outside of the object
+         */
         RayIntersectionImpl(Point3D point, double distance, boolean outer) {
             super(point, distance, outer);
         }
