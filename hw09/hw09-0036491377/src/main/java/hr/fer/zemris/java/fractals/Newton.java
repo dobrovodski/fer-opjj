@@ -246,11 +246,7 @@ public class Newton {
 
                 int index = rootedPolynomial.indexOfClosestRootFor(zn, ROOT_THRESHOLD);
 
-                if (index == -1) {
-                    data[offset++] = 0;
-                } else {
-                    data[offset++] = (short) (index + 1);
-                }
+                data[offset++] = (short) (index + 1);
             }
         }
     }

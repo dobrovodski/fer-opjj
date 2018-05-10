@@ -42,7 +42,7 @@ public class Sphere extends GraphicalObject {
      */
     private double krb;
     /**
-     * Reflection component coefficient.
+     * reflection component coefficient.
      */
     private double krn;
 
@@ -106,7 +106,7 @@ public class Sphere extends GraphicalObject {
         return new RayIntersectionImpl(
                 intersectionPoint,
                 x,
-                ray.start.sub(center).norm() < ray.start.sub(intersectionPoint).norm()
+                ray.start.sub(center).norm() > ray.start.sub(intersectionPoint).norm()
         );
     }
 
