@@ -69,7 +69,6 @@ public class Newton {
             try {
                 Complex c = Complex.fromString(root);
                 roots.add(c);
-                System.out.println(c);
             } catch (IllegalArgumentException ex) {
                 System.out.println("Could not parse as complex number: " + root);
                 continue;
