@@ -101,7 +101,7 @@ public class Complex {
      */
     public Complex divide(Complex other) {
         Objects.requireNonNull(other, "Other vector cannot be null.");
-        double divisor = other.modulus() * other.modulus();
+        double divisor = other.re * other.re + other.im * other.im;
         return new Complex((re * other.re + im * other.im) / divisor, (im * other.re - re * other.im) / divisor);
     }
 
@@ -262,5 +262,22 @@ public class Complex {
         }
 
         return new Complex(real, imaginary);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        final double EPS = 1E-6;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Complex complex = (Complex) o;
+        return Math.abs(complex.re - re) < EPS &&
+               Math.abs(complex.im - im) < EPS;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(re, im);
     }
 }
