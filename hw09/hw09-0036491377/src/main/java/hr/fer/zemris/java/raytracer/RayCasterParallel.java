@@ -134,8 +134,6 @@ public class RayCasterParallel {
         @Override
         protected void compute() {
             if (yMax - yMin + 1 <= THRESHOLD) {
-                System.out.println(yMax);
-                System.out.println(yMin);
                 computeDirect();
                 return;
             }
