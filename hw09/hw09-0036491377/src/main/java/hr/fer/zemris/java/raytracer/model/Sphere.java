@@ -9,14 +9,41 @@ import java.util.Objects;
  * @author matej
  */
 public class Sphere extends GraphicalObject {
+    /**
+     * Center of the sphere.
+     */
     private Point3D center;
+    /**
+     * Radius of the sphere.
+     */
     private double radius;
+    /**
+     * Diffuse component for the color red.
+     */
     private double kdr;
+    /**
+     * Diffuse component for the color green.
+     */
     private double kdg;
+    /**
+     * Diffuse component for the color blue.
+     */
     private double kdb;
+    /**
+     * Reflection component for the color red.
+     */
     private double krr;
+    /**
+     * Reflection component for the color green.
+     */
     private double krg;
+    /**
+     * Reflection component for the color blue.
+     */
     private double krb;
+    /**
+     * Reflection component coefficient.
+     */
     private double krn;
 
     /**
@@ -30,7 +57,7 @@ public class Sphere extends GraphicalObject {
      * @param krr reflection component for the color red
      * @param krg reflection component for the color green
      * @param krb reflection component for the color blue
-     * @param krn reflection component
+     * @param krn reflection component coefficient
      */
     public Sphere(Point3D center, double radius, double kdr, double kdg, double kdb, double krr, double krg, double
             krb, double krn) {
