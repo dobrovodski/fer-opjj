@@ -14,6 +14,7 @@ import java.util.List;
  * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
  *         tests </a>
  */
+
 public class ComplexTest {
     private final static double EPS = 1E-5;
     private Complex c1;

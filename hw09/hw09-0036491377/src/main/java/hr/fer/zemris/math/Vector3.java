@@ -1,5 +1,7 @@
 package hr.fer.zemris.math;
 
+import java.util.Objects;
+
 /**
  * This class represents a 3-dimensional vector and provides useful methods for performing unary and binary operations
  * using vectors.
@@ -58,8 +60,11 @@ public class Vector3 {
      * @param other other vector
      *
      * @return this and other added
+     *
+     * @throws NullPointerException if other is null.
      */
     public Vector3 add(Vector3 other) {
+        Objects.requireNonNull(other, "Other cannot be null.");
         return new Vector3(x + other.x, y + other.y, z + other.z);
     }
 
@@ -69,8 +74,11 @@ public class Vector3 {
      * @param other other vector
      *
      * @return this subtracted by other
+     *
+     * @throws NullPointerException if other is null.
      */
     public Vector3 sub(Vector3 other) {
+        Objects.requireNonNull(other, "Other cannot be null.");
         return new Vector3(x - other.x, y - other.y, z - other.z);
     }
 
@@ -80,6 +88,8 @@ public class Vector3 {
      * @param other other vector
      *
      * @return dot product of this vector and the given one
+     *
+     * @throws NullPointerException if other is null.
      */
     public double dot(Vector3 other) {
         return x * other.x + y * other.y + z * other.z;
@@ -91,6 +101,8 @@ public class Vector3 {
      * @param other other vector
      *
      * @return vector which is a cross product between this and other
+     *
+     * @throws NullPointerException if other is null.
      */
     public Vector3 cross(Vector3 other) {
         return new Vector3(
@@ -110,8 +122,11 @@ public class Vector3 {
      * @param other other vector
      *
      * @return cosine of the angle between this vector and the given one
+     *
+     * @throws NullPointerException if other is null.
      */
     public double cosAngle(Vector3 other) {
+        Objects.requireNonNull(other, "Other cannot be null.");
         return dot(other) / (norm() * other.norm());
     }
 
@@ -154,5 +169,23 @@ public class Vector3 {
     @Override
     public String toString() {
         return String.format("(%f, %f, %f)", x, y, z);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        final double EPS = 1E-6;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Vector3 vector3 = (Vector3) o;
+        return Math.abs(vector3.x - x) < EPS &&
+               Math.abs(vector3.y - y) < EPS &&
+               Math.abs(vector3.z - z) < EPS;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }

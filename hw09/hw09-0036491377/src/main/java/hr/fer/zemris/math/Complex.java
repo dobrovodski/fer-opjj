@@ -86,6 +86,8 @@ public class Complex {
      * @param other complex number to multiply with
      *
      * @return this and other multiplied together
+     *
+     * @throws NullPointerException if other is null.
      */
     public Complex multiply(Complex other) {
         Objects.requireNonNull(other, "Other vector cannot be null.");
@@ -98,6 +100,8 @@ public class Complex {
      * @param other complex number to divide with
      *
      * @return this divided by other
+     *
+     * @throws NullPointerException if other is null.
      */
     public Complex divide(Complex other) {
         Objects.requireNonNull(other, "Other vector cannot be null.");
@@ -111,6 +115,8 @@ public class Complex {
      * @param other complex number to add with
      *
      * @return this and other added together
+     *
+     * @throws NullPointerException if other is null.
      */
     public Complex add(Complex other) {
         Objects.requireNonNull(other, "Other vector cannot be null.");
@@ -123,6 +129,8 @@ public class Complex {
      * @param other complex number to subtract from this
      *
      * @return this subtracted by other
+     *
+     * @throws NullPointerException if other is null.
      */
     public Complex sub(Complex other) {
         Objects.requireNonNull(other, "Other vector cannot be null.");
@@ -201,6 +209,9 @@ public class Complex {
      * @param str complex number to multiply with
      *
      * @return this and other multiplied together
+     *
+     * @throws NullPointerException if str is null.
+     * @throws IllegalArgumentException if str is empty or if it couldn't be parsed as complex numbed.
      */
     public static Complex fromString(String str) {
         Objects.requireNonNull(str, "String cannot be null.");
