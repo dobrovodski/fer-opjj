@@ -45,6 +45,16 @@ public class Vector3Test {
     }
 
     @Test
+    public void Sub_RegularVectors_Correct() {
+        Assert.assertEquals(v1.sub(v2), new Vector3(6.4, 6, -5.24));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void Sub_Null_ExceptionThrown() {
+        v1.sub(null);
+    }
+
+    @Test
     public void Dot_RegularVectors_Correct() {
         Assert.assertEquals(v1.dot(v2), 22.572, EPS);
     }
