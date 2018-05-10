@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 
 /**
  * This class is used to demonstrate Newton-Raphson fractal generation. The user provides complex-valued roots of a
@@ -142,8 +141,8 @@ public class Newton {
          * @param yMax max y bound
          * @param data image data
          */
-        public Task(double reMin, double reMax, double imMin, double imMax,
-                int width, int height, int yMin, int yMax, short[] data) {
+        public Task(double reMin, double reMax, double imMin, double imMax, int width, int height, int yMin, int yMax,
+                short[] data) {
             this.reMin = reMin;
             this.reMax = reMax;
             this.imMin = imMin;
@@ -189,8 +188,8 @@ public class Newton {
         }
 
         @Override
-        public void produce(double reMin, double reMax, double imMin, double imMax,
-                int width, int height, long requestNo, IFractalResultObserver observer) {
+        public void produce(double reMin, double reMax, double imMin, double imMax, int width, int height,
+                long requestNo, IFractalResultObserver observer) {
 
             short[] data = new short[width * height];
             List<Future<Void>> results = new ArrayList<>();
@@ -220,9 +219,19 @@ public class Newton {
 
     /**
      * Fills the data array with calculated values.
+     *
+     * @param reMin min real value
+     * @param reMax max real value
+     * @param imMin min imag value
+     * @param imMax max imag value
+     * @param width width
+     * @param height height
+     * @param yMin min y bound
+     * @param yMax max y bound
+     * @param data image data
      */
-    public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height, int
-            yMin, int yMax, short[] data) {
+    public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height,
+            int yMin, int yMax, short[] data) {
         int offset = yMin * width;
 
         for (int y = yMin; y <= yMax; y++) {

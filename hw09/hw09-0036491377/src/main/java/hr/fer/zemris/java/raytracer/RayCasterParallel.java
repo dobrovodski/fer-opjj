@@ -39,6 +39,11 @@ public class RayCasterParallel {
     private static class Task extends RecursiveAction {
 
         /**
+		 * Default serial version UID.
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
          * Fork threshold.
          */
         private final static int THRESHOLD = 16;

@@ -112,6 +112,13 @@ public class Vector3 {
         );
     }
 
+    /**
+     * Creates a vector which is the result of scaling this vector with the given scalar.
+     *
+     * @param s scalar to scale with
+     *
+     * @return resulting vector after scaling
+     */
     public Vector3 scale(double s) {
         return new Vector3(x * s, y * s, z * s);
     }
