@@ -10,6 +10,7 @@ public class CalcLayout implements LayoutManager2 {
 
     private static final int ROW_COUNT = 5;
     private static final int COLUMN_COUNT = 7;
+    private static final int FIRST_ELEMENT_WIDTH = 5;
 
     private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
     private int spacing;
@@ -45,8 +46,7 @@ public class CalcLayout implements LayoutManager2 {
     private void updatePreferredSize(Component newest, RCPosition constraints) {
         Dimension newestDim = newest.getPreferredSize();
         if (preferredSize == null) {
-            preferredSize = new Dimension(newestDim);
-            return;
+            preferredSize = new Dimension();
         }
 
         preferredSize.height = preferredSize.height > newestDim.height ? preferredSize.height : newestDim.height;
@@ -126,7 +126,30 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public Dimension preferredLayoutSize(Container parent) {
-        return null;
+        Insets insets = parent.getInsets();
+        int insetWidth = insets.left + insets.right;
+        int insetHeight = insets.top + insets.bottom;
+        int gapWidth = (COLUMN_COUNT - 1) * spacing;
+        int gapHeight = (ROW_COUNT - 1) * spacing;
+        int componentHeight = ROW_COUNT * preferredSize.height;
+
+        Component first = components[0][0];
+        int firstWidth = 0;
+        if (first != null) {
+            firstWidth = first.getPreferredSize().width;
+        }
+
+        int componentWidth;
+        if (firstWidth > FIRST_ELEMENT_WIDTH * preferredSize.width) {
+            componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * preferredSize.width;
+        } else {
+            componentWidth = COLUMN_COUNT * preferredSize.width;
+        }
+
+        int totalWidth = insetWidth + gapWidth + componentWidth;
+        int totalHeight = insetHeight + gapHeight + componentHeight;
+
+        return new Dimension(totalWidth, totalHeight);
     }
 
     @Override
