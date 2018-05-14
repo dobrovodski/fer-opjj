@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.gui.layouts;
 
+import java.util.Objects;
+
 public class RCPosition {
     private int row;
     private int column;
@@ -15,5 +17,21 @@ public class RCPosition {
 
     public int getColumn() {
         return column;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        RCPosition that = (RCPosition) o;
+        return row == that.row &&
+               column == that.column;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, column);
     }
 }

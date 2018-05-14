@@ -1,11 +1,10 @@
 package hr.fer.zemris.java.gui.layouts;
 
 import java.awt.*;
+import java.util.Hashtable;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CalcLayout implements LayoutManager2 {
 
@@ -13,7 +12,9 @@ public class CalcLayout implements LayoutManager2 {
     private static final int COLUMN_COUNT = 7;
     private static final int FIRST_ELEMENT_WIDTH = 5;
 
-    private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
+    //private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
+    private Hashtable<Component, RCPosition> components = new Hashtable<>();
+    Component first;
     private int spacing;
 
     public CalcLayout(int spacing) {
@@ -66,11 +67,15 @@ public class CalcLayout implements LayoutManager2 {
             throw new CalcLayoutException("The first row only accepts columns 1, 6 and 7.");
         }
 
-        if (components[row - 1][column - 1] != null) {
+        if (components.containsValue(pos)) {
             throw new CalcLayoutException("There cannot be two components with the same constraints.");
         }
 
-        components[row - 1][column - 1] = comp;
+        if (row == 1 && column == 1) {
+            first = comp;
+        }
+
+        components.put(comp, pos);
     }
 
     @Override
@@ -85,7 +90,7 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void invalidateLayout(Container target) {
-        components = new Component[ROW_COUNT][COLUMN_COUNT];
+        components = new Hashtable<>();
     }
 
     @Override
@@ -95,13 +100,7 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void removeLayoutComponent(Component comp) {
-        for (int i = 0; i < components.length; i++) {
-            for (int j = 0; j < components[i].length; j++) {
-                if (components[i][j] == comp) {
-                    components[i][j] = null;
-                }
-            }
-        }
+        components.remove(comp);
     }
 
     @Override
@@ -129,30 +128,28 @@ public class CalcLayout implements LayoutManager2 {
 
         int w = -1;
         int h = -1;
-        Component firstComponent = components[0][0];
-        for (Component[] componentRow : components) {
-            for (Component component : componentRow) {
-                if (component == null || component == firstComponent) {
-                    continue;
-                }
+        Component firstComponent = first;
+        for (Component component : components.keySet()) {
+            if (component == null || component == firstComponent) {
+                continue;
+            }
 
-                Dimension dimension = getSize.apply(component);
-                // Some components might not care about its size and will return null
-                if (dimension == null) {
-                    continue;
-                }
+            Dimension dimension = getSize.apply(component);
+            // Some components might not care about its size and will return null
+            if (dimension == null) {
+                continue;
+            }
 
-                if (w == -1) { // Forcibly set width to the first width you see
-                    w = dimension.width;
-                } else {
-                    w = predicate.apply(dimension.width, w);
-                }
+            if (w == -1) { // Forcibly set width to the first width you see
+                w = dimension.width;
+            } else {
+                w = predicate.apply(dimension.width, w);
+            }
 
-                if (h == -1) { // Forcibly set height to the first height you see
-                    h = dimension.height;
-                } else {
-                    h = predicate.apply(dimension.height, h);
-                }
+            if (h == -1) { // Forcibly set height to the first height you see
+                h = dimension.height;
+            } else {
+                h = predicate.apply(dimension.height, h);
             }
         }
 
@@ -185,5 +182,9 @@ public class CalcLayout implements LayoutManager2 {
     @Override
     public void layoutContainer(Container parent) {
         Insets insets = parent.getInsets();
+        Hashtable<Component, RCPosition> ht = new Hashtable<>();
+        for (Component component : components.keySet()) {
+
+        }
     }
 }
