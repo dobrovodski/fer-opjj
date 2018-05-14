@@ -182,9 +182,19 @@ public class CalcLayout implements LayoutManager2 {
     @Override
     public void layoutContainer(Container parent) {
         Insets insets = parent.getInsets();
-        Hashtable<Component, RCPosition> ht = new Hashtable<>();
-        for (Component component : components.keySet()) {
+        Dimension size = parent.getSize();
+        int w = size.width - insets.left - insets.right;
+        int h = size.height - insets.top - insets.bottom;
+        for (Component component : parent.getComponents()) {
+            RCPosition pos = components.get(component);
+            if (pos == null) {
+                continue;
+            }
 
+            int x = 0;
+            int y = 0;
+            int cw = 0;
+            int ch = 0;
         }
     }
 }
