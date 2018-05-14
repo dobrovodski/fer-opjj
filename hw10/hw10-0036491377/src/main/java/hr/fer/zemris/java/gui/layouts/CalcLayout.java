@@ -16,8 +16,6 @@ public class CalcLayout implements LayoutManager2 {
     private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
     private int spacing;
 
-    private Dimension preferredSize = new Dimension();
-
     public CalcLayout(int spacing) {
         if (spacing < 0) {
             throw new IllegalArgumentException("The gap between elements must be a positive number");
@@ -42,15 +40,6 @@ public class CalcLayout implements LayoutManager2 {
         }
 
         return new RCPosition(pos[0], pos[1]);
-    }
-
-    private void updatePreferredSize(Component newest, RCPosition constraints) {
-        Dimension newestDim = newest.getPreferredSize();
-
-        preferredSize.height = Math.max(preferredSize.height, newestDim.height);
-        if (!(constraints.getColumn() == 1 && constraints.getColumn() == 1)) {
-            preferredSize.width = Math.max(preferredSize.width, newestDim.width);
-        }
     }
 
     @Override
@@ -81,7 +70,6 @@ public class CalcLayout implements LayoutManager2 {
             throw new CalcLayoutException("There cannot be two components with the same constraints.");
         }
 
-        updatePreferredSize(comp, pos);
         components[row - 1][column - 1] = comp;
     }
 
@@ -98,7 +86,6 @@ public class CalcLayout implements LayoutManager2 {
     @Override
     public void invalidateLayout(Container target) {
         components = new Component[ROW_COUNT][COLUMN_COUNT];
-        preferredSize = new Dimension();
     }
 
     @Override
