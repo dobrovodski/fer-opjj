@@ -90,11 +90,12 @@ public class CalcLayout implements LayoutManager2 {
     @Override
     public void invalidateLayout(Container target) {
         components = new Hashtable<>();
+        first = null;
     }
 
     @Override
     public void addLayoutComponent(String name, Component comp) {
-
+        // Does nothing
     }
 
     @Override
@@ -193,8 +194,8 @@ public class CalcLayout implements LayoutManager2 {
             int x = w / COLUMN_COUNT * pos.getColumn();
             int y = h / ROW_COUNT * pos.getRow();
 
-            int cw;
             int ch = h / COLUMN_COUNT - spacing;
+            int cw;
             if (component == first) {
                 cw = w / COLUMN_COUNT * FIRST_ELEMENT_WIDTH - spacing;
             } else {
