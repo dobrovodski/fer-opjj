@@ -1,10 +1,10 @@
 package hr.fer.zemris.java.gui.layouts;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class CalcLayout implements LayoutManager2 {
 
@@ -15,7 +15,7 @@ public class CalcLayout implements LayoutManager2 {
     private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
     private int spacing;
 
-    private Dimension preferredSize;
+    private Dimension preferredSize = new Dimension();
 
     public CalcLayout(int spacing) {
         if (spacing < 0) {
@@ -45,13 +45,10 @@ public class CalcLayout implements LayoutManager2 {
 
     private void updatePreferredSize(Component newest, RCPosition constraints) {
         Dimension newestDim = newest.getPreferredSize();
-        if (preferredSize == null) {
-            preferredSize = new Dimension();
-        }
 
-        preferredSize.height = preferredSize.height > newestDim.height ? preferredSize.height : newestDim.height;
+        preferredSize.height = Math.max(preferredSize.height, newestDim.height);
         if (!(constraints.getColumn() == 1 && constraints.getColumn() == 1)) {
-            preferredSize.width = preferredSize.width > newestDim.width ? preferredSize.width : newestDim.width;
+            preferredSize.width = Math.max(preferredSize.width, newestDim.width);
         }
     }
 
@@ -88,11 +85,6 @@ public class CalcLayout implements LayoutManager2 {
     }
 
     @Override
-    public Dimension maximumLayoutSize(Container target) {
-        return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    }
-
-    @Override
     public float getLayoutAlignmentX(Container target) {
         return 0.5f;
     }
@@ -105,7 +97,7 @@ public class CalcLayout implements LayoutManager2 {
     @Override
     public void invalidateLayout(Container target) {
         components = new Component[ROW_COUNT][COLUMN_COUNT];
-        preferredSize = null;
+        preferredSize = new Dimension();
     }
 
     @Override
@@ -126,7 +118,8 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public Dimension preferredLayoutSize(Container parent) {
-        Insets insets = parent.getInsets();
+        return layoutSize(parent, Math::max);
+        /*Insets insets = parent.getInsets();
         int insetWidth = insets.left + insets.right;
         int insetHeight = insets.top + insets.bottom;
         int gapWidth = (COLUMN_COUNT - 1) * spacing;
@@ -149,12 +142,130 @@ public class CalcLayout implements LayoutManager2 {
         int totalWidth = insetWidth + gapWidth + componentWidth;
         int totalHeight = insetHeight + gapHeight + componentHeight;
 
-        return new Dimension(totalWidth, totalHeight);
+        return new Dimension(totalWidth, totalHeight);*/
     }
 
     @Override
     public Dimension minimumLayoutSize(Container parent) {
-        return null;
+        Insets insets = parent.getInsets();
+        int insetWidth = insets.left + insets.right;
+        int insetHeight = insets.top + insets.bottom;
+        int gapWidth = (COLUMN_COUNT - 1) * spacing;
+        int gapHeight = (ROW_COUNT - 1) * spacing;
+
+
+        Component first = components[0][0];
+        int firstWidth = 0;
+        if (first != null) {
+            firstWidth = first.getPreferredSize().width;
+        }
+
+        int w = -1;
+        int h = -1;
+        for (Component[] componentRow : components) {
+            for (Component component : componentRow) {
+                if (component == null) {
+                    continue;
+                }
+                Dimension dim = component.getPreferredSize();
+                if (dim == null) {
+                    continue;
+                }
+
+                if (w == -1) {
+                    w = dim.width;
+                } else {
+                    w = Math.max(dim.width, w);
+                }
+
+                if (h == -1) {
+                    h = dim.height;
+                } else {
+                    h = Math.max(dim.height, h);
+                }
+            }
+        }
+
+        int componentHeight = ROW_COUNT * h;
+        int componentWidth;
+        if (firstWidth > FIRST_ELEMENT_WIDTH * w) {
+            componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * w;
+        } else {
+            componentWidth = COLUMN_COUNT * w;
+        }
+
+        int totalWidth = insetWidth + gapWidth + componentWidth;
+        int totalHeight = insetHeight + gapHeight + componentHeight;
+
+        return new Dimension(totalWidth, totalHeight);
+    }
+
+    @Override
+    public Dimension maximumLayoutSize(Container target) {
+        return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    public Dimension layoutSize(Container container, BiFunction<Integer, Integer, Integer> predicate) {
+        Insets insets = container.getInsets();
+        int insetWidth = insets.left + insets.right;
+        int insetHeight = insets.top + insets.bottom;
+        int gapWidth = (COLUMN_COUNT - 1) * spacing;
+        int gapHeight = (ROW_COUNT - 1) * spacing;
+
+        Component first = components[0][0];
+        int firstWidth = 0;
+        if (first != null) {
+            firstWidth = first.getPreferredSize().width;
+        }
+
+        int w = -1;
+        int h = -1;
+
+        for (Component[] componentRow : components) {
+            for (Component component : componentRow) {
+                if (component == null || component == first) {
+                    continue;
+                }
+
+                Dimension dim = component.getPreferredSize();
+                if (dim == null) {
+                    continue;
+                }
+
+                if (w == -1) {
+                    w = dim.width;
+                } else {
+                    w = predicate.apply(dim.width, w);
+                }
+
+                if (h == -1) {
+                    h = dim.height;
+                } else {
+                    h = predicate.apply(dim.height, h);
+                }
+            }
+        }
+
+        int componentHeight = ROW_COUNT * h;
+        int componentWidth;
+        if (firstWidth >= FIRST_ELEMENT_WIDTH * w) {
+            componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * w;
+        } else {
+            componentWidth = COLUMN_COUNT * w;
+        }
+
+        if (w == -1) {
+            componentWidth = 0;
+        }
+
+        if (h == -1) {
+            componentHeight = 0;
+        }
+
+        int totalWidth = insetWidth + gapWidth + componentWidth;
+        int totalHeight = insetHeight + gapHeight + componentHeight;
+
+        return new Dimension(totalWidth, totalHeight);
     }
 
     @Override
