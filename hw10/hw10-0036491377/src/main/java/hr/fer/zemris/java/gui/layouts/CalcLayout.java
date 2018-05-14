@@ -12,9 +12,8 @@ public class CalcLayout implements LayoutManager2 {
     private static final int COLUMN_COUNT = 7;
     private static final int FIRST_ELEMENT_WIDTH = 5;
 
-    //private Component[][] components = new Component[ROW_COUNT][COLUMN_COUNT];
     private Hashtable<Component, RCPosition> components = new Hashtable<>();
-    Component first;
+    private Component first;
     private int spacing;
 
     public CalcLayout(int spacing) {
@@ -153,6 +152,10 @@ public class CalcLayout implements LayoutManager2 {
             }
         }
 
+        if (w == -1 && h == -1) {
+            return null;
+        }
+
         int componentHeight = ROW_COUNT * h;
         int componentWidth;
 
@@ -163,15 +166,10 @@ public class CalcLayout implements LayoutManager2 {
         if (firstComponent != null) {
             firstWidth = getSize.apply(firstComponent).width;
         }
-
         if (firstWidth >= FIRST_ELEMENT_WIDTH * w) {
             componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * w;
         } else {
             componentWidth = COLUMN_COUNT * w;
-        }
-
-        if (w == -1 && h == -1) {
-            return null;
         }
 
         int totalWidth = insetWidth + gapWidth + componentWidth;
@@ -185,16 +183,25 @@ public class CalcLayout implements LayoutManager2 {
         Dimension size = parent.getSize();
         int w = size.width - insets.left - insets.right;
         int h = size.height - insets.top - insets.bottom;
+
         for (Component component : parent.getComponents()) {
             RCPosition pos = components.get(component);
             if (pos == null) {
                 continue;
             }
 
-            int x = 0;
-            int y = 0;
-            int cw = 0;
-            int ch = 0;
+            int x = w / COLUMN_COUNT * pos.getColumn();
+            int y = h / ROW_COUNT * pos.getRow();
+
+            int cw;
+            int ch = h / COLUMN_COUNT - spacing;
+            if (component == first) {
+                cw = w / COLUMN_COUNT * FIRST_ELEMENT_WIDTH - spacing;
+            } else {
+                cw = w / COLUMN_COUNT - spacing;
+            }
+
+            component.setBounds(x, y, cw, ch);
         }
     }
 }
