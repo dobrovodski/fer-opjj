@@ -58,11 +58,11 @@ public class CalcLayout implements LayoutManager2 {
         int row = pos.getRow();
         int column = pos.getColumn();
 
-        if (row < 1 || row > 5 || column < 1 || column > 7) {
+        if (row < 1 || row > ROW_COUNT || column < 1 || column > COLUMN_COUNT) {
             throw new CalcLayoutException("Constraints must be within the boundaries [1, 5]x[1, 7].");
         }
 
-        if (row == 1 && (column > 1 && column < 6)) {
+        if (row == 1 && (column > 1 && column < FIRST_ELEMENT_WIDTH + 1)) {
             throw new CalcLayoutException("The first row only accepts columns 1, 6 and 7.");
         }
 
