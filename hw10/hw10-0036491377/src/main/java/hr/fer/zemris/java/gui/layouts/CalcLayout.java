@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CalcLayout implements LayoutManager2 {
@@ -118,153 +119,79 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public Dimension preferredLayoutSize(Container parent) {
-        return layoutSize(parent, Math::max);
-        /*Insets insets = parent.getInsets();
-        int insetWidth = insets.left + insets.right;
-        int insetHeight = insets.top + insets.bottom;
-        int gapWidth = (COLUMN_COUNT - 1) * spacing;
-        int gapHeight = (ROW_COUNT - 1) * spacing;
-        int componentHeight = ROW_COUNT * preferredSize.height;
-
-        Component first = components[0][0];
-        int firstWidth = 0;
-        if (first != null) {
-            firstWidth = first.getPreferredSize().width;
-        }
-
-        int componentWidth;
-        if (firstWidth > FIRST_ELEMENT_WIDTH * preferredSize.width) {
-            componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * preferredSize.width;
-        } else {
-            componentWidth = COLUMN_COUNT * preferredSize.width;
-        }
-
-        int totalWidth = insetWidth + gapWidth + componentWidth;
-        int totalHeight = insetHeight + gapHeight + componentHeight;
-
-        return new Dimension(totalWidth, totalHeight);*/
+        return layoutSize(parent, Math::max, Component::getPreferredSize);
     }
 
     @Override
     public Dimension minimumLayoutSize(Container parent) {
-        Insets insets = parent.getInsets();
-        int insetWidth = insets.left + insets.right;
-        int insetHeight = insets.top + insets.bottom;
-        int gapWidth = (COLUMN_COUNT - 1) * spacing;
-        int gapHeight = (ROW_COUNT - 1) * spacing;
-
-
-        Component first = components[0][0];
-        int firstWidth = 0;
-        if (first != null) {
-            firstWidth = first.getPreferredSize().width;
-        }
-
-        int w = -1;
-        int h = -1;
-        for (Component[] componentRow : components) {
-            for (Component component : componentRow) {
-                if (component == null) {
-                    continue;
-                }
-                Dimension dim = component.getPreferredSize();
-                if (dim == null) {
-                    continue;
-                }
-
-                if (w == -1) {
-                    w = dim.width;
-                } else {
-                    w = Math.max(dim.width, w);
-                }
-
-                if (h == -1) {
-                    h = dim.height;
-                } else {
-                    h = Math.max(dim.height, h);
-                }
-            }
-        }
-
-        int componentHeight = ROW_COUNT * h;
-        int componentWidth;
-        if (firstWidth > FIRST_ELEMENT_WIDTH * w) {
-            componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * w;
-        } else {
-            componentWidth = COLUMN_COUNT * w;
-        }
-
-        int totalWidth = insetWidth + gapWidth + componentWidth;
-        int totalHeight = insetHeight + gapHeight + componentHeight;
-
-        return new Dimension(totalWidth, totalHeight);
+        return layoutSize(parent, Math::max, Component::getMinimumSize);
     }
 
     @Override
     public Dimension maximumLayoutSize(Container target) {
-        return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        return layoutSize(target, Math::min, Component::getMaximumSize);
     }
 
-    public Dimension layoutSize(Container container, BiFunction<Integer, Integer, Integer> predicate) {
+    public Dimension layoutSize(Container container, BiFunction<Integer, Integer, Integer> predicate,
+            Function<Component, Dimension> getSize) {
         Insets insets = container.getInsets();
         int insetWidth = insets.left + insets.right;
         int insetHeight = insets.top + insets.bottom;
         int gapWidth = (COLUMN_COUNT - 1) * spacing;
         int gapHeight = (ROW_COUNT - 1) * spacing;
 
-        Component first = components[0][0];
-        int firstWidth = 0;
-        if (first != null) {
-            firstWidth = first.getPreferredSize().width;
-        }
-
         int w = -1;
         int h = -1;
-
+        Component firstComponent = components[0][0];
         for (Component[] componentRow : components) {
             for (Component component : componentRow) {
-                if (component == null || component == first) {
+                if (component == null || component == firstComponent) {
                     continue;
                 }
 
-                Dimension dim = component.getPreferredSize();
-                if (dim == null) {
+                Dimension dimension = getSize.apply(component);
+                // Some components might not care about its size and will return null
+                if (dimension == null) {
                     continue;
                 }
 
-                if (w == -1) {
-                    w = dim.width;
+                if (w == -1) { // Forcibly set width to the first width you see
+                    w = dimension.width;
                 } else {
-                    w = predicate.apply(dim.width, w);
+                    w = predicate.apply(dimension.width, w);
                 }
 
-                if (h == -1) {
-                    h = dim.height;
+                if (h == -1) { // Forcibly set height to the first height you see
+                    h = dimension.height;
                 } else {
-                    h = predicate.apply(dim.height, h);
+                    h = predicate.apply(dimension.height, h);
                 }
             }
         }
 
         int componentHeight = ROW_COUNT * h;
         int componentWidth;
+
+        // In case the (1, 1) component exists, get its width to check total component width
+        // Total component width will either be (first width) + (number of leftover components * size)
+        // or it can be
+        int firstWidth = 0;
+        if (firstComponent != null) {
+            firstWidth = getSize.apply(firstComponent).width;
+        }
+
         if (firstWidth >= FIRST_ELEMENT_WIDTH * w) {
             componentWidth = firstWidth + (COLUMN_COUNT - FIRST_ELEMENT_WIDTH) * w;
         } else {
             componentWidth = COLUMN_COUNT * w;
         }
 
-        if (w == -1) {
-            componentWidth = 0;
-        }
-
-        if (h == -1) {
-            componentHeight = 0;
+        if (w == -1 && h == -1) {
+            return null;
         }
 
         int totalWidth = insetWidth + gapWidth + componentWidth;
         int totalHeight = insetHeight + gapHeight + componentHeight;
-
         return new Dimension(totalWidth, totalHeight);
     }
 
