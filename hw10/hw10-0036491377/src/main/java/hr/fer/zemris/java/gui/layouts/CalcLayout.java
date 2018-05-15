@@ -89,8 +89,6 @@ public class CalcLayout implements LayoutManager2 {
 
     @Override
     public void invalidateLayout(Container target) {
-        components = new Hashtable<>();
-        first = null;
     }
 
     @Override
@@ -191,10 +189,10 @@ public class CalcLayout implements LayoutManager2 {
                 continue;
             }
 
-            int x = w / COLUMN_COUNT * pos.getColumn();
-            int y = h / ROW_COUNT * pos.getRow();
+            int x = w / COLUMN_COUNT * (pos.getColumn() - 1);
+            int y = h / ROW_COUNT * (pos.getRow() - 1);
 
-            int ch = h / COLUMN_COUNT - spacing;
+            int ch = h / ROW_COUNT - spacing;
             int cw;
             if (component == first) {
                 cw = w / COLUMN_COUNT * FIRST_ELEMENT_WIDTH - spacing;

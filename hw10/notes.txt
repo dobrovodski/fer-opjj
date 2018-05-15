@@ -1,0 +1,12 @@
+- binary op buttons: +, -, *, /, x^n
+- unary op buttons: 1/x, log, sin, cos, ln, tan, ctg, =, push, pop
+- special buttons: ., +/-, clr, res
+- checkbox: inv
+- label: screen
+
+
+- invertible: log, sin, cos, tan, ctg, ln, x^n
+- non-invertible: 1/x, push, pop, =, +, -, *, /
+
+- unary: log, sin, cos, tan, ctg, push, pop, =, 1/x
+- binary: +, -, *, /, x^n

@@ -8,7 +8,7 @@ public class CalcModelImpl implements CalcModel {
     private List<CalcValueListener> listeners = new ArrayList<>();
     private Double activeOperand;
     private DoubleBinaryOperator pendingOperation;
-    private String digit;
+    private String digit = "";
 
     @Override
     public void addCalcValueListener(CalcValueListener l) {
@@ -22,7 +22,7 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public double getValue() {
-        if (digit == null) {
+        if (digit.isEmpty()) {
             return 0.0;
         }
 
@@ -36,11 +36,15 @@ public class CalcModelImpl implements CalcModel {
         }
 
         digit = String.valueOf(value);
+        digit = toString();
+
+        notifyListeners();
     }
 
     @Override
     public void clear() {
-        digit = null;
+        digit = "";
+        notifyListeners();
     }
 
     @Override
@@ -48,12 +52,11 @@ public class CalcModelImpl implements CalcModel {
         clear();
         clearActiveOperand();
         pendingOperation = null;
-        listeners.clear();
     }
 
     @Override
     public void swapSign() {
-        if (digit == null) {
+        if (digit.isEmpty()) {
             return;
         }
 
@@ -62,23 +65,28 @@ public class CalcModelImpl implements CalcModel {
         } else {
             digit = '-' + digit;
         }
+
+        notifyListeners();
     }
 
     @Override
     public void insertDecimalPoint() {
-        if (digit == null) {
+        if (digit.isEmpty()) {
             insertDigit(0);
         }
         if (digit.indexOf('.') != -1) {
             return;
         }
         digit += '.';
+
+        notifyListeners();
     }
 
     @Override
     public void insertDigit(int digit) {
-        if (this.digit == null) {
+        if (this.digit.isEmpty()) {
             this.digit = String.valueOf(digit);
+            notifyListeners();
             return;
         }
 
@@ -88,6 +96,7 @@ public class CalcModelImpl implements CalcModel {
         }
 
         this.digit = concatenated;
+        notifyListeners();
     }
 
     @Override
@@ -126,7 +135,7 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public String toString() {
-        if (digit == null) {
+        if (digit.isEmpty()) {
             return "0";
         }
 
