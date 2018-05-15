@@ -13,7 +13,7 @@ public class CalcModelTest {
 
     private static CalcModel newCalcModel() {
         // Zamijenite ovo tako da vraća primjerak Vaše implementacije modela.
-        return new DummyCalcModel();
+        return new CalcModelImpl();
     }
 
     @Before
@@ -194,91 +194,5 @@ public class CalcModelTest {
 
         assertEquals(34.0, model.getValue(), 1E-10);
         assertEquals("34", model.toString());
-    }
-
-    private static class DummyCalcModel implements CalcModel {
-
-        @Override
-        public void addCalcValueListener(CalcValueListener l) {
-            notimp();
-        }
-
-        @Override
-        public void removeCalcValueListener(CalcValueListener l) {
-            notimp();
-        }
-
-        @Override
-        public double getValue() {
-            notimp();
-            return 0;
-        }
-
-        @Override
-        public void setValue(double value) {
-            notimp();
-        }
-
-        @Override
-        public void clear() {
-            notimp();
-        }
-
-        @Override
-        public void clearAll() {
-            notimp();
-        }
-
-        @Override
-        public void swapSign() {
-            notimp();
-        }
-
-        @Override
-        public void insertDecimalPoint() {
-            notimp();
-        }
-
-        @Override
-        public void insertDigit(int digit) {
-            notimp();
-        }
-
-        @Override
-        public boolean isActiveOperandSet() {
-            notimp();
-            return false;
-        }
-
-        @Override
-        public double getActiveOperand() {
-            notimp();
-            return 0;
-        }
-
-        @Override
-        public void setActiveOperand(double activeOperand) {
-            notimp();
-        }
-
-        @Override
-        public void clearActiveOperand() {
-            notimp();
-        }
-
-        @Override
-        public DoubleBinaryOperator getPendingBinaryOperation() {
-            notimp();
-            return null;
-        }
-
-        @Override
-        public void setPendingBinaryOperation(DoubleBinaryOperator op) {
-            notimp();
-        }
-
-        private void notimp() {
-            throw new UnsupportedOperationException("Method is not implemented yet!");
-        }
     }
 }
