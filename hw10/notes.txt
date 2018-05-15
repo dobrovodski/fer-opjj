@@ -11,3 +11,4 @@
 - unary: log, sin, cos, tan, ctg, push, pop, =, 1/x
 - binary: +, -, *, /, x^n
 
+- 58,+ --> setActiveOperand(58), setPendingBinaryOperation(+), clear value (but not screen!!!)

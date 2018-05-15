@@ -86,7 +86,7 @@ public class Calculator extends JFrame {
             }
 
             double operand = m.getActiveOperand();
-            double result  = op.applyAsDouble(operand, m.getValue());
+            double result = op.applyAsDouble(operand, m.getValue());
 
             m.setValue(result);
             m.clearActiveOperand();
@@ -100,8 +100,7 @@ public class Calculator extends JFrame {
                 return;
             }
 
-            String s = stack.pop();
-            x.setValue(Double.parseDouble(s));
+            x.setValue(Double.parseDouble(stack.pop()));
         }), 4, 7);
 
         // Inverting checkbox
@@ -115,6 +114,7 @@ public class Calculator extends JFrame {
     }
 
     private void addButton(Container pane, CalcButton btn, int row, int col) {
+        btn.setMinimumSize(new Dimension(20, 20));
         btn.addActionListener(e -> {
             try {
                 btn.action(model);
