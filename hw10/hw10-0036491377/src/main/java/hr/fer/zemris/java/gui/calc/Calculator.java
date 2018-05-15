@@ -23,7 +23,6 @@ public class Calculator extends JFrame {
     private boolean uninverted = true;
     private Stack<String> stack = new Stack<>();
 
-
     public static void main(String[] args) {
         new Calculator();
     }
@@ -89,8 +88,9 @@ public class Calculator extends JFrame {
             double operand = m.getActiveOperand();
             double result  = op.applyAsDouble(operand, m.getValue());
 
-            m.setActiveOperand(result);
             m.setValue(result);
+            m.clearActiveOperand();
+            m.setPendingBinaryOperation(null);
         }), 1, 6);
 
         addButton(cp, new ActionButton("push", x -> stack.push(x.toString())), 3, 7);

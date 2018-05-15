@@ -40,9 +40,6 @@ public class CalcModelImpl implements CalcModel {
         }
 
         digit = String.valueOf(value);
-        if (digit.indexOf('.') != -1 && value % 1 == 0) {
-            //digit = digit.substring(0, digit.indexOf('.'));
-        }
         notifyListeners();
     }
 
@@ -89,6 +86,11 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public void insertDigit(int digit) {
+        // TODO: error?
+        if (!(digit >= 0 && digit <= 9)) {
+            return;
+        }
+
         if (this.digit.isEmpty()) {
             this.digit = String.valueOf(digit);
             notifyListeners();
@@ -135,6 +137,7 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public void setPendingBinaryOperation(DoubleBinaryOperator op) {
+        digit = "";
         pendingOperation = op;
     }
 
@@ -145,6 +148,12 @@ public class CalcModelImpl implements CalcModel {
         }
 
         removeLeadingZeroes();
+
+        // Remove trailing zeroes, but this doesn't affect digit
+        if (getValue() % 1 == 0 && digit.indexOf('.') != -1) {
+            return digit.substring(0, digit.indexOf('.'));
+        }
+
         return digit;
     }
 
