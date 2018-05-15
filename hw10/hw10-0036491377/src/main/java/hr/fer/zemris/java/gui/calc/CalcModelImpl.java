@@ -31,13 +31,18 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public void setValue(double value) {
-        if (Double.isNaN(value) || Double.isInfinite(value)) {
-            return;
+        if (Double.isNaN(value)) {
+            throw new IllegalArgumentException("Cannot set value to NaN.");
+        }
+
+        if (Double.isInfinite(value)) {
+            throw new IllegalArgumentException("Cannot set value to infinite.");
         }
 
         digit = String.valueOf(value);
-        digit = toString();
-
+        if (digit.indexOf('.') != -1 && value % 1 == 0) {
+            //digit = digit.substring(0, digit.indexOf('.'));
+        }
         notifyListeners();
     }
 

@@ -10,6 +10,8 @@ import hr.fer.zemris.java.gui.layouts.RCPosition;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Stack;
+import java.util.function.DoubleBinaryOperator;
 
 public class Calculator extends JFrame {
     private final static int X = 20;
@@ -19,6 +21,8 @@ public class Calculator extends JFrame {
     private final static int GAP = 5;
     private CalcModel model = new CalcModelImpl();
     private boolean uninverted = true;
+    private Stack<String> stack = new Stack<>();
+
 
     public static void main(String[] args) {
         new Calculator();
@@ -39,7 +43,7 @@ public class Calculator extends JFrame {
 
         JLabel l = new JLabel("", SwingConstants.RIGHT);
         cp.add(l, new RCPosition(1, 1));
-        model.addCalcValueListener(model1 -> l.setText(model1.toString()));
+        model.addCalcValueListener(m -> l.setText(m.toString()));
 
         // Digit buttons
         addButton(cp, new DigitButton("7"), 2, 3);
@@ -76,8 +80,29 @@ public class Calculator extends JFrame {
         addButton(cp, new ActionButton("clr", CalcModel::clear), 1, 7);
         addButton(cp, new ActionButton("res", CalcModel::clearAll), 2, 7);
         addButton(cp, new ActionButton("+/-", CalcModel::swapSign), 5, 4);
-        addButton(cp, new ActionButton("push", x -> {}), 3, 7);
-        addButton(cp, new ActionButton("pop", x -> {}), 4, 7);
+        addButton(cp, new ActionButton("=", m -> {
+            DoubleBinaryOperator op = m.getPendingBinaryOperation();
+            if (op == null) {
+                return;
+            }
+
+            double operand = m.getActiveOperand();
+            double result  = op.applyAsDouble(operand, m.getValue());
+
+            m.setActiveOperand(result);
+            m.setValue(result);
+        }), 1, 6);
+
+        addButton(cp, new ActionButton("push", x -> stack.push(x.toString())), 3, 7);
+        addButton(cp, new ActionButton("pop", x -> {
+            if (stack.empty()) {
+                JOptionPane.showMessageDialog(cp, "The stack is empty.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String s = stack.pop();
+            x.setValue(Double.parseDouble(s));
+        }), 4, 7);
 
         // Inverting checkbox
         JCheckBox invBtn = new JCheckBox("Inv");
@@ -90,7 +115,14 @@ public class Calculator extends JFrame {
     }
 
     private void addButton(Container pane, CalcButton btn, int row, int col) {
-        btn.addActionListener(e -> btn.action(model));
+        btn.addActionListener(e -> {
+            try {
+                btn.action(model);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(pane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         pane.add(btn, new RCPosition(row, col));
     }
 }

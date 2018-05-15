@@ -15,6 +15,7 @@ public class BinaryOperatorButton extends CalcButton {
     @Override
     public void action(CalcModel model) {
         model.setActiveOperand(model.getValue());
+        model.clear();
         model.setPendingBinaryOperation(op);
     }
 }
