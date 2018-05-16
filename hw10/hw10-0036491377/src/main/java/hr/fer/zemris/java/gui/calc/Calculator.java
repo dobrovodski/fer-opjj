@@ -9,6 +9,7 @@ import hr.fer.zemris.java.gui.layouts.CalcLayout;
 import hr.fer.zemris.java.gui.layouts.RCPosition;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Stack;
 import java.util.function.DoubleBinaryOperator;
@@ -16,8 +17,8 @@ import java.util.function.DoubleBinaryOperator;
 public class Calculator extends JFrame {
     private final static int X = 20;
     private final static int Y = 50;
-    private final static int WIDTH = 500;
-    private final static int HEIGHT = 500;
+    private final static int WIDTH = 520;
+    private final static int HEIGHT = 400;
     private final static int GAP = 5;
     private CalcModel model = new CalcModelImpl();
     private boolean uninverted = true;
@@ -78,7 +79,7 @@ public class Calculator extends JFrame {
         addButton(cp, new BinaryOperatorButton("x^n", (x, y) -> uninverted ? Math.pow(x, y) : Math.pow(x, -y)), 5, 1);
 
         // Special action buttons
-        addButton(cp, new ActionButton(".", CalcModel::insertDecimalPoint), 5, 5);
+        addButton(cp, new ActionButton("•", CalcModel::insertDecimalPoint), 5, 5);
         addButton(cp, new ActionButton("clr", CalcModel::clear), 1, 7);
         addButton(cp, new ActionButton("res", CalcModel::clearAll), 2, 7);
         addButton(cp, new ActionButton("+/-", CalcModel::swapSign), 5, 4);
@@ -117,7 +118,11 @@ public class Calculator extends JFrame {
     }
 
     private void addButton(Container pane, CalcButton btn, int row, int col) {
+        btn.setMinimumSize(new Dimension(10, 50));
+        btn.setBackground(new Color(114, 159, 207));
+        btn.setOpaque(true);
         btn.setMinimumSize(new Dimension(20, 20));
+
         btn.addActionListener(e -> {
             try {
                 btn.action(model);
@@ -130,6 +135,11 @@ public class Calculator extends JFrame {
     }
 
     private void addScreen(Container pane, JLabel screen, int row, int col) {
+        screen.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        screen.setBackground(new Color(255, 211, 32));
+        screen.setFont(new Font("Arial", Font.BOLD, 30));
+        screen.setOpaque(true);
+
         pane.add(screen, new RCPosition(row, col));
         model.addCalcValueListener(m -> screen.setText(m.toString()));
         model.clear();
