@@ -58,10 +58,6 @@ public class PrimListModel implements ListModel<Integer> {
         primes.add(current);
     }
 
-    public List<Integer> getPrimes() {
-        return primes;
-    }
-
     @Override
     public int getSize() {
         return primes.size();
