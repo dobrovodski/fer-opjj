@@ -11,11 +11,13 @@ public class BarChartComponent extends JComponent {
     private int w;
     private int h;
 
-    private static final int LEFT_PAD_FIXED = 20;
-    private static final int BOTTOM_PAD_FIXED = 20;
+    private static final int VERTICAL_PAD = 30;
+    private static final int HORIZONTAL_PAD = 30;
     private static final int ARROW_SIZE = 10;
+    private static final int DESCRIPTION_MARGIN = 10;
+    private static final int BAR_DISTANCE = 2;
 
-    private static int FONT_SIZE;
+    private int fontSize;
     private FontMetrics metrics;
     private List<XYValue> values;
     private GraphicsState graphicsState;
@@ -30,42 +32,39 @@ public class BarChartComponent extends JComponent {
     public BarChartComponent(BarChart barChart) {
         this.barChart = barChart;
         values = barChart.getValues();
-        String maxLabel = String.valueOf(values.get(0).getY());
-
-        for (XYValue v : values) {
-            maxLabel = maxLabel.length() > String.valueOf(v.getY()).length() ? maxLabel : String.valueOf(v.getY());
-        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         metrics = g.getFontMetrics(g.getFont());
-        FONT_SIZE = metrics.getHeight();
+        fontSize = metrics.getHeight();
+        w = getWidth();
+        h = getHeight();
+
         paintComponent((Graphics2D) g);
     }
 
-    private void paintComponent(Graphics2D g) {
-        w = getWidth();
-        h = getHeight();
-        drawLabels(g);
-        drawAxes(g);
+    private void paintComponent(Graphics2D g2d) {
+        drawChart(g2d);
+        drawAxes(g2d);
     }
 
-    private void drawAxes(Graphics2D g) {
-        final int padX = LEFT_PAD_FIXED + metrics.stringWidth(String.valueOf(barChart.getMaxY())) + FONT_SIZE + 10;
-        final int padY = BOTTOM_PAD_FIXED + FONT_SIZE;
+    private void drawAxes(Graphics2D g2d) {
+        final int padX = VERTICAL_PAD + metrics.stringWidth(String.valueOf(barChart.getMaxY())) + fontSize +
+                         DESCRIPTION_MARGIN;
+        final int padY = HORIZONTAL_PAD + fontSize;
 
-        saveGraphicsState(g);
-        setGraphicsState(g, graphicsState.font, AXES_COLOR, new BasicStroke(2));
+        saveGraphicsState(g2d);
+        setGraphicsState(g2d, graphicsState.font, AXES_COLOR, new BasicStroke(2));
         // y-axis line
-        g.drawLine(padX, h - padY + 5, padX, padY);
+        g2d.drawLine(padX, h - padY + 5, padX, padY);
         // x-axis line
-        g.drawLine(padX, h - padY, w - padX, h - padY);
-        loadGraphicsState(g);
+        g2d.drawLine(padX - 5, h - padY, w - padX, h - padY);
+        loadGraphicsState(g2d);
 
         // y-axis arrow
         fillTriangle(
-                g,
+                g2d,
                 padX - ARROW_SIZE / 2, // left of y-axis
                 padY,
                 padX + ARROW_SIZE / 2, // right of y-axis
@@ -76,7 +75,7 @@ public class BarChartComponent extends JComponent {
 
         // x-axis arrow
         fillTriangle(
-                g,
+                g2d,
                 w - padX,                   // above of x-axis
                 h - padY - ARROW_SIZE / 2,
                 w - padX,                   // below of x-axis
@@ -85,52 +84,50 @@ public class BarChartComponent extends JComponent {
                 h - padY
         );
 
-        saveGraphicsState(g);
-        setGraphicsState(g, DESCRIPTION_FONT, LABEL_COLOR, new BasicStroke(1));
+        saveGraphicsState(g2d);
+        setGraphicsState(g2d, DESCRIPTION_FONT, LABEL_COLOR, new BasicStroke(1));
 
-        // x-label
+        // x-description
         String xDescription = barChart.getxDescription();
-        g.drawString(xDescription, w / 2 - metrics.stringWidth(xDescription) / 2, h - BOTTOM_PAD_FIXED + FONT_SIZE);
+        g2d.drawString(xDescription, w / 2 - metrics.stringWidth(xDescription) / 2, h - HORIZONTAL_PAD + fontSize);
 
-        // y-label
+        // y-description
         String yDescription = barChart.getyDescription();
         AffineTransform at = AffineTransform.getQuadrantRotateInstance(-1);
-        g.setTransform(at);
-        g.drawString(yDescription, -(h / 2 + metrics.stringWidth(yDescription) / 2), LEFT_PAD_FIXED);
-        at.quadrantRotate(1);
-        g.setTransform(at);
+        g2d.setTransform(at);
+        g2d.drawString(yDescription, -(h / 2 + metrics.stringWidth(yDescription) / 2), VERTICAL_PAD);
+        //at.quadrantRotate(1);
+        //g2d.setTransform(at);
 
-        loadGraphicsState(g);
+        loadGraphicsState(g2d);
 
     }
 
-    private void drawLabels(Graphics2D g) {
-        final int padX = LEFT_PAD_FIXED + metrics.stringWidth(String.valueOf(barChart.getMaxY())) + FONT_SIZE + 10;
+    private void drawChart(Graphics2D g2d) {
+        final int maxYSize = metrics.stringWidth(String.valueOf(barChart.getMaxY()));
+        final int padX = VERTICAL_PAD + maxYSize + fontSize + DESCRIPTION_MARGIN;
         final int countX = values.size();
         final int gapX = (int) ((w - 2.0 * padX) / countX);
 
-        final int padY = BOTTOM_PAD_FIXED + FONT_SIZE;
+        final int padY = HORIZONTAL_PAD + fontSize;
         final int countY = (barChart.getMaxY() - barChart.getMinY()) / barChart.getGapY();
         final int gapY = (int) ((h - 2.0 * padY) / countY);
 
-        final int spacing = barChart.getGapY();
+        saveGraphicsState(g2d);
+        setGraphicsState(g2d, LABEL_FONT, g2d.getColor(), g2d.getStroke());
 
-        saveGraphicsState(g);
-
-        setGraphicsState(g, LABEL_FONT, g.getColor(), g.getStroke());
         for (int i = 0; i <= countY; i++) {
             String str = String.valueOf(barChart.getMinY() + i * barChart.getGapY());
-            int maxWidth = metrics.stringWidth(String.valueOf(barChart.getMaxY()));
-            int x = LEFT_PAD_FIXED + FONT_SIZE + maxWidth - metrics.stringWidth(str);
+            int x = VERTICAL_PAD + maxYSize - metrics.stringWidth(str) + DESCRIPTION_MARGIN;
 
-            // y label
-            setGraphicsState(g, g.getFont(), LABEL_COLOR, g.getStroke());
-            g.setColor(LABEL_COLOR);
-            g.drawString(str, x, h - i * gapY - BOTTOM_PAD_FIXED - 3 * FONT_SIZE / 4);
+            // y-label
+            setGraphicsState(g2d, g2d.getFont(), LABEL_COLOR, g2d.getStroke());
+            g2d.setColor(LABEL_COLOR);
+            g2d.drawString(str, x, (h - i * gapY - HORIZONTAL_PAD) - (3 * fontSize / 4));
 
             // grid line
-            setGraphicsState(g, g.getFont(), GRID_COLOR, new BasicStroke(2));
-            g.drawLine(padX - 5, h - padY - i * gapY, w - padX, h - padY - i * gapY);
+            setGraphicsState(g2d, g2d.getFont(), GRID_COLOR, new BasicStroke(2));
+            g2d.drawLine(padX - 5, h - padY - i * gapY, w - padX, h - padY - i * gapY);
         }
 
         for (int i = 0; i <= countX; i++) {
@@ -138,48 +135,45 @@ public class BarChartComponent extends JComponent {
                 String str = String.valueOf(values.get(i).getX());
                 int x = padX + i * gapX + gapX / 2 - metrics.stringWidth(str) / 2;
 
-                // x label
-                setGraphicsState(g, LABEL_FONT, LABEL_COLOR, g.getStroke());
-                g.drawString(str, x, h - BOTTOM_PAD_FIXED);
+                // x-label
+                setGraphicsState(g2d, LABEL_FONT, LABEL_COLOR, g2d.getStroke());
+                g2d.drawString(str, x, h - HORIZONTAL_PAD);
 
-                // Rectangle
-                int rectX = padX + i * gapX + spacing / 2;
+                // rectangle
+                int rectX = padX + i * gapX + BAR_DISTANCE / 2;
                 int rectH = values.get(i).getY() / barChart.getGapY() * gapY;
                 int rectY = h - padY - rectH;
-                int rectW = gapX - spacing;
-                setGraphicsState(g, g.getFont(), BAR_COLOR, g.getStroke());
-                g.fillRect(rectX, rectY, rectW, rectH);
+                int rectW = gapX - BAR_DISTANCE;
+                setGraphicsState(g2d, g2d.getFont(), BAR_COLOR, g2d.getStroke());
+                g2d.fillRect(rectX, rectY, rectW, rectH);
             }
 
             // grid line
-            g.setColor(GRID_COLOR);
-            Stroke cur = g.getStroke();
-            g.setStroke(new BasicStroke(2));
-            g.drawLine(padX + i * gapX, padY, padX + i * gapX, h - padY + 5);
-            g.setStroke(cur);
+            setGraphicsState(g2d, g2d.getFont(), GRID_COLOR, new BasicStroke(2));
+            g2d.drawLine(padX + i * gapX, padY, padX + i * gapX, h - padY + 5);
 
-            loadGraphicsState(g);
+            loadGraphicsState(g2d);
         }
     }
 
-    private void fillTriangle(Graphics2D g, int x1, int y1, int x2, int y2, int x3, int y3) {
-        g.fillPolygon(new int[]{x1, x2, x3}, new int[]{y1, y2, y3}, 3);
+    private void fillTriangle(Graphics2D g2d, int x1, int y1, int x2, int y2, int x3, int y3) {
+        g2d.fillPolygon(new int[]{x1, x2, x3}, new int[]{y1, y2, y3}, 3);
     }
 
-    private void saveGraphicsState(Graphics2D g) {
-        graphicsState = new GraphicsState(g.getFont(), g.getColor(), g.getStroke());
+    private void saveGraphicsState(Graphics2D g2d) {
+        graphicsState = new GraphicsState(g2d.getFont(), g2d.getColor(), g2d.getStroke());
     }
 
-    private void loadGraphicsState(Graphics2D g) {
-        g.setFont(graphicsState.font);
-        g.setColor(graphicsState.color);
-        g.setStroke(graphicsState.stroke);
+    private void loadGraphicsState(Graphics2D g2d) {
+        g2d.setFont(graphicsState.font);
+        g2d.setColor(graphicsState.color);
+        g2d.setStroke(graphicsState.stroke);
     }
 
-    private void setGraphicsState(Graphics2D g, Font font, Color color, Stroke stroke) {
-        g.setFont(font);
-        g.setColor(color);
-        g.setStroke(stroke);
+    private void setGraphicsState(Graphics2D g2d, Font font, Color color, Stroke stroke) {
+        g2d.setFont(font);
+        g2d.setColor(color);
+        g2d.setStroke(stroke);
     }
 
     private static class GraphicsState {
@@ -187,7 +181,7 @@ public class BarChartComponent extends JComponent {
         private Color color;
         private Stroke stroke;
 
-        public GraphicsState(Font font, Color color, Stroke stroke) {
+        private GraphicsState(Font font, Color color, Stroke stroke) {
             this.font = font;
             this.color = color;
             this.stroke = stroke;
