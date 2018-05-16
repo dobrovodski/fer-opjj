@@ -9,6 +9,7 @@ public class Demo extends JFrame {
     public Demo() throws HeadlessException {
         setLocation(20, 50);
         setSize(800, 800);
+        setTitle("BarChart Demo");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         initGUI();
     }
