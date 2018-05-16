@@ -118,11 +118,6 @@ public class Calculator extends JFrame {
     }
 
     private void addButton(Container pane, CalcButton btn, int row, int col) {
-        btn.setMinimumSize(new Dimension(10, 50));
-        btn.setBackground(new Color(114, 159, 207));
-        btn.setOpaque(true);
-        btn.setMinimumSize(new Dimension(20, 20));
-
         btn.addActionListener(e -> {
             try {
                 btn.action(model);
@@ -135,11 +130,6 @@ public class Calculator extends JFrame {
     }
 
     private void addScreen(Container pane, JLabel screen, int row, int col) {
-        screen.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        screen.setBackground(new Color(255, 211, 32));
-        screen.setFont(new Font("Arial", Font.BOLD, 30));
-        screen.setOpaque(true);
-
         pane.add(screen, new RCPosition(row, col));
         model.addCalcValueListener(m -> screen.setText(m.toString()));
         model.clear();

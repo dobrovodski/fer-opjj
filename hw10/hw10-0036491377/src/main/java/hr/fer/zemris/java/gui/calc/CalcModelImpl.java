@@ -152,9 +152,7 @@ public class CalcModelImpl implements CalcModel {
         }
 
         removeLeadingZeroes();
-        removeTrailingZeroes();
 
-        // Remove trailing zeroes, but this doesn't affect digit internally
         /*if (getValue() % 1 == 0 && digit.indexOf('.') != -1 && digit.indexOf('.') != digit.length() - 1) {
             return digit.substring(0, digit.indexOf('.'));
         }*/
@@ -163,7 +161,8 @@ public class CalcModelImpl implements CalcModel {
     }
 
     private void notifyListeners() {
-        // TODO: watch for concurrent modification
+        // Concurrent modification can cause an exception here, but for the domain of this problem, such operations
+        // won't occur.
         for (CalcValueListener l : listeners) {
             l.valueChanged(this);
         }
@@ -172,12 +171,6 @@ public class CalcModelImpl implements CalcModel {
     private void removeLeadingZeroes() {
         while (digit.startsWith("0") && digit.length() > 1 && digit.charAt(1) != '.') {
             digit = digit.substring(1);
-        }
-    }
-
-    private void removeTrailingZeroes() {
-        if (getValue() % 1 == 0 && digit.indexOf('.') != -1 && digit.indexOf('.') != digit.length() - 1) {
-            digit = digit.substring(0, digit.indexOf('.'));
         }
     }
 }
