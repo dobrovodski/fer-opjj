@@ -15,6 +15,7 @@ public class BarChartDemo extends JFrame {
     private static int gapY;
     private static String xDescription;
     private static String yDescription;
+    private static String fileName;
 
     public BarChartDemo() {
         setLocation(20, 50);
@@ -29,7 +30,7 @@ public class BarChartDemo extends JFrame {
             return;
         }
 
-        String fileName = args[0];
+        fileName = args[0];
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             xDescription = br.readLine();
             yDescription = br.readLine();
@@ -69,6 +70,8 @@ public class BarChartDemo extends JFrame {
 
     private void initGUI() {
         Container cp = getContentPane();
+        cp.setLayout(new BorderLayout());
+        cp.add(new JLabel(fileName, JLabel.CENTER), BorderLayout.PAGE_START);
         cp.add(new BarChartComponent(new BarChart(
                 values,
                 xDescription,
