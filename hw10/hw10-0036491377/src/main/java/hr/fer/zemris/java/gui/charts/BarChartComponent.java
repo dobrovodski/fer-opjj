@@ -96,8 +96,6 @@ public class BarChartComponent extends JComponent {
         AffineTransform at = AffineTransform.getQuadrantRotateInstance(-1);
         g2d.setTransform(at);
         g2d.drawString(yDescription, -(h / 2 + metrics.stringWidth(yDescription) / 2), VERTICAL_PAD);
-        //at.quadrantRotate(1);
-        //g2d.setTransform(at);
 
         loadGraphicsState(g2d);
 
