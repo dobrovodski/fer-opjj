@@ -137,7 +137,11 @@ public class CalcModelImpl implements CalcModel {
 
     @Override
     public void setPendingBinaryOperation(DoubleBinaryOperator op) {
-        digit = "";
+        // Don't clear the digit if you're clearing the pending binary operation
+        if (op != null) {
+            digit = "";
+        }
+
         pendingOperation = op;
     }
 
@@ -148,11 +152,12 @@ public class CalcModelImpl implements CalcModel {
         }
 
         removeLeadingZeroes();
+        removeTrailingZeroes();
 
-        // Remove trailing zeroes, but this doesn't affect digit
-        if (getValue() % 1 == 0 && digit.indexOf('.') != -1) {
+        // Remove trailing zeroes, but this doesn't affect digit internally
+        /*if (getValue() % 1 == 0 && digit.indexOf('.') != -1 && digit.indexOf('.') != digit.length() - 1) {
             return digit.substring(0, digit.indexOf('.'));
-        }
+        }*/
 
         return digit;
     }
@@ -167,6 +172,12 @@ public class CalcModelImpl implements CalcModel {
     private void removeLeadingZeroes() {
         while (digit.startsWith("0") && digit.length() > 1 && digit.charAt(1) != '.') {
             digit = digit.substring(1);
+        }
+    }
+
+    private void removeTrailingZeroes() {
+        if (getValue() % 1 == 0 && digit.indexOf('.') != -1 && digit.indexOf('.') != digit.length() - 1) {
+            digit = digit.substring(0, digit.indexOf('.'));
         }
     }
 }

@@ -24,7 +24,10 @@ public class Calculator extends JFrame {
     private Stack<String> stack = new Stack<>();
 
     public static void main(String[] args) {
-        new Calculator();
+        SwingUtilities.invokeLater(() -> {
+            Calculator c = new Calculator();
+            c.setVisible(true);
+        });
     }
 
     public Calculator() {
@@ -40,9 +43,9 @@ public class Calculator extends JFrame {
         Container cp = getContentPane();
         cp.setLayout(new CalcLayout(GAP));
 
-        JLabel l = new JLabel("", SwingConstants.RIGHT);
-        cp.add(l, new RCPosition(1, 1));
-        model.addCalcValueListener(m -> l.setText(m.toString()));
+        // Screen
+        JLabel screenLabel = new JLabel("", SwingConstants.RIGHT);
+        addScreen(cp, screenLabel, 1, 1);
 
         // Digit buttons
         addButton(cp, new DigitButton("7"), 2, 3);
@@ -124,5 +127,11 @@ public class Calculator extends JFrame {
         });
 
         pane.add(btn, new RCPosition(row, col));
+    }
+
+    private void addScreen(Container pane, JLabel screen, int row, int col) {
+        pane.add(screen, new RCPosition(row, col));
+        model.addCalcValueListener(m -> screen.setText(m.toString()));
+        model.clear();
     }
 }
