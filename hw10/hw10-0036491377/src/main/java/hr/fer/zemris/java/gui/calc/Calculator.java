@@ -13,16 +13,50 @@ import java.awt.*;
 import java.util.Stack;
 import java.util.function.DoubleBinaryOperator;
 
+/**
+ * Simple GUI calculator which provides typical functions for a calculator.
+ *
+ * @author matej
+ */
 public class Calculator extends JFrame {
+    /**
+     * X position of window.
+     */
     private final static int X = 20;
+    /**
+     * Y position of window.
+     */
     private final static int Y = 50;
+    /**
+     * Width of window.
+     */
     private final static int WIDTH = 520;
+    /**
+     * Height of window.
+     */
     private final static int HEIGHT = 400;
+    /**
+     * Gap between calculator buttons.
+     */
     private final static int GAP = 5;
+    /**
+     * Calculator model.
+     */
     private CalcModel model = new CalcModelImpl();
+    /**
+     * Keeps track of which operation to perform when performing functions which have an inverse.
+     */
     private boolean uninverted = true;
+    /**
+     * Keeps track of the calculator's internal stack.
+     */
     private Stack<String> stack = new Stack<>();
 
+    /**
+     * Main entry point.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             Calculator c = new Calculator();
@@ -30,6 +64,9 @@ public class Calculator extends JFrame {
         });
     }
 
+    /**
+     * Constructor.
+     */
     public Calculator() {
         setLocation(X, Y);
         setSize(WIDTH, HEIGHT);
@@ -39,6 +76,9 @@ public class Calculator extends JFrame {
         initGUI();
     }
 
+    /**
+     * Initializes the GUI.
+     */
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new CalcLayout(GAP));
@@ -117,6 +157,14 @@ public class Calculator extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Adds the button to the given pane at the location (row, col).
+     *
+     * @param pane pane to add the button to
+     * @param btn {@link CalcButton} to add
+     * @param row row to add to
+     * @param col column to add to
+     */
     private void addButton(Container pane, CalcButton btn, int row, int col) {
         btn.addActionListener(e -> {
             try {
@@ -129,6 +177,14 @@ public class Calculator extends JFrame {
         pane.add(btn, new RCPosition(row, col));
     }
 
+    /**
+     * Adds a screen which listens for changes in the calculator's model.
+     *
+     * @param pane pane to add the screen to
+     * @param screen {@link JLabel} which acts as a screen
+     * @param row row to add to
+     * @param col column to add to
+     */
     private void addScreen(Container pane, JLabel screen, int row, int col) {
         pane.add(screen, new RCPosition(row, col));
         model.addCalcValueListener(m -> screen.setText(m.toString()));

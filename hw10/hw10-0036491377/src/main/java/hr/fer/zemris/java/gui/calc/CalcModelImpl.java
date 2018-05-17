@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleBinaryOperator;
 
+/**
+ * Implementation of {@link CalcModel}.
+ *
+ * @author matej
+ */
 public class CalcModelImpl implements CalcModel {
     private List<CalcValueListener> listeners = new ArrayList<>();
     private Double activeOperand;

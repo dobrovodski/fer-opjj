@@ -2,11 +2,27 @@ package hr.fer.zemris.java.gui.calc.buttons;
 
 import hr.fer.zemris.java.gui.calc.CalcModel;
 
+import javax.swing.*;
 import java.util.function.DoubleBinaryOperator;
 
+/**
+ * This button represents binary operations such as +, *, /, -. The button takes in a {@link DoubleBinaryOperator} as
+ * its action to perform.
+ *
+ * @author matej
+ */
 public class BinaryOperatorButton extends CalcButton {
+    /**
+     * Action to perform.
+     */
     private DoubleBinaryOperator op;
 
+    /**
+     * Constructor.
+     *
+     * @param text text which will be inside of the {@link JButton}.
+     * @param op action to be performed.
+     */
     public BinaryOperatorButton(String text, DoubleBinaryOperator op) {
         super(text);
         this.op = op;
