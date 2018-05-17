@@ -3,8 +3,17 @@ package hr.fer.zemris.java.gui.prim;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Demo GUI program for adding dynamically generated prime numbers into 2 separate lists which are displayed in a
+ * scrollable pane.
+ *
+ * @author matej
+ */
 public class PrimDemo extends JFrame {
 
+    /**
+     * Constructor.
+     */
     public PrimDemo() {
         setLocation(20, 50);
         setSize(500, 300);
@@ -14,6 +23,10 @@ public class PrimDemo extends JFrame {
         initGUI();
     }
 
+    /**
+     * Entry point.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new PrimDemo();
@@ -21,6 +34,9 @@ public class PrimDemo extends JFrame {
         });
     }
 
+    /**
+     * Initializes the GUI.
+     */
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
