@@ -128,9 +128,9 @@ public class BarChartComponent extends JComponent {
      * @param g2d graphics2d object
      */
     private void drawAxes(Graphics2D g2d) {
-        final int padX = VERTICAL_PAD + maxYWidth() + fontSize +
+        final int padX = HORIZONTAL_PAD + maxYWidth() + fontSize +
                          DESCRIPTION_MARGIN;
-        final int padY = HORIZONTAL_PAD + fontSize;
+        final int padY = VERTICAL_PAD + fontSize;
 
         saveGraphicsState(g2d);
         setGraphicsState(g2d, graphicsState.font, AXES_COLOR, new BasicStroke(2));
@@ -167,13 +167,13 @@ public class BarChartComponent extends JComponent {
 
         // x-description
         String xDescription = barChart.getxDescription();
-        g2d.drawString(xDescription, w / 2 - metrics.stringWidth(xDescription) / 2, h - HORIZONTAL_PAD + fontSize);
+        g2d.drawString(xDescription, w / 2 - metrics.stringWidth(xDescription) / 2, h - VERTICAL_PAD + fontSize);
 
         // y-description
         String yDescription = barChart.getyDescription();
         AffineTransform at = AffineTransform.getQuadrantRotateInstance(-1);
         g2d.setTransform(at);
-        g2d.drawString(yDescription, -(h / 2 + metrics.stringWidth(yDescription) / 2), VERTICAL_PAD);
+        g2d.drawString(yDescription, -(h / 2 + metrics.stringWidth(yDescription) / 2), HORIZONTAL_PAD);
 
         loadGraphicsState(g2d);
     }
@@ -184,11 +184,11 @@ public class BarChartComponent extends JComponent {
      * @param g2d graphics2d object
      */
     private void drawChart(Graphics2D g2d) {
-        final int padX = VERTICAL_PAD + maxYWidth() + fontSize + DESCRIPTION_MARGIN;
+        final int padX = HORIZONTAL_PAD + maxYWidth() + fontSize + DESCRIPTION_MARGIN;
         final int countX = values.size();
         final int gapX = (int) ((w - 2.0 * padX) / countX);
 
-        final int padY = HORIZONTAL_PAD + fontSize;
+        final int padY = VERTICAL_PAD + fontSize;
         int yMax = barChart.getMaxY(), yMin = barChart.getMinY(), spacing = barChart.getGapY();
         int countY = (int) Math.ceil((yMax - yMin) * 1.0 / spacing);
         final int gapY = (int) ((h - 2.0 * padY) / countY);
@@ -198,12 +198,12 @@ public class BarChartComponent extends JComponent {
 
         for (int i = 0; i <= countY; i++) {
             String str = String.valueOf(barChart.getMinY() + i * barChart.getGapY());
-            int x = VERTICAL_PAD + maxYWidth() - metrics.stringWidth(str) + DESCRIPTION_MARGIN;
+            int x = HORIZONTAL_PAD + maxYWidth() - metrics.stringWidth(str) + DESCRIPTION_MARGIN;
 
             // y-label
             setGraphicsState(g2d, g2d.getFont(), LABEL_COLOR, g2d.getStroke());
             g2d.setColor(LABEL_COLOR);
-            g2d.drawString(str, x, (h - i * gapY - HORIZONTAL_PAD) - (3 * fontSize / 4));
+            g2d.drawString(str, x, (h - i * gapY - VERTICAL_PAD) - (3 * fontSize / 4));
 
             // grid line
             setGraphicsState(g2d, g2d.getFont(), GRID_COLOR, new BasicStroke(2));
@@ -217,7 +217,7 @@ public class BarChartComponent extends JComponent {
 
                 // x-label
                 setGraphicsState(g2d, LABEL_FONT, LABEL_COLOR, g2d.getStroke());
-                g2d.drawString(str, x, h - HORIZONTAL_PAD);
+                g2d.drawString(str, x, h - VERTICAL_PAD);
 
                 // rectangle
                 int rectX = padX + i * gapX + BAR_DISTANCE / 2;
