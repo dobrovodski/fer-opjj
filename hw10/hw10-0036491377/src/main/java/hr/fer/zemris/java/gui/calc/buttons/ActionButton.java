@@ -14,6 +14,10 @@ import java.util.function.Consumer;
  */
 public class ActionButton extends CalcButton {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Consumer action to be performed.
      */
     private Consumer<CalcModel> action;

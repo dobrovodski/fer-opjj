@@ -6,11 +6,29 @@ import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a model for prime number generation. It provides methods for notifying listeners and it does so whenever the
+ * next prime number is generated.
+ *
+ * @author matej
+ */
 public class PrimListModel implements ListModel<Integer> {
+    /**
+     * List of currently stored primes-
+     */
     private List<Integer> primes;
+    /**
+     * Listeners.
+     */
     private List<ListDataListener> listeners;
+    /**
+     * Current / latest prime.
+     */
     private int current;
 
+    /**
+     * Constructor.
+     */
     public PrimListModel() {
         super();
         primes = new ArrayList<>();
@@ -39,6 +57,9 @@ public class PrimListModel implements ListModel<Integer> {
         listeners.remove(l);
     }
 
+    /**
+     * Calculates the next prime number and notifies the subscribed observers.
+     */
     public void next() {
         while (true) {
             if (current == 1 || current % 2 == 0) {
@@ -61,7 +82,18 @@ public class PrimListModel implements ListModel<Integer> {
         }
     }
 
+    /**
+     * Returns true if the given number is prime, false otherwise.
+     *
+     * @param n number to check
+     *
+     * @return true if the given number is prime, false otherwise
+     */
     private boolean isPrime(int n) {
+        if (n <= 0) {
+            return false;
+        }
+
         if (n == 2) {
             return true;
         }

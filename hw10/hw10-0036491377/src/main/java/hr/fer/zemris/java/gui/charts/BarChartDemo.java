@@ -17,6 +17,10 @@ import java.util.List;
  */
 public class BarChartDemo extends JFrame {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Values of bar chart.
      */
     private static List<XYValue> values;

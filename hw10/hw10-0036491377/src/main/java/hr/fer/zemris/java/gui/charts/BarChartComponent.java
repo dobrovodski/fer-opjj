@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class BarChartComponent extends JComponent {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Bar chart to display.
      */
     private BarChart barChart;

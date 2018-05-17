@@ -7,6 +7,11 @@ package hr.fer.zemris.java.gui.layouts;
  */
 public class CalcLayoutException extends RuntimeException {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructor.
      *
      * @param message message to display

@@ -20,6 +20,10 @@ import java.util.function.DoubleBinaryOperator;
  */
 public class Calculator extends JFrame {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * X position of window.
      */
     private final static int X = 20;

@@ -13,6 +13,11 @@ import java.awt.*;
  */
 public abstract class CalcButton extends JButton implements CalcAction {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructor.
      *
      * @param text text which will be inside of the {@link JButton}.

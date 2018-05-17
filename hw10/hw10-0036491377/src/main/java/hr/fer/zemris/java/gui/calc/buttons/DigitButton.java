@@ -12,6 +12,10 @@ import javax.swing.*;
  */
 public class DigitButton extends CalcButton {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Digit to be inserted.
      */
     private int digit;

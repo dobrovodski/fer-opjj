@@ -13,6 +13,10 @@ import java.util.function.DoubleBinaryOperator;
  */
 public class BinaryOperatorButton extends CalcButton {
     /**
+     * Default serial version UID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Action to perform.
      */
     private DoubleBinaryOperator op;
