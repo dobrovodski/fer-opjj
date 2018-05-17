@@ -8,15 +8,46 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GUI program to display bar chart data. The program requires a single argument - path to the file with the data. The
+ * file has to be formatted in a special way: xAxisDescription yAxisDescription x1,y1 x2,y2 x3,y3 ... minYAxisValue
+ * maxYAxisValue yAxisStep
+ *
+ * @author matej
+ */
 public class BarChartDemo extends JFrame {
+    /**
+     * Values of bar chart.
+     */
     private static List<XYValue> values;
+    /**
+     * Smallest y-axis value.
+     */
     private static int minY;
+    /**
+     * Largest y-axis value.
+     */
     private static int maxY;
-    private static int gapY;
+    /**
+     * Y-axis step.
+     */
+    private static int stepY;
+    /**
+     * X-axis description.
+     */
     private static String xDescription;
+    /**
+     * Y-axis description.
+     */
     private static String yDescription;
+    /**
+     * Name of the file with the data.
+     */
     private static String fileName;
 
+    /**
+     * Constructor.
+     */
     public BarChartDemo() {
         setLocation(20, 50);
         setSize(600, 600);
@@ -25,6 +56,11 @@ public class BarChartDemo extends JFrame {
         initGUI();
     }
 
+    /**
+     * Entry point
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Program requires one argument.");
@@ -42,7 +78,7 @@ public class BarChartDemo extends JFrame {
             minY = Integer.parseInt(br.readLine());
             maxY = Integer.parseInt(br.readLine());
 
-            gapY = Integer.parseInt(br.readLine());
+            stepY = Integer.parseInt(br.readLine());
 
         } catch (IOException e) {
             System.out.println("File could not be read: " + fileName);
@@ -58,6 +94,13 @@ public class BarChartDemo extends JFrame {
         });
     }
 
+    /**
+     * Parses the given data into a list of {@link XYValue}s.
+     *
+     * @param dataStr list of potential {@link XYValue}s.
+     *
+     * @return list of {@link XYValue}s
+     */
     private static List<XYValue> parseData(String[] dataStr) {
         List<XYValue> list = new ArrayList<>();
 
@@ -69,6 +112,9 @@ public class BarChartDemo extends JFrame {
         return list;
     }
 
+    /**
+     * Initializes the GUI.
+     */
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
@@ -79,7 +125,7 @@ public class BarChartDemo extends JFrame {
                 yDescription,
                 minY,
                 maxY,
-                gapY
+                stepY
         )));
     }
 }

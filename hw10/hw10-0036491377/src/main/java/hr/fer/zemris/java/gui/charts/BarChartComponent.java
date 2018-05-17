@@ -5,30 +5,94 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
+/**
+ * Graphical component which displays the provided {@link BarChart}.
+ *
+ * @author matej
+ */
 public class BarChartComponent extends JComponent {
+    /**
+     * Bar chart to display.
+     */
     private BarChart barChart;
 
+    /**
+     * Width of the component.
+     */
     private int w;
+    /**
+     * Height of the component.
+     */
     private int h;
 
+    /**
+     * Vertical padding.
+     */
     private static final int VERTICAL_PAD = 30;
+    /**
+     * Horizontal padding.
+     */
     private static final int HORIZONTAL_PAD = 30;
+    /**
+     * Size of the axis-arrow.
+     */
     private static final int ARROW_SIZE = 10;
-    private static final int DESCRIPTION_MARGIN = 10;
+    /**
+     * Margin between y-axis description and y-axis.
+     */
+    private static final int DESCRIPTION_MARGIN = 20;
+    /**
+     * Gap between bars.
+     */
     private static final int BAR_DISTANCE = 2;
 
+    /**
+     * Current font size.
+     */
     private int fontSize;
+    /**
+     * Font metrics.
+     */
     private FontMetrics metrics;
+    /**
+     * Bar chart values.
+     */
     private List<XYValue> values;
+    /**
+     * Current {@link GraphicsState}.
+     */
     private GraphicsState graphicsState;
 
+    /**
+     * Color of bars.
+     */
     private static final Color BAR_COLOR = new Color(244, 119, 72);
+    /**
+     * Color of grid lines.
+     */
     private static final Color GRID_COLOR = new Color(238, 221, 190);
+    /**
+     * Color of axes lines.
+     */
     private static final Color AXES_COLOR = new Color(151, 151, 151);
+    /**
+     * Color of labels.
+     */
     private static final Color LABEL_COLOR = new Color(0, 0, 0);
+    /**
+     * Color of axes descriptions.
+     */
     private static final Font DESCRIPTION_FONT = new Font("default", Font.PLAIN, 16);
+    /**
+     * Label font.
+     */
     private static final Font LABEL_FONT = new Font("default", Font.BOLD, 16);
 
+    /**
+     * Constructor.
+     *
+     * @param barChart bar chart to display
+     */
     public BarChartComponent(BarChart barChart) {
         this.barChart = barChart;
         values = barChart.getValues();
@@ -44,13 +108,23 @@ public class BarChartComponent extends JComponent {
         paintComponent((Graphics2D) g);
     }
 
+    /**
+     * Paints component using given {@link Graphics2D} object.
+     *
+     * @param g2d graphics object used to draw
+     */
     private void paintComponent(Graphics2D g2d) {
         drawChart(g2d);
         drawAxes(g2d);
     }
 
+    /**
+     * Draws the axes of the bar chart
+     *
+     * @param g2d graphics2d object
+     */
     private void drawAxes(Graphics2D g2d) {
-        final int padX = VERTICAL_PAD + metrics.stringWidth(String.valueOf(barChart.getMaxY())) + fontSize +
+        final int padX = VERTICAL_PAD + maxYWidth() + fontSize +
                          DESCRIPTION_MARGIN;
         final int padY = HORIZONTAL_PAD + fontSize;
 
@@ -100,9 +174,13 @@ public class BarChartComponent extends JComponent {
         loadGraphicsState(g2d);
     }
 
+    /**
+     * Draws the actual bar chart, includuing the grid, bars and labels.
+     *
+     * @param g2d graphics2d object
+     */
     private void drawChart(Graphics2D g2d) {
-        final int maxYSize = metrics.stringWidth(String.valueOf(barChart.getMaxY()));
-        final int padX = VERTICAL_PAD + maxYSize + fontSize + DESCRIPTION_MARGIN;
+        final int padX = VERTICAL_PAD + maxYWidth() + fontSize + DESCRIPTION_MARGIN;
         final int countX = values.size();
         final int gapX = (int) ((w - 2.0 * padX) / countX);
 
@@ -116,7 +194,7 @@ public class BarChartComponent extends JComponent {
 
         for (int i = 0; i <= countY; i++) {
             String str = String.valueOf(barChart.getMinY() + i * barChart.getGapY());
-            int x = VERTICAL_PAD + maxYSize - metrics.stringWidth(str) + DESCRIPTION_MARGIN;
+            int x = VERTICAL_PAD + maxYWidth() - metrics.stringWidth(str) + DESCRIPTION_MARGIN;
 
             // y-label
             setGraphicsState(g2d, g2d.getFont(), LABEL_COLOR, g2d.getStroke());
@@ -154,31 +232,90 @@ public class BarChartComponent extends JComponent {
         }
     }
 
+    /**
+     * Fills triangle at given positions.
+     *
+     * @param g2d graphics2d object
+     * @param x1 x1 point
+     * @param y1 y1 point
+     * @param x2 x2 point
+     * @param y2 y2 point
+     * @param x3 x3 point
+     * @param y3 y3 point
+     */
     private void fillTriangle(Graphics2D g2d, int x1, int y1, int x2, int y2, int x3, int y3) {
         g2d.fillPolygon(new int[]{x1, x2, x3}, new int[]{y1, y2, y3}, 3);
     }
 
+    /**
+     * Saves the current graphics state.
+     *
+     * @param g2d graphics2d object
+     */
     private void saveGraphicsState(Graphics2D g2d) {
         graphicsState = new GraphicsState(g2d.getFont(), g2d.getColor(), g2d.getStroke());
     }
 
+    /**
+     * Loads the previously saved graphics state.
+     *
+     * @param g2d graphics2d object
+     */
     private void loadGraphicsState(Graphics2D g2d) {
         g2d.setFont(graphicsState.font);
         g2d.setColor(graphicsState.color);
         g2d.setStroke(graphicsState.stroke);
     }
 
+    /**
+     * Sets the current graphics state.
+     *
+     * @param g2d graphics2d object
+     * @param font font to set
+     * @param color color to set
+     * @param stroke stroke to set
+     */
     private void setGraphicsState(Graphics2D g2d, Font font, Color color, Stroke stroke) {
         g2d.setFont(font);
         g2d.setColor(color);
         g2d.setStroke(stroke);
     }
 
+    /**
+     * Returns the width of the largest element on the y-axis.
+     *
+     * @return width of the largest element on the y-axis
+     */
+    private int maxYWidth() {
+        return metrics.stringWidth(String.valueOf(barChart.getMaxY()));
+    }
+
+    /**
+     * Keeps track of the current graphics state (font, color, stroke)
+     *
+     * @author matej
+     */
     private static class GraphicsState {
+        /**
+         * Current font.
+         */
         private Font font;
+        /**
+         * Current color.
+         */
         private Color color;
+        /**
+         * Current stroke.
+         */
         private Stroke stroke;
 
+        /**
+         * Constructor.
+         *
+         * @param font font to store
+         * @param color color to store
+         * @param stroke stroke to store
+         */
         private GraphicsState(Font font, Color color, Stroke stroke) {
             this.font = font;
             this.color = color;
