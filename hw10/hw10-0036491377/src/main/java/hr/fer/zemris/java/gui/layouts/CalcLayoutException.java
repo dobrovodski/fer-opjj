@@ -8,6 +8,7 @@ package hr.fer.zemris.java.gui.layouts;
 public class CalcLayoutException extends RuntimeException {
     /**
      * Constructor.
+     *
      * @param message message to display
      */
     public CalcLayoutException(String message) {

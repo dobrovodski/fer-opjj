@@ -1,6 +1,5 @@
 package hr.fer.zemris.java.gui.calc;
 
-import hr.fer.zemris.java.gui.layouts.CalcLayout;
 import org.junit.Before;
 import org.junit.Test;
 

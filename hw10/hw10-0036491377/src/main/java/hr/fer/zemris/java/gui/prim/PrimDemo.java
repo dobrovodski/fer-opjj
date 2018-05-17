@@ -25,6 +25,7 @@ public class PrimDemo extends JFrame {
 
     /**
      * Entry point.
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {

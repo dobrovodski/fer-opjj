@@ -6,16 +6,45 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+/**
+ * Layout manager for a calculator which uniformly lays out its components in a 5 row x 7 column grid with the exception
+ * of the position (1, 1) which expands to the position (1, 5).
+ *
+ * @author matej
+ */
 public class CalcLayout implements LayoutManager2 {
 
+    /**
+     * Row count.
+     */
     private static final int ROW_COUNT = 5;
+    /**
+     * Column count.
+     */
     private static final int COLUMN_COUNT = 7;
+    /**
+     * Width of first element in number of columns.
+     */
     private static final int FIRST_ELEMENT_WIDTH = 5;
 
+    /**
+     * Hashtable for components.
+     */
     private Hashtable<Component, RCPosition> components = new Hashtable<>();
+    /**
+     * Reference to the component at (1, 1).
+     */
     private Component first;
+    /**
+     * Spacing between the components.
+     */
     private int spacing;
 
+    /**
+     * Constructor.
+     *
+     * @param spacing spacing between the components
+     */
     public CalcLayout(int spacing) {
         if (spacing < 0) {
             throw new IllegalArgumentException("The gap between elements must be a positive number");
@@ -24,10 +53,23 @@ public class CalcLayout implements LayoutManager2 {
         this.spacing = spacing;
     }
 
+    /**
+     * Constructor which initializes the spacing to 0.
+     */
     public CalcLayout() {
         this(0);
     }
 
+    /**
+     * Converts string constraint into an {@link RCPosition} if possible. The constraint has to be in the form "row,
+     * columm".
+     *
+     * @param constraints string to convert
+     *
+     * @return converted {@link RCPosition}
+     *
+     * @throws CalcLayoutException if the string could not be converted
+     */
     private RCPosition toRCPosition(String constraints) {
         String[] posString = constraints.split(",");
         int[] pos = new int[2];
@@ -116,7 +158,17 @@ public class CalcLayout implements LayoutManager2 {
         return layoutSize(target, Math::min, Component::getMaximumSize);
     }
 
-    public Dimension layoutSize(Container container, BiFunction<Integer, Integer, Integer> predicate,
+    /**
+     * General method for calculating the wanted layout size.
+     *
+     * @param container container
+     * @param predicate called when comparing the current stored size and the size of the current component
+     *         being checked
+     * @param getSize getter for size of a {@link Component}
+     *
+     * @return dimensions of the layout
+     */
+    private Dimension layoutSize(Container container, BiFunction<Integer, Integer, Integer> predicate,
             Function<Component, Dimension> getSize) {
         Insets insets = container.getInsets();
         int insetWidth = insets.left + insets.right;
