@@ -20,6 +20,7 @@ public class BarChartDemo extends JFrame {
     public BarChartDemo() {
         setLocation(20, 50);
         setSize(600, 600);
+        setTitle("Bar Chart Demo");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         initGUI();
     }
