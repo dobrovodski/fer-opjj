@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.gui.calc;
 
+import hr.fer.zemris.java.gui.layouts.CalcLayout;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,12 +8,14 @@ import static org.junit.Assert.*;
 
 import java.util.function.DoubleBinaryOperator;
 
+/**
+ * JUnit tests for {@link CalcModelImpl}.
+ */
 public class CalcModelTest {
 
     private CalcModel model;
 
     private static CalcModel newCalcModel() {
-        // Zamijenite ovo tako da vraća primjerak Vaše implementacije modela.
         return new CalcModelImpl();
     }
 

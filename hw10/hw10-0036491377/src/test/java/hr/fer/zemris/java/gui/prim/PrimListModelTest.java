@@ -8,6 +8,13 @@ import javax.swing.event.ListDataListener;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * JUnit tests for {@link PrimListModel}.
+ *
+ * @author matej
+ * @see <a href= "http://osherove.com/blog/2005/4/3/naming-standards-for-unit-tests.html"> Naming standards for unit
+ *         tests </a>
+ */
 public class PrimListModelTest {
     private PrimListModel model;
 

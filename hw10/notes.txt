@@ -12,3 +12,12 @@
 - binary: +, -, *, /, x^n
 
 - 58,+ --> setActiveOperand(58), setPendingBinaryOperation(+), clear value (but not screen!!!)
+
+
+Checklist:
+- row/column indexing starts at 1
+- all rows have equal height, all columns have equal width (excluding screen)
+- CalcLayoutException extends RuntimeException
+- JUnit tests for restrictions
+- height of all rows = max height of preferred height of all components
+...

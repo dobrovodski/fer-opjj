@@ -75,7 +75,8 @@ public class Calculator extends JFrame {
         addButton(cp, new BinaryOperatorButton("-", (x, y) -> x - y), 4, 6);
         addButton(cp, new BinaryOperatorButton("*", (x, y) -> x * y), 3, 6);
         addButton(cp, new BinaryOperatorButton("/", (x, y) -> x / y), 2, 6);
-        addButton(cp, new BinaryOperatorButton("x^n", (x, y) -> uninverted ? Math.pow(x, y) : Math.pow(x, -y)), 5, 1);
+        addButton(cp, new BinaryOperatorButton("x^n",
+                (x, y) -> uninverted ? Math.pow(x, y) : Math.pow(x, 1.0 / y)), 5, 1);
 
         // Special action buttons
         addButton(cp, new ActionButton("•", CalcModel::insertDecimalPoint), 5, 5);

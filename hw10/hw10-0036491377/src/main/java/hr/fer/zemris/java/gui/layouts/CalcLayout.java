@@ -160,7 +160,7 @@ public class CalcLayout implements LayoutManager2 {
 
         // In case the (1, 1) component exists, get its width to check total component width
         // Total component width will either be (first width) + (number of leftover components * size)
-        // or it can be
+        // or it can be (number of components * size)
         int firstWidth = 0;
         if (firstComponent != null) {
             firstWidth = getSize.apply(firstComponent).width;
