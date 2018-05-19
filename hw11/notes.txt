@@ -1,0 +1,16 @@
+Functionality:
+- name of this editor must be shown in window's title - icon: custom OwO
+- allow user to work with multiple documents at the same time
+- creating a new blank document - icon: newFile.bmp
+- opening existing document - icon: openFile.bmp
+- saving document - icon: saveFile.bmp
+- saving-as document (warn user if file already exists) - icon: ?
+- close document shown it a tab (and remove that tab) - icon: closeFile.bmp
+- cut/copy/paste text - icons: cut.bmp/copy.bmp/paste.bmp
+- statistical info - icon: ?
+- exiting application - icon: ?
+- each tab should have embedded an icon which visually indicates if the document is modified - icon: ?/unsaved.ico/...?
+- each tab should additionally display filename of document 
+- tooltip with the full document path
+- icons should be png
+- 
