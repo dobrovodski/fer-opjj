@@ -14,3 +14,10 @@ Functionality:
 - tooltip with the full document path
 - icons should be png
 - 
+
+Implementation:
+- for text editing use JTextArea component
+- for each open document you will create a new instance of JTextArea for it
+- added to a JScrollPane added to JPanel(or something else) and eventually added into a JTabbedPane
+- JFileChooser for open/save
+- 
