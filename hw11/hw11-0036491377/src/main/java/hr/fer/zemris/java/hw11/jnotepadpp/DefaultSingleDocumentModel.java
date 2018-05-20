@@ -1,6 +1,8 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,24 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
     public DefaultSingleDocumentModel(Path filePath, String content) {
         this.textComponent = new JTextArea(content);
+        this.textComponent.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                System.out.println("JTextArea changed.");
+                setModified(true);
+            }
+        });
+
         this.filePath = filePath;
         this.listeners = new ArrayList<>();
     }
