@@ -46,10 +46,11 @@ public class JNotepadPP extends JFrame {
     }
 
     private void createActions() {
-        setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "TODO");
-        setActionAttributes(newDocumentAction, "New", "control N", KeyEvent.VK_N, "TODO");
-        setActionAttributes(saveDocumentAction, "Save", "control S", KeyEvent.VK_S, "TODO");
-        setActionAttributes(saveAsDocumentAction, "Save As", "control alt S", KeyEvent.VK_A, "TODO");
+        setActionAttributes(newDocumentAction, "New", "control N", KeyEvent.VK_N, "New file");
+        setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "Open file");
+        setActionAttributes(saveDocumentAction, "Save", "control S", KeyEvent.VK_S, "Save");
+        setActionAttributes(saveAsDocumentAction, "Save As", "control alt S", KeyEvent.VK_A, "Save As");
+        setActionAttributes(closeDocumentAction, "Close", "control W", KeyEvent.VK_W, "Close");
     }
 
     private void setActionAttributes(Action action, String name, String keyStroke, int mnemonic, String description) {
@@ -68,19 +69,23 @@ public class JNotepadPP extends JFrame {
         fileMenu.add(new JMenuItem(newDocumentAction));
         fileMenu.add(new JMenuItem(saveDocumentAction));
         fileMenu.add(new JMenuItem(saveAsDocumentAction));
+        fileMenu.add(new JMenuItem(closeDocumentAction));
 
         this.setJMenuBar(mb);
     }
 
     private void createToolbars() {
-        JToolBar tb = new JToolBar("Alati");
+        JToolBar tb = new JToolBar();
         tb.setFloatable(true);
-        tb.setDefaultB
 
-        tb.add(createActionButton(openDocumentAction, "icons/newFile.png"));
+        tb.add(createActionButton(newDocumentAction, "icons/newFile.png"));
+        tb.add(createActionButton(openDocumentAction, "icons/openFile.png"));
         tb.add(createActionButton(saveDocumentAction, "icons/saveFile.png"));
+        tb.add(createActionButton(saveAsDocumentAction, "icons/saveAsFile.png"));
+        tb.add(createActionButton(closeDocumentAction, "icons/closeFile.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
+
     }
 
     private Action openDocumentAction = new AbstractAction() {
@@ -116,6 +121,11 @@ public class JNotepadPP extends JFrame {
     private Action saveAsDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Save as");
 
@@ -135,7 +145,7 @@ public class JNotepadPP extends JFrame {
             }
 
             if (choice == 0) {
-                multipleDocumentModel.saveDocument(multipleDocumentModel.getCurrentDocument(), filePath);
+                multipleDocumentModel.saveDocument(doc, filePath);
             }
         }
     };
@@ -143,13 +153,25 @@ public class JNotepadPP extends JFrame {
     private Action saveDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Path filePath = multipleDocumentModel.getCurrentDocument().getFilePath();
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            Path filePath = doc.getFilePath();
             if (filePath == null) {
                 saveAsDocumentAction.actionPerformed(e);
                 return;
             }
 
-            multipleDocumentModel.saveDocument(multipleDocumentModel.getCurrentDocument(), filePath);
+            multipleDocumentModel.saveDocument(doc, filePath);
+        }
+    };
+
+    private Action closeDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            multipleDocumentModel.closeDocument(multipleDocumentModel.getCurrentDocument());
         }
     };
 

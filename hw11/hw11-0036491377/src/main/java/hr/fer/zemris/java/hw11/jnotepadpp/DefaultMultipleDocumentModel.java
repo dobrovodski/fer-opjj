@@ -1,12 +1,14 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +22,15 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     public DefaultMultipleDocumentModel() {
         singleDocuments = new ArrayList<>();
         listeners = new ArrayList<>();
+
+        addChangeListener(e -> {
+            int index = getSelectedIndex();
+            if (index < 0 || singleDocuments.size() == 0) {
+                currentDocument = null;
+            } else {
+                currentDocument = singleDocuments.get(index);
+            }
+        });
     }
 
     @Override
@@ -31,8 +42,12 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         singleDocuments.add(newDocument);
 
         JScrollPane sp = new JScrollPane(newDocument.getTextComponent());
-        addTab("new document", sp);
+        String name = "new document";
+        Path path = Paths.get("").toAbsolutePath().resolve(name);
+        newDocument.setFilePath(path);
+        addTab(path.getFileName().toString(), sp);
         setSelectedIndex(singleDocuments.indexOf(currentDocument));
+        setTabAttributes(singleDocuments.indexOf(currentDocument), name, "x");
 
         notifyCurrentDocumentChanged(prevDocument, newDocument);
         notifyDocumentAdded(newDocument);
@@ -100,11 +115,16 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         JLabel nameLabel = new JLabel(name);
         panel.add(nameLabel, BorderLayout.CENTER);
         panel.add(new JButton(icon), BorderLayout.LINE_END);
+        panel.setMaximumSize(new Dimension(30, 30));
         setTabComponentAt(index, panel);
     }
 
     @Override
     public void saveDocument(SingleDocumentModel model, Path newPath) {
+        if (model == null) {
+            return;
+        }
+
         Objects.requireNonNull(newPath, "Path may not be null.");
         try {
             Files.write(newPath, model.getTextComponent().getText().getBytes(StandardCharsets.UTF_8));
@@ -118,6 +138,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
     @Override
     public void closeDocument(SingleDocumentModel model) {
+        if (model == null) {
+            return;
+        }
+
         int size = singleDocuments.size();
         int index = singleDocuments.indexOf(model);
 
@@ -135,7 +159,16 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             }
         }
 
+
+        if (currentDocument != null) {
+            int currentIndex = singleDocuments.indexOf(currentDocument);
+            setSelectedIndex(currentIndex);
+            String name = currentDocument.getFilePath().getFileName().toString();
+            setTabAttributes(currentIndex, name, "x");
+        }
+
         singleDocuments.remove(model);
+        removeTabAt(index);
         notifyCurrentDocumentChanged(model, currentDocument);
         notifyDocumentRemoved(model);
     }
