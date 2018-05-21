@@ -4,14 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class JNotepadPP extends JFrame {
-    private DefaultMultipleDocumentModel model;
-    private JTabbedPane tabbedPane;
+    private DefaultMultipleDocumentModel multipleDocumentModel;
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException |
+                InstantiationException |
+                IllegalAccessException |
+                UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
         SwingUtilities.invokeLater(() -> {
             new JNotepadPP().setVisible(true);
         });
@@ -21,27 +31,31 @@ public class JNotepadPP extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(50, 50);
         setSize(600, 600);
-        model = new DefaultMultipleDocumentModel();
-        tabbedPane = new JTabbedPane();
+        multipleDocumentModel = new DefaultMultipleDocumentModel();
         initGUI();
     }
 
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
-        cp.add(tabbedPane, BorderLayout.CENTER);
+        cp.add(multipleDocumentModel, BorderLayout.CENTER);
+
         createActions();
         createMenus();
+        createToolbars();
     }
 
     private void createActions() {
-        setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "Owo");
+        setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "TODO");
+        setActionAttributes(newDocumentAction, "New", "control N", KeyEvent.VK_N, "TODO");
+        setActionAttributes(saveDocumentAction, "Save", "control S", KeyEvent.VK_S, "TODO");
+        setActionAttributes(saveAsDocumentAction, "Save As", "control alt S", KeyEvent.VK_A, "TODO");
     }
 
-    private void setActionAttributes(Action action, String name, String keyStroke, int mnemomic, String description) {
+    private void setActionAttributes(Action action, String name, String keyStroke, int mnemonic, String description) {
         action.putValue(Action.NAME, name);
         action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(keyStroke));
-        action.putValue(Action.MNEMONIC_KEY, mnemomic);
+        action.putValue(Action.MNEMONIC_KEY, mnemonic);
         action.putValue(Action.SHORT_DESCRIPTION, description);
     }
 
@@ -51,12 +65,22 @@ public class JNotepadPP extends JFrame {
         JMenu fileMenu = new JMenu("File");
         mb.add(fileMenu);
         fileMenu.add(new JMenuItem(openDocumentAction));
+        fileMenu.add(new JMenuItem(newDocumentAction));
+        fileMenu.add(new JMenuItem(saveDocumentAction));
+        fileMenu.add(new JMenuItem(saveAsDocumentAction));
 
         this.setJMenuBar(mb);
     }
 
     private void createToolbars() {
+        JToolBar tb = new JToolBar("Alati");
+        tb.setFloatable(true);
+        tb.setDefaultB
 
+        tb.add(createActionButton(openDocumentAction, "icons/newFile.png"));
+        tb.add(createActionButton(saveDocumentAction, "icons/saveFile.png"));
+
+        getContentPane().add(tb, BorderLayout.PAGE_START);
     }
 
     private Action openDocumentAction = new AbstractAction() {
@@ -64,6 +88,7 @@ public class JNotepadPP extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Open file");
+
             // Cancel
             if (fc.showOpenDialog(JNotepadPP.this) != JFileChooser.APPROVE_OPTION) {
                 return;
@@ -72,30 +97,83 @@ public class JNotepadPP extends JFrame {
             Path filePath = fc.getSelectedFile().toPath();
             if (!Files.isReadable(filePath)) {
                 JOptionPane.showMessageDialog(JNotepadPP.this,
-                        "File " + filePath.getFileName().toAbsolutePath() + " ne postoji!",
-                        "Pogreška",
+                        "File " + filePath.getFileName().toAbsolutePath() + " does not exist.",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
 
-            model.addMultipleDocumentListener(new MultipleDocumentListener() {
-                @Override
-                public void currentDocumentChanged(SingleDocumentModel previousModel, SingleDocumentModel currentModel) {
-                    System.out.println("Here");
-                }
-
-                @Override
-                public void documentAdded(SingleDocumentModel model) {
-                    System.out.println("Here2");
-                    tabbedPane.addTab("yeet", model.getTextComponent());
-                }
-
-                @Override
-                public void documentRemoved(SingleDocumentModel model) {
-                    System.out.println("Here3");
-                }
-            });
-
-            model.loadDocument(filePath);
+            multipleDocumentModel.loadDocument(filePath);
         }
     };
+
+    private Action newDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            multipleDocumentModel.createNewDocument();
+        }
+    };
+
+    private Action saveAsDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Save as");
+
+            // Cancel
+            if (fc.showOpenDialog(JNotepadPP.this) != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            Path filePath = fc.getSelectedFile().toPath();
+
+            int choice = 1;
+            if (Files.exists(filePath)) {
+                 choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
+                        filePath.getFileName() + " already exists.\nDo you want to replace it?",
+                        "Confirm Save As",
+                        JOptionPane.YES_NO_OPTION);
+            }
+
+            if (choice == 0) {
+                multipleDocumentModel.saveDocument(multipleDocumentModel.getCurrentDocument(), filePath);
+            }
+        }
+    };
+
+    private Action saveDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Path filePath = multipleDocumentModel.getCurrentDocument().getFilePath();
+            if (filePath == null) {
+                saveAsDocumentAction.actionPerformed(e);
+                return;
+            }
+
+            multipleDocumentModel.saveDocument(multipleDocumentModel.getCurrentDocument(), filePath);
+        }
+    };
+
+    private JButton createActionButton(Action action, String location) {
+        JButton button = new JButton(action);
+        InputStream is = this.getClass().getResourceAsStream(location);
+        byte[] bytes;
+
+        try {
+            bytes = is.readAllBytes();
+        } catch (IOException e) {
+            return null;
+        }
+
+        try {
+            is.close();
+        } catch (IOException e) {
+            return null;
+        }
+
+        button.setIcon(new ImageIcon(bytes));
+        button.setText("");
+        button.setFocusPainted(false);
+
+        return button;
+    }
 }

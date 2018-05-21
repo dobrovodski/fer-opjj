@@ -1,6 +1,9 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +30,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         currentDocument = newDocument;
         singleDocuments.add(newDocument);
 
+        JScrollPane sp = new JScrollPane(newDocument.getTextComponent());
+        addTab("new document", sp);
+        setSelectedIndex(singleDocuments.indexOf(currentDocument));
+
         notifyCurrentDocumentChanged(prevDocument, newDocument);
         notifyDocumentAdded(newDocument);
         return newDocument;
@@ -43,9 +50,17 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         // Check if already opened
         for (SingleDocumentModel m : singleDocuments) {
-            if (m.getFilePath().equals(path)) {
+            Path mPath = m.getFilePath();
+
+            if (mPath == null) {
+                continue;
+            }
+
+            if (mPath.equals(path)) {
                 SingleDocumentModel prev = currentDocument;
                 currentDocument = m;
+
+                setSelectedIndex(singleDocuments.indexOf(currentDocument));
                 notifyCurrentDocumentChanged(prev, currentDocument);
                 return currentDocument;
             }
@@ -56,8 +71,8 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             bytes = Files.readAllBytes(path);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                    "EWE: " + path.getFileName().toAbsolutePath(),
-                    "OWO",
+                    "Could not read file: " + path.getFileName().toAbsolutePath(),
+                    "Error",
                     JOptionPane.ERROR_MESSAGE);
             return null;
         }
@@ -68,14 +83,37 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         currentDocument = model;
         singleDocuments.add(model);
 
+        String name = path.getFileName().toString();
+        addTab(name, new JScrollPane(model.getTextComponent()));
+        setSelectedIndex(singleDocuments.indexOf(currentDocument));
+        setTabAttributes(singleDocuments.indexOf(currentDocument), name, "x");
+
         notifyCurrentDocumentChanged(prev, currentDocument);
         notifyDocumentAdded(model);
+
         return model;
+    }
+
+    private void setTabAttributes(int index, String name, String icon) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        JLabel nameLabel = new JLabel(name);
+        panel.add(nameLabel, BorderLayout.CENTER);
+        panel.add(new JButton(icon), BorderLayout.LINE_END);
+        setTabComponentAt(index, panel);
     }
 
     @Override
     public void saveDocument(SingleDocumentModel model, Path newPath) {
-
+        Objects.requireNonNull(newPath, "Path may not be null.");
+        try {
+            Files.write(newPath, model.getTextComponent().getText().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not save " + newPath.getFileName().toAbsolutePath() + ".",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @Override
@@ -152,6 +190,4 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     private void setIconSaved() {
 
     }
-
-
 }

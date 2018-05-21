@@ -15,20 +15,20 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
     public DefaultSingleDocumentModel(Path filePath, String content) {
         this.textComponent = new JTextArea(content);
+
         this.textComponent.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-
+                setModified(true);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-
+                setModified(true);
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                System.out.println("JTextArea changed.");
                 setModified(true);
             }
         });
