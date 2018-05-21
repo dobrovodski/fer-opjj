@@ -1,9 +1,6 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -46,8 +43,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         Path path = Paths.get("").toAbsolutePath().resolve(name);
         newDocument.setFilePath(path);
         addTab(path.getFileName().toString(), sp);
-        setSelectedIndex(singleDocuments.indexOf(currentDocument));
-        setTabAttributes(singleDocuments.indexOf(currentDocument), name, "x");
+
+        int index = singleDocuments.indexOf(currentDocument);
+        setSelectedIndex(index);
+        setTabAttributes(index, name, path.toString(), "icons/paste.png");
 
         notifyCurrentDocumentChanged(prevDocument, newDocument);
         notifyDocumentAdded(newDocument);
@@ -73,9 +72,12 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             if (mPath.equals(path)) {
                 SingleDocumentModel prev = currentDocument;
+                setEnabledAt(singleDocuments.indexOf(prev), false);
                 currentDocument = m;
 
-                setSelectedIndex(singleDocuments.indexOf(currentDocument));
+                int index = singleDocuments.indexOf(currentDocument);
+                setSelectedIndex(index);
+                setEnabledAt(index, false);
                 notifyCurrentDocumentChanged(prev, currentDocument);
                 return currentDocument;
             }
@@ -100,8 +102,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         String name = path.getFileName().toString();
         addTab(name, new JScrollPane(model.getTextComponent()));
-        setSelectedIndex(singleDocuments.indexOf(currentDocument));
-        setTabAttributes(singleDocuments.indexOf(currentDocument), name, "x");
+
+        int index = singleDocuments.indexOf(currentDocument);
+        setSelectedIndex(index);
+        setTabAttributes(index, name, path.toAbsolutePath().toString(), "icons/paste.png");
 
         notifyCurrentDocumentChanged(prev, currentDocument);
         notifyDocumentAdded(model);
@@ -109,14 +113,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         return model;
     }
 
-    private void setTabAttributes(int index, String name, String icon) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        JLabel nameLabel = new JLabel(name);
-        panel.add(nameLabel, BorderLayout.CENTER);
-        panel.add(new JButton(icon), BorderLayout.LINE_END);
-        panel.setMaximumSize(new Dimension(30, 30));
-        setTabComponentAt(index, panel);
+    private void setTabAttributes(int index, String name, String tooltip, String icon) {
+        setTitleAt(index, name);
+        setToolTipTextAt(index, tooltip);
+        setIconAt(index, Util.loadIcon(icon));
     }
 
     @Override
@@ -163,8 +163,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         if (currentDocument != null) {
             int currentIndex = singleDocuments.indexOf(currentDocument);
             setSelectedIndex(currentIndex);
-            String name = currentDocument.getFilePath().getFileName().toString();
-            setTabAttributes(currentIndex, name, "x");
+            Path path = currentDocument.getFilePath();
+            String name = path.getFileName().toString();
+            setTabAttributes(currentIndex, name, path.toAbsolutePath().toString(), "icons/paste.png");
         }
 
         singleDocuments.remove(model);

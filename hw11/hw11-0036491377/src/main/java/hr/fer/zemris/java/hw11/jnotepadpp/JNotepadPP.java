@@ -177,22 +177,7 @@ public class JNotepadPP extends JFrame {
 
     private JButton createActionButton(Action action, String location) {
         JButton button = new JButton(action);
-        InputStream is = this.getClass().getResourceAsStream(location);
-        byte[] bytes;
-
-        try {
-            bytes = is.readAllBytes();
-        } catch (IOException e) {
-            return null;
-        }
-
-        try {
-            is.close();
-        } catch (IOException e) {
-            return null;
-        }
-
-        button.setIcon(new ImageIcon(bytes));
+        button.setIcon(Util.loadIcon(location));
         button.setText("");
         button.setFocusPainted(false);
 
