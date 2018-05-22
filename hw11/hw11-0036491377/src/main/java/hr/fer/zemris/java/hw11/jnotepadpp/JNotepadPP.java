@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 public class JNotepadPP extends JFrame {
     private DefaultMultipleDocumentModel multipleDocumentModel;
+    private final static String nameOfWindow = "JNotepad++";
     private Action openDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -150,6 +151,7 @@ public class JNotepadPP extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(50, 50);
         setSize(600, 600);
+        setTitle(nameOfWindow);
         multipleDocumentModel = new DefaultMultipleDocumentModel();
         initGUI();
     }
@@ -180,6 +182,18 @@ public class JNotepadPP extends JFrame {
                     dispose();
                 }
             }
+        });
+
+        multipleDocumentModel.addChangeListener(e -> {
+            int index = multipleDocumentModel.getSelectedIndex();
+            if (index == -1) {
+                setTitle(nameOfWindow);
+                return;
+            }
+
+            Path path = multipleDocumentModel.getDocument(multipleDocumentModel.getSelectedIndex()).getFilePath();
+            String name = path == null ? "new document" : path.getFileName().toString();
+            setTitle(name + " - " + nameOfWindow);
         });
 
         createActions();
