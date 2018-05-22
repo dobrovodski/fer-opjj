@@ -190,9 +190,15 @@ public class JNotepadPP extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
-            if (!current.isModified()) {
+            if (current == null) {
                 return;
             }
+
+            if (!current.isModified()) {
+                multipleDocumentModel.closeDocument(current);
+                return;
+            }
+
             int n = queryForUnsavedDocument(current);
             if (n == 0) {
                 saveAsDocumentAction.actionPerformed(null);
