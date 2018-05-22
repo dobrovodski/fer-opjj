@@ -45,7 +45,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         addTab(newDocumentName, sp);
         setSelectedIndex(index);
-        setTabAttributes(index, newDocumentName, newDocumentName, UNSAVED);
+        setTabAttributes(index, newDocumentName, newDocumentName, SAVED);
         addAttributesListener(newDocument);
 
         notifyCurrentDocumentChanged(prevDocument, newDocument);
@@ -114,7 +114,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             return;
         }
 
-        Objects.requireNonNull(newPath, "Path may not be null.");
+        if (newPath == null) {
+            newPath = model.getFilePath();
+        }
+
         try {
             Files.write(newPath, model.getTextComponent().getText().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -160,6 +163,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         }
 
         singleDocuments.remove(model);
+
         removeTabAt(index);
         notifyCurrentDocumentChanged(model, currentDocument);
         notifyDocumentRemoved(model);
