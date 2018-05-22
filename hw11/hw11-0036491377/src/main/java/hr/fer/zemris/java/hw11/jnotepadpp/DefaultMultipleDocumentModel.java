@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +14,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     private List<SingleDocumentModel> singleDocuments;
     private SingleDocumentModel currentDocument;
     private List<MultipleDocumentListener> listeners;
+    private static final Icon SAVED = Util.loadIcon("icons/saved.png");
+    private static final Icon UNSAVED = Util.loadIcon("icons/unsaved.png");
+    private static final String newDocumentName = "new document";
 
     public DefaultMultipleDocumentModel() {
         singleDocuments = new ArrayList<>();
@@ -39,14 +41,12 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         singleDocuments.add(newDocument);
 
         JScrollPane sp = new JScrollPane(newDocument.getTextComponent());
-        String name = "new document";
-        Path path = Paths.get("").toAbsolutePath().resolve(name);
-        newDocument.setFilePath(path);
-        addTab(path.getFileName().toString(), sp);
-
         int index = singleDocuments.indexOf(currentDocument);
+
+        addTab(newDocumentName, sp);
         setSelectedIndex(index);
-        setTabAttributes(index, name, path.toString(), "icons/paste.png");
+        setTabAttributes(index, newDocumentName, newDocumentName, UNSAVED);
+        addAttributesListener(newDocument);
 
         notifyCurrentDocumentChanged(prevDocument, newDocument);
         notifyDocumentAdded(newDocument);
@@ -72,28 +72,16 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             if (mPath.equals(path)) {
                 SingleDocumentModel prev = currentDocument;
-                setEnabledAt(singleDocuments.indexOf(prev), false);
                 currentDocument = m;
 
                 int index = singleDocuments.indexOf(currentDocument);
                 setSelectedIndex(index);
-                setEnabledAt(index, false);
                 notifyCurrentDocumentChanged(prev, currentDocument);
                 return currentDocument;
             }
         }
 
-        byte[] bytes;
-        try {
-            bytes = Files.readAllBytes(path);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Could not read file: " + path.getFileName().toAbsolutePath(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-        String text = new String(bytes, StandardCharsets.UTF_8);
+        String text = Util.readFile(path.toAbsolutePath(), this);
 
         SingleDocumentModel model = new DefaultSingleDocumentModel(path, text);
         SingleDocumentModel prev = currentDocument;
@@ -105,7 +93,8 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         int index = singleDocuments.indexOf(currentDocument);
         setSelectedIndex(index);
-        setTabAttributes(index, name, path.toAbsolutePath().toString(), "icons/paste.png");
+        setTabAttributes(index, name, path.toAbsolutePath().toString(), SAVED);
+        addAttributesListener(model);
 
         notifyCurrentDocumentChanged(prev, currentDocument);
         notifyDocumentAdded(model);
@@ -113,10 +102,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         return model;
     }
 
-    private void setTabAttributes(int index, String name, String tooltip, String icon) {
+    private void setTabAttributes(int index, String name, String tooltip, Icon icon) {
         setTitleAt(index, name);
         setToolTipTextAt(index, tooltip);
-        setIconAt(index, Util.loadIcon(icon));
+        setIconAt(index, icon);
     }
 
     @Override
@@ -134,6 +123,12 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+
+        if (!newPath.equals(model.getFilePath())) {
+            model.setFilePath(newPath);
+        }
+
+        model.setModified(false);
     }
 
     @Override
@@ -159,13 +154,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
             }
         }
 
-
         if (currentDocument != null) {
             int currentIndex = singleDocuments.indexOf(currentDocument);
             setSelectedIndex(currentIndex);
-            Path path = currentDocument.getFilePath();
-            String name = path.getFileName().toString();
-            setTabAttributes(currentIndex, name, path.toAbsolutePath().toString(), "icons/paste.png");
         }
 
         singleDocuments.remove(model);
@@ -217,11 +208,25 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         }
     }
 
-    private void setIconModified() {
-        //setIconAt(, );
-    }
+    private void addAttributesListener(SingleDocumentModel model) {
+        model.addSingleDocumentListener(new SingleDocumentListener() {
+            @Override
+            public void documentModifyStatusUpdated(SingleDocumentModel model) {
+                int index = singleDocuments.indexOf(model);
+                Path path = model.getFilePath();
+                Icon icon = model.isModified() ? UNSAVED : SAVED;
 
-    private void setIconSaved() {
+                if (path != null) {
+                    setTabAttributes(index, path.getFileName().toString(), path.toAbsolutePath().toString(), icon);
+                } else {
+                    setTabAttributes(index, newDocumentName, newDocumentName, icon);
+                }
+            }
 
+            @Override
+            public void documentFilePathUpdated(SingleDocumentModel model) {
+                System.out.println("file path updated");
+            }
+        });
     }
 }

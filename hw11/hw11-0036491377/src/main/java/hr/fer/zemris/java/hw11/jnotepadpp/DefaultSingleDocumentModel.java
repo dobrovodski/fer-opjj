@@ -60,6 +60,10 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
     @Override
     public void setModified(boolean modified) {
+        if (this.modified == modified) {
+            return;
+        }
+
         this.modified = modified;
         notifyModifiedChanged();
     }

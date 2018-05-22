@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.lang.annotation.Documented;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,43 +14,6 @@ import java.nio.file.Path;
 public class JNotepad extends JFrame {
     private JTextArea editor;
     private Path openedFilePath;
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.invokeLater(() -> {
-            new JNotepad().setVisible(true);
-        });
-    }
-
-    public JNotepad() {
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setLocation(50, 50);
-        setSize(600, 600);
-
-        initGUI();
-    }
-
-    private void initGUI() {
-        editor = new JTextArea("owo");
-        Container cp = getContentPane();
-        cp.setLayout(new BorderLayout());
-        cp.add(new JScrollPane(editor), BorderLayout.CENTER);
-
-        createActions();
-        createMenus();
-        createToolbars();
-    }
-
     private Action openDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -70,23 +32,12 @@ public class JNotepad extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
 
-            byte[] bytes;
-            try {
-                bytes = Files.readAllBytes(filePath);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(JNotepad.this,
-                        "Pogreška prilikom čitanja: " + filePath.getFileName().toAbsolutePath(),
-                        "Pogreška",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            String text = Util.readFile(filePath.toAbsolutePath(), JNotepad.this);
 
-            String text = new String(bytes, StandardCharsets.UTF_8);
             editor.setText(text);
             openedFilePath = filePath;
         }
     };
-
     private Action saveDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -124,7 +75,6 @@ public class JNotepad extends JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
         }
     };
-
     private Action deleteSelectedPartAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -142,7 +92,6 @@ public class JNotepad extends JFrame {
             }
         }
     };
-
     private Action toggleCaseAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -183,13 +132,48 @@ public class JNotepad extends JFrame {
             return new String(chars);
         }
     };
-
     private Action exitAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
     };
+
+    public JNotepad() {
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(50, 50);
+        setSize(600, 600);
+
+        initGUI();
+    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        SwingUtilities.invokeLater(() -> {
+            new JNotepad().setVisible(true);
+        });
+    }
+
+    private void initGUI() {
+        editor = new JTextArea("owo");
+        Container cp = getContentPane();
+        cp.setLayout(new BorderLayout());
+        cp.add(new JScrollPane(editor), BorderLayout.CENTER);
+
+        createActions();
+        createMenus();
+        createToolbars();
+    }
 
     private void createActions() {
         openDocumentAction.putValue(Action.NAME, "Open");

@@ -4,13 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class JNotepadPP extends JFrame {
     private DefaultMultipleDocumentModel multipleDocumentModel;
+
+    public JNotepadPP() {
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(50, 50);
+        setSize(600, 600);
+        multipleDocumentModel = new DefaultMultipleDocumentModel();
+        initGUI();
+    }
 
     public static void main(String[] args) {
         try {
@@ -27,18 +33,11 @@ public class JNotepadPP extends JFrame {
         });
     }
 
-    public JNotepadPP() {
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setLocation(50, 50);
-        setSize(600, 600);
-        multipleDocumentModel = new DefaultMultipleDocumentModel();
-        initGUI();
-    }
-
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
         cp.add(multipleDocumentModel, BorderLayout.CENTER);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         createActions();
         createMenus();
@@ -83,9 +82,22 @@ public class JNotepadPP extends JFrame {
         tb.add(createActionButton(saveDocumentAction, "icons/saveFile.png"));
         tb.add(createActionButton(saveAsDocumentAction, "icons/saveAsFile.png"));
         tb.add(createActionButton(closeDocumentAction, "icons/closeFile.png"));
+        tb.addSeparator();
+        tb.add(createActionButton(exitAction, "icons/cut.png"));
+        tb.add(createActionButton(closeDocumentAction, "icons/copy.png"));
+        tb.add(createActionButton(closeDocumentAction, "icons/paste.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
 
+    }
+
+    private JButton createActionButton(Action action, String location) {
+        JButton button = new JButton(action);
+        button.setIcon(Util.loadIcon(location));
+        button.setText("");
+        button.setFocusPainted(false);
+
+        return button;
     }
 
     private Action openDocumentAction = new AbstractAction() {
@@ -110,14 +122,12 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.loadDocument(filePath);
         }
     };
-
     private Action newDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
             multipleDocumentModel.createNewDocument();
         }
     };
-
     private Action saveAsDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -138,7 +148,7 @@ public class JNotepadPP extends JFrame {
 
             int choice = 1;
             if (Files.exists(filePath)) {
-                 choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
+                choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
                         filePath.getFileName() + " already exists.\nDo you want to replace it?",
                         "Confirm Save As",
                         JOptionPane.YES_NO_OPTION);
@@ -149,7 +159,6 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
-
     private Action saveDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -167,7 +176,6 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.saveDocument(doc, filePath);
         }
     };
-
     private Action closeDocumentAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -175,12 +183,16 @@ public class JNotepadPP extends JFrame {
         }
     };
 
-    private JButton createActionButton(Action action, String location) {
-        JButton button = new JButton(action);
-        button.setIcon(Util.loadIcon(location));
-        button.setText("");
-        button.setFocusPainted(false);
+    private Action exitAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (SingleDocumentModel m : multipleDocumentModel) {
+                if (m.isModified()) {
+                    System.out.println("not saved");
+                }
+            }
 
-        return button;
-    }
+            dispose();
+        }
+    };
 }
