@@ -147,6 +147,28 @@ public class JNotepadPP extends JFrame {
         }
     };
 
+    private Action statsAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
+            if (current == null) {
+                return;
+            }
+
+            JTextArea textArea = current.getTextComponent();
+            int lineCount = textArea.getLineCount();
+            int characterCount = textArea.getText().length();
+            int nonBlankCharacterCount = textArea.getText().replaceAll("\\s+", "").length();
+
+            JOptionPane.showMessageDialog(JNotepadPP.this,
+                    String.format("Characters (without blanks): %d\n"
+                                  + "Lines: %d\n"
+                                  + "Current document length: %d",
+                                  nonBlankCharacterCount, lineCount, characterCount),
+                    "Summary", JOptionPane.INFORMATION_MESSAGE);
+        }
+    };
+
     public JNotepadPP() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(50, 50);
@@ -212,6 +234,8 @@ public class JNotepadPP extends JFrame {
         setActionAttributes(cutAction, "Cut", "control X", KeyEvent.VK_T, "Cut");
         setActionAttributes(copyAction, "Copy", "control C", KeyEvent.VK_C, "Copy");
         setActionAttributes(pasteAction, "Paste", "control V", KeyEvent.VK_P, "Paste");
+
+        setActionAttributes(statsAction, "Summary...", "control alt t", KeyEvent.VK_U, "Summary");
     }
 
     private void setActionAttributes(Action action, String name, String keyStroke, int mnemonic, String description) {
@@ -240,6 +264,10 @@ public class JNotepadPP extends JFrame {
         editMenu.add(new JMenuItem(copyAction));
         editMenu.add(new JMenuItem(pasteAction));
 
+        JMenu viewMenu = new JMenu("View");
+        mb.add(viewMenu);
+        viewMenu.add(new JMenuItem(statsAction));
+
         this.setJMenuBar(mb);
     }
 
@@ -256,6 +284,8 @@ public class JNotepadPP extends JFrame {
         tb.add(createActionButton(cutAction, "icons/cut.png"));
         tb.add(createActionButton(copyAction, "icons/copy.png"));
         tb.add(createActionButton(pasteAction, "icons/paste.png"));
+        tb.addSeparator();
+        tb.add(createActionButton(statsAction, "icons/paste.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
 
