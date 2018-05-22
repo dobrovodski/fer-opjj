@@ -11,6 +11,140 @@ import java.nio.file.Path;
 
 public class JNotepadPP extends JFrame {
     private DefaultMultipleDocumentModel multipleDocumentModel;
+    private Action openDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Path filePath = chooseFile("Open file");
+            if (filePath == null) {
+                return;
+            }
+
+            if (!Files.isReadable(filePath)) {
+                JOptionPane.showMessageDialog(JNotepadPP.this,
+                        "File " + filePath.getFileName().toAbsolutePath() + " does not exist.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+            multipleDocumentModel.loadDocument(filePath);
+        }
+    };
+    private Action newDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            multipleDocumentModel.createNewDocument();
+        }
+    };
+    private Action saveAsDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            Path filePath = chooseFile("Save As");
+            if (filePath == null) {
+                return;
+            }
+
+            int choice = 1;
+            if (Files.exists(filePath)) {
+                choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
+                        filePath.getFileName() + " already exists.\nDo you want to replace it?",
+                        "Confirm Save As",
+                        JOptionPane.YES_NO_OPTION);
+            } else {
+                // If target file doesn't exist, create and save it
+                multipleDocumentModel.saveDocument(doc, filePath);
+            }
+
+            if (choice == 0) {
+                multipleDocumentModel.saveDocument(doc, filePath);
+            }
+        }
+    };
+    private Action saveDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            Path filePath = doc.getFilePath();
+            if (filePath == null) {
+                saveAsDocumentAction.actionPerformed(e);
+                return;
+            }
+
+            multipleDocumentModel.saveDocument(doc, filePath);
+        }
+    };
+    private Action closeDocumentAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
+            if (current == null) {
+                return;
+            }
+
+            if (!current.isModified()) {
+                multipleDocumentModel.closeDocument(current);
+                return;
+            }
+
+            int n = queryForUnsavedDocument(current);
+            if (n == 0) {
+                saveAsDocumentAction.actionPerformed(null);
+                multipleDocumentModel.closeDocument(current);
+            }
+            if (n == 1) {
+                multipleDocumentModel.closeDocument(current);
+            }
+        }
+    };
+    private Action exitAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (checkUnsavedDocuments()) {
+                dispose();
+            }
+        }
+    };
+    private Action copyAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            doc.getTextComponent().copy();
+        }
+    };
+    private Action pasteAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            doc.getTextComponent().paste();
+        }
+    };
+    private Action cutAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            if (doc == null) {
+                return;
+            }
+
+            doc.getTextComponent().cut();
+        }
+    };
 
     public JNotepadPP() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -113,148 +247,6 @@ public class JNotepadPP extends JFrame {
 
     }
 
-    private Action openDocumentAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Path filePath = chooseFile("Open file");
-            if (filePath == null) {
-                return;
-            }
-
-            if (!Files.isReadable(filePath)) {
-                JOptionPane.showMessageDialog(JNotepadPP.this,
-                        "File " + filePath.getFileName().toAbsolutePath() + " does not exist.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-
-            multipleDocumentModel.loadDocument(filePath);
-        }
-    };
-
-    private Action newDocumentAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            multipleDocumentModel.createNewDocument();
-        }
-    };
-
-    private Action saveAsDocumentAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            if (doc == null) {
-                return;
-            }
-
-            Path filePath = chooseFile("Save As");
-            if (filePath == null) {
-                return;
-            }
-
-            int choice = 1;
-            if (Files.exists(filePath)) {
-                choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
-                        filePath.getFileName() + " already exists.\nDo you want to replace it?",
-                        "Confirm Save As",
-                        JOptionPane.YES_NO_OPTION);
-            } else {
-                multipleDocumentModel.saveDocument(doc, filePath);
-            }
-
-            if (choice == 0) {
-                multipleDocumentModel.saveDocument(doc, filePath);
-            }
-        }
-    };
-
-    private Action saveDocumentAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            if (doc == null) {
-                return;
-            }
-
-            Path filePath = doc.getFilePath();
-            if (filePath == null) {
-                saveAsDocumentAction.actionPerformed(e);
-                return;
-            }
-
-            multipleDocumentModel.saveDocument(doc, filePath);
-        }
-    };
-
-    private Action closeDocumentAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
-            if (current == null) {
-                return;
-            }
-
-            if (!current.isModified()) {
-                multipleDocumentModel.closeDocument(current);
-                return;
-            }
-
-            int n = queryForUnsavedDocument(current);
-            if (n == 0) {
-                saveAsDocumentAction.actionPerformed(null);
-                multipleDocumentModel.closeDocument(current);
-            }
-            if (n == 1) {
-                multipleDocumentModel.closeDocument(current);
-            }
-        }
-    };
-
-    private Action exitAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (checkUnsavedDocuments()) {
-                dispose();
-            }
-        }
-    };
-
-    private Action copyAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            if (doc == null) {
-                return;
-            }
-
-            doc.getTextComponent().copy();
-        }
-    };
-
-    private Action pasteAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            if (doc == null) {
-                return;
-            }
-
-            doc.getTextComponent().paste();
-        }
-    };
-
-    private Action cutAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            if (doc == null) {
-                return;
-            }
-
-            doc.getTextComponent().cut();
-        }
-    };
-
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
         String name = path == null ? "new document" : path.getFileName().toString();
@@ -275,7 +267,8 @@ public class JNotepadPP extends JFrame {
                     Path path = m.getFilePath();
                     if (path == null) {
                         path = chooseFile("Save As");
-                        if (path == null) return false;
+                        if (path == null)
+                            return false;
                     }
 
                     multipleDocumentModel.saveDocument(m, path);

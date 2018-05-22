@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel {
-    private List<SingleDocumentModel> singleDocuments;
-    private SingleDocumentModel currentDocument;
-    private List<MultipleDocumentListener> listeners;
     private static final Icon SAVED = Util.loadIcon("icons/saved.png");
     private static final Icon UNSAVED = Util.loadIcon("icons/unsaved.png");
     private static final String newDocumentName = "new document";
+    private List<SingleDocumentModel> singleDocuments;
+    private SingleDocumentModel currentDocument;
+    private List<MultipleDocumentListener> listeners;
 
     public DefaultMultipleDocumentModel() {
         singleDocuments = new ArrayList<>();
