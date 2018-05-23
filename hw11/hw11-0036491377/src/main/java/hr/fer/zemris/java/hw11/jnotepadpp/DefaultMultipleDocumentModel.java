@@ -24,10 +24,12 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         addChangeListener(e -> {
             int index = getSelectedIndex();
+            SingleDocumentModel prev = getCurrentDocument();
             if (index < 0 || singleDocuments.size() == 0) {
                 currentDocument = null;
             } else {
                 currentDocument = singleDocuments.get(index);
+                notifyCurrentDocumentChanged(prev, currentDocument);
             }
         });
     }

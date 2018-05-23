@@ -1,6 +1,10 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -164,10 +168,12 @@ public class JNotepadPP extends JFrame {
                     String.format("Characters (without blanks): %d\n"
                                   + "Lines: %d\n"
                                   + "Current document length: %d",
-                                  nonBlankCharacterCount, lineCount, characterCount),
+                            nonBlankCharacterCount, lineCount, characterCount),
                     "Summary", JOptionPane.INFORMATION_MESSAGE);
         }
     };
+
+    private StatusBar statusBar;
 
     public JNotepadPP() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -206,17 +212,32 @@ public class JNotepadPP extends JFrame {
             }
         });
 
-        multipleDocumentModel.addChangeListener(e -> {
-            int index = multipleDocumentModel.getSelectedIndex();
-            if (index == -1) {
-                setTitle(nameOfWindow);
-                return;
+        multipleDocumentModel.addMultipleDocumentListener(new MultipleDocumentListener() {
+            @Override
+            public void currentDocumentChanged(SingleDocumentModel previousModel, SingleDocumentModel currentModel) {
+                if (previousModel != null) {
+                    previousModel.getTextComponent().removeCaretListener(statusBar.getCaretListener());
+                }
+
+                if (currentModel != null) {
+                    updateCaret(currentModel);
+                    updateTitle(currentModel);
+                }
             }
 
-            Path path = multipleDocumentModel.getDocument(multipleDocumentModel.getSelectedIndex()).getFilePath();
-            String name = path == null ? "new document" : path.getFileName().toString();
-            setTitle(name + " - " + nameOfWindow);
+            @Override
+            public void documentAdded(SingleDocumentModel model) {
+                model.getTextComponent().addCaretListener(statusBar.getCaretListener());
+            }
+
+            @Override
+            public void documentRemoved(SingleDocumentModel model) {
+                model.getTextComponent().removeCaretListener(statusBar.getCaretListener());
+            }
         });
+
+        statusBar = new StatusBar();
+        cp.add(statusBar, BorderLayout.SOUTH);
 
         createActions();
         createMenus();
@@ -288,7 +309,76 @@ public class JNotepadPP extends JFrame {
         tb.add(createActionButton(statsAction, "icons/paste.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
+    }
 
+    private static class StatusBar extends JPanel {
+        private JLabel lengthLabel;
+        private JLabel lineLabel;
+        private JLabel colLabel;
+        private JLabel selLabel;
+
+        private CaretListener caretListener;
+
+        public StatusBar() {
+            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+            setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+            caretListener = e -> {
+                JTextArea area = (JTextArea) e.getSource();
+                setLengthLabel(area.getText().length());
+                System.out.println(area.getText().length());
+
+                int pos = area.getCaretPosition();
+                int line;
+                try {
+                    line = area.getLineOfOffset(pos);
+                    setLineLabel(line + 1);
+                    setColLabel(pos - area.getLineStartOffset(line) + 1);
+                    setSelLabel(Math.abs(e.getDot() - e.getMark()));
+                } catch (BadLocationException ignored) {
+                }
+            };
+
+            lengthLabel = new JLabel();
+            setLengthLabel(0);
+            lineLabel = new JLabel();
+            setLineLabel(0);
+            colLabel = new JLabel();
+            setColLabel(0);
+            selLabel = new JLabel();
+            setSelLabel(0);
+
+            add(Box.createHorizontalStrut(5));
+            add(lengthLabel);
+            add(Box.createHorizontalStrut(5));
+            add(new JSeparator(SwingConstants.VERTICAL));
+            add(lineLabel);
+            add(Box.createHorizontalStrut(10));
+            add(colLabel);
+            add(Box.createHorizontalStrut(10));
+            add(selLabel);
+            add(Box.createHorizontalStrut(5));
+        }
+
+        public void setLengthLabel(int length) {
+            lengthLabel.setText("length: " + length);
+        }
+
+        public void setLineLabel(int length) {
+            lineLabel.setText("Ln: " + length);
+        }
+
+        public void setColLabel(int length) {
+            colLabel.setText("Col: " + length);
+        }
+
+        public void setSelLabel(int length) {
+            selLabel.setText("Sel: " + length);
+        }
+
+        public CaretListener getCaretListener() {
+            return caretListener;
+        }
     }
 
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
@@ -348,5 +438,26 @@ public class JNotepadPP extends JFrame {
         button.setFocusPainted(false);
 
         return button;
+    }
+
+    private void updateCaret(SingleDocumentModel model) {
+        model.getTextComponent().addCaretListener(statusBar.getCaretListener());
+        statusBar.getCaretListener().caretUpdate(new CaretEvent(model.getTextComponent()) {
+            @Override
+            public int getDot() {
+                return model.getTextComponent().getCaret().getDot();
+            }
+
+            @Override
+            public int getMark() {
+                return model.getTextComponent().getCaret().getMark();
+            }
+        });
+    }
+
+    private void updateTitle(SingleDocumentModel model) {
+        Path path = model.getFilePath();
+        String name = path == null ? "new document" : path.toString();
+        setTitle(name + " - " + nameOfWindow);
     }
 }
