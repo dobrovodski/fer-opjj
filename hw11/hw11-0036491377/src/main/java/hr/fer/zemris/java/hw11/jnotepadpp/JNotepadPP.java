@@ -201,6 +201,42 @@ public class JNotepadPP extends JFrame {
             LocalizationProvider.getInstance().setLanguage("en");
         }
     };
+    private Action upperCaseAction = new LocalizableAction("uppercase", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+    private Action lowerCaseAction = new LocalizableAction("lowercase", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+    private Action invertCaseAction = new LocalizableAction("invertcase", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+    private Action sortAscendingAction = new LocalizableAction("ascending", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+    private Action sortDescendingAction = new LocalizableAction("descending", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
+    private Action uniqueLinesAction = new LocalizableAction("unique", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    };
 
     public JNotepadPP() {
         multipleDocumentModel = new DefaultMultipleDocumentModel();
@@ -327,10 +363,22 @@ public class JNotepadPP extends JFrame {
 
         JMenu languageMenu = new LJMenu("languages", flp);
         mb.add(languageMenu);
-
         languageMenu.add(new JMenuItem(languageEnAction));
         languageMenu.add(new JMenuItem(languageHrAction));
         languageMenu.add(new JMenuItem(languageDeAction));
+
+        JMenu toolMenu = new LJMenu("tools", flp);
+        mb.add(toolMenu);
+        JMenu caseMenu = new LJMenu("changeCase", flp);
+        caseMenu.add(new JMenuItem(upperCaseAction));
+        caseMenu.add(new JMenuItem(lowerCaseAction));
+        caseMenu.add(new JMenuItem(invertCaseAction));
+        toolMenu.add(caseMenu);
+        JMenu sortMenu = new LJMenu("sort", flp);
+        toolMenu.add(sortMenu);
+        sortMenu.add(new JMenuItem(sortAscendingAction));
+        sortMenu.add(new JMenuItem(sortDescendingAction));
+        toolMenu.add(new JMenuItem(uniqueLinesAction));
 
         this.setJMenuBar(mb);
     }
