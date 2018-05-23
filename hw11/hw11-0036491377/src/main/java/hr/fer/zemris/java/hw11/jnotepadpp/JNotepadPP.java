@@ -1,6 +1,10 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
+import hr.fer.zemris.java.hw11.jnotepadpp.local.FormLocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJLabel;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -18,9 +22,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class JNotepadPP extends JFrame {
-    private DefaultMultipleDocumentModel multipleDocumentModel;
     private final static String nameOfWindow = "JNotepad++";
-    private Action openDocumentAction = new AbstractAction() {
+    private DefaultMultipleDocumentModel multipleDocumentModel;
+    private FormLocalizationProvider flp = new FormLocalizationProvider(LocalizationProvider.getInstance(), this);
+    private StatusBar statusBar;
+
+    private Action openDocumentAction = new LocalizableAction("open", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             Path filePath = chooseFile("Open file");
@@ -38,13 +45,13 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.loadDocument(filePath);
         }
     };
-    private Action newDocumentAction = new AbstractAction() {
+    private Action newDocumentAction = new LocalizableAction("new", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             multipleDocumentModel.createNewDocument();
         }
     };
-    private Action saveAsDocumentAction = new AbstractAction() {
+    private Action saveAsDocumentAction = new LocalizableAction("saveAs", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -73,7 +80,7 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
-    private Action saveDocumentAction = new AbstractAction() {
+    private Action saveDocumentAction = new LocalizableAction("save", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -90,7 +97,7 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.saveDocument(doc, filePath);
         }
     };
-    private Action closeDocumentAction = new AbstractAction() {
+    private Action closeDocumentAction = new LocalizableAction("close", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
@@ -113,7 +120,7 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
-    private Action exitAction = new AbstractAction() {
+    private Action exitAction = new LocalizableAction("exit", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (checkUnsavedDocuments()) {
@@ -121,7 +128,7 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
-    private Action copyAction = new AbstractAction() {
+    private Action copyAction = new LocalizableAction("copy", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -132,7 +139,7 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().copy();
         }
     };
-    private Action pasteAction = new AbstractAction() {
+    private Action pasteAction = new LocalizableAction("paste", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -143,7 +150,7 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().paste();
         }
     };
-    private Action cutAction = new AbstractAction() {
+    private Action cutAction = new LocalizableAction("cut", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -154,8 +161,7 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().cut();
         }
     };
-
-    private Action statsAction = new AbstractAction() {
+    private Action statsAction = new LocalizableAction("stats", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
@@ -176,15 +182,31 @@ public class JNotepadPP extends JFrame {
                     "Summary", JOptionPane.INFORMATION_MESSAGE);
         }
     };
-
-    private StatusBar statusBar;
+    private Action languageHrAction = new LocalizableAction("languageHr", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("hr");
+        }
+    };
+    private Action languageDeAction = new LocalizableAction("languageDe", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("de");
+        }
+    };
+    private Action languageEnAction = new LocalizableAction("languageEn", flp) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            LocalizationProvider.getInstance().setLanguage("en");
+        }
+    };
 
     public JNotepadPP() {
+        multipleDocumentModel = new DefaultMultipleDocumentModel();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(50, 50);
         setSize(600, 600);
         setTitle(nameOfWindow);
-        multipleDocumentModel = new DefaultMultipleDocumentModel();
         initGUI();
     }
 
@@ -240,36 +262,38 @@ public class JNotepadPP extends JFrame {
             }
         });
 
-        statusBar = new StatusBar();
+        statusBar = new StatusBar(flp);
         cp.add(statusBar, BorderLayout.SOUTH);
 
+        createToolbars();
         createActions();
         createMenus();
-        createToolbars();
     }
 
     private void createActions() {
         // TODO
-        setActionAttributes(newDocumentAction, LocalizationProvider.getInstance().getString("login"), "control N",
-                KeyEvent.VK_N, "New file");
-        setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "Open file");
-        setActionAttributes(saveDocumentAction, "Save", "control S", KeyEvent.VK_S, "Save");
-        setActionAttributes(saveAsDocumentAction, "Save As", "control alt S", KeyEvent.VK_A, "Save As");
-        setActionAttributes(closeDocumentAction, "Close", "control W", KeyEvent.VK_C, "Close");
-        setActionAttributes(exitAction, "Exit", "alt F4", KeyEvent.VK_X, "Exit");
+        setActionAttributes(newDocumentAction, "control N", KeyEvent.VK_N);
+        setActionAttributes(openDocumentAction, "control O", KeyEvent.VK_O);
+        setActionAttributes(saveDocumentAction, "control S", KeyEvent.VK_S);
+        setActionAttributes(saveAsDocumentAction, "control alt S", KeyEvent.VK_A);
+        setActionAttributes(closeDocumentAction, "control W", KeyEvent.VK_C);
+        setActionAttributes(exitAction, "alt F4", KeyEvent.VK_X);
 
-        setActionAttributes(cutAction, "Cut", "control X", KeyEvent.VK_T, "Cut");
-        setActionAttributes(copyAction, "Copy", "control C", KeyEvent.VK_C, "Copy");
-        setActionAttributes(pasteAction, "Paste", "control V", KeyEvent.VK_P, "Paste");
+        setActionAttributes(cutAction, "control X", KeyEvent.VK_T);
+        setActionAttributes(copyAction, "control C", KeyEvent.VK_C);
+        setActionAttributes(pasteAction, "control V", KeyEvent.VK_P);
 
-        setActionAttributes(statsAction, "Summary...", "control alt t", KeyEvent.VK_U, "Summary");
+        setActionAttributes(statsAction, "control alt t", KeyEvent.VK_U);
+
+
+        setActionAttributes(languageEnAction, "control alt e", KeyEvent.VK_E);
+        setActionAttributes(languageDeAction, "control alt d", KeyEvent.VK_D);
+        setActionAttributes(languageHrAction, "control alt h", KeyEvent.VK_H);
     }
 
-    private void setActionAttributes(Action action, String name, String keyStroke, int mnemonic, String description) {
-        action.putValue(Action.NAME, name);
+    private void setActionAttributes(Action action, String keyStroke, int mnemonic) {
         action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(keyStroke));
         action.putValue(Action.MNEMONIC_KEY, mnemonic);
-        action.putValue(Action.SHORT_DESCRIPTION, description);
     }
 
     private void createMenus() {
@@ -295,6 +319,14 @@ public class JNotepadPP extends JFrame {
         mb.add(viewMenu);
         viewMenu.add(new JMenuItem(statsAction));
 
+
+        JMenu languageMenu = new JMenu("Languages");
+        mb.add(languageMenu);
+
+        languageMenu.add(new JMenuItem(languageEnAction));
+        languageMenu.add(new JMenuItem(languageHrAction));
+        languageMenu.add(new JMenuItem(languageDeAction));
+
         this.setJMenuBar(mb);
     }
 
@@ -315,108 +347,6 @@ public class JNotepadPP extends JFrame {
         tb.add(createActionButton(statsAction, "icons/paste.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
-    }
-
-    private static class StatusBar extends JPanel {
-        private JLabel lengthLabel;
-        private JLabel lineLabel;
-        private JLabel colLabel;
-        private JLabel selLabel;
-        private JLabel clockLabel;
-        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
-        private boolean stopClock = false;
-
-        private CaretListener caretListener;
-
-        public StatusBar() {
-            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-            setBorder(new BevelBorder(BevelBorder.LOWERED));
-
-            caretListener = e -> {
-                JTextArea area = (JTextArea) e.getSource();
-                setLengthLabel(area.getText().length());
-                System.out.println(area.getText().length());
-
-                int pos = area.getCaretPosition();
-                int line;
-                try {
-                    line = area.getLineOfOffset(pos);
-                    setLineLabel(line + 1);
-                    setColLabel(pos - area.getLineStartOffset(line) + 1);
-                    setSelLabel(Math.abs(e.getDot() - e.getMark()));
-                } catch (BadLocationException ignored) {
-                }
-            };
-
-            lengthLabel = new JLabel();
-            setLengthLabel(0);
-            lineLabel = new JLabel();
-            setLineLabel(0);
-            colLabel = new JLabel();
-            setColLabel(0);
-            selLabel = new JLabel();
-            setSelLabel(0);
-            clockLabel = new JLabel();
-            setTimeLabel();
-
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(lengthLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(new JSeparator(SwingConstants.VERTICAL));
-            add(lineLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(colLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(selLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(clockLabel);
-            add(Box.createRigidArea(new Dimension(5, 0)));
-
-            startClock();
-        }
-
-        private void startClock() {
-            Thread t = new Thread(() -> {
-                while (!stopClock) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ignored) {
-                    }
-                    SwingUtilities.invokeLater(this::setTimeLabel);
-                }
-            });
-
-            t.setDaemon(true);
-            t.start();
-        }
-
-        public void setLengthLabel(int length) {
-            lengthLabel.setText("length: " + length);
-        }
-
-        public void setLineLabel(int length) {
-            lineLabel.setText("Ln: " + length);
-        }
-
-        public void setColLabel(int length) {
-            colLabel.setText("Col: " + length);
-        }
-
-        public void setSelLabel(int length) {
-            selLabel.setText("Sel: " + length);
-        }
-
-        public void stopClock() {
-            stopClock = true;
-        }
-
-        private void setTimeLabel() {
-            clockLabel.setText(formatter.format(LocalDateTime.now()));
-        }
-
-        public CaretListener getCaretListener() {
-            return caretListener;
-        }
     }
 
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
@@ -471,6 +401,7 @@ public class JNotepadPP extends JFrame {
 
     private JButton createActionButton(Action action, String location) {
         JButton button = new JButton(action);
+        button.setHideActionText(true);
         button.setIcon(Util.loadIcon(location));
         button.setText("");
         button.setFocusPainted(false);
@@ -497,5 +428,109 @@ public class JNotepadPP extends JFrame {
         Path path = model.getFilePath();
         String name = path == null ? "new document" : path.toString();
         setTitle(name + " - " + nameOfWindow);
+    }
+
+    private static class StatusBar extends JPanel {
+        private LJLabel lengthLabel;
+        private JLabel lineLabel;
+        private JLabel colLabel;
+        private JLabel selLabel;
+        private JLabel clockLabel;
+        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
+        private ILocalizationProvider lp;
+        private boolean stopClock = false;
+
+        private CaretListener caretListener;
+
+        public StatusBar(ILocalizationProvider lp) {
+            this.lp = lp;
+            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+            setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+            caretListener = e -> {
+                JTextArea area = (JTextArea) e.getSource();
+                setLengthLabel(area.getText().length());
+
+                int pos = area.getCaretPosition();
+                int line;
+                try {
+                    line = area.getLineOfOffset(pos);
+                    setLineLabel(line + 1);
+                    setColLabel(pos - area.getLineStartOffset(line) + 1);
+                    setSelLabel(Math.abs(e.getDot() - e.getMark()));
+                } catch (BadLocationException ignored) {
+                }
+            };
+
+            lengthLabel = new LJLabel("new", lp);
+            setLengthLabel(0);
+            lineLabel = new JLabel();
+            setLineLabel(0);
+            colLabel = new JLabel();
+            setColLabel(0);
+            selLabel = new JLabel();
+            setSelLabel(0);
+            clockLabel = new JLabel();
+            setTimeLabel();
+
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(lengthLabel);
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(new JSeparator(SwingConstants.VERTICAL));
+            add(lineLabel);
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(colLabel);
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(selLabel);
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(clockLabel);
+            add(Box.createRigidArea(new Dimension(5, 0)));
+
+            startClock();
+        }
+
+        private void startClock() {
+            Thread t = new Thread(() -> {
+                while (!stopClock) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ignored) {
+                    }
+                    SwingUtilities.invokeLater(this::setTimeLabel);
+                }
+            });
+
+            t.setDaemon(true);
+            t.start();
+        }
+
+        public void setLengthLabel(int length) {
+            String t = lengthLabel.getText();
+            lengthLabel.setText(lengthLabel.getText() + ": " + length);
+        }
+
+        public void setLineLabel(int length) {
+            lineLabel.setText("Ln: " + length);
+        }
+
+        public void setColLabel(int length) {
+            colLabel.setText("Col: " + length);
+        }
+
+        public void setSelLabel(int length) {
+            selLabel.setText("Sel: " + length);
+        }
+
+        public void stopClock() {
+            stopClock = true;
+        }
+
+        private void setTimeLabel() {
+            clockLabel.setText(formatter.format(LocalDateTime.now()));
+        }
+
+        public CaretListener getCaretListener() {
+            return caretListener;
+        }
     }
 }
