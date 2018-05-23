@@ -250,6 +250,10 @@ public class JNotepadPP extends JFrame {
                     updateCaret(currentModel);
                     updateTitle(currentModel);
                 }
+
+                if (currentModel == null) {
+                    updateTitle(null);
+                }
             }
 
             @Override
@@ -352,7 +356,7 @@ public class JNotepadPP extends JFrame {
 
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
-        String name = path == null ? "new document" : path.getFileName().toString();
+        String name = path == null ? "new" : path.getFileName().toString();
 
         return JOptionPane.showConfirmDialog(
                 this,
@@ -425,8 +429,13 @@ public class JNotepadPP extends JFrame {
     }
 
     private void updateTitle(SingleDocumentModel model) {
+        if (model == null) {
+            setTitle(nameOfWindow);
+            return;
+        }
+
         Path path = model.getFilePath();
-        String name = path == null ? "new document" : path.toString();
+        String name = path == null ? "new" : path.toString();
         setTitle(name + " - " + nameOfWindow);
     }
 
