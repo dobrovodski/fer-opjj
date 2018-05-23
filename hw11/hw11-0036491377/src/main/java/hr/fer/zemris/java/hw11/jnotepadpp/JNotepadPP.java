@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
+import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.CaretEvent;
@@ -12,6 +14,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class JNotepadPP extends JFrame {
     private DefaultMultipleDocumentModel multipleDocumentModel;
@@ -245,7 +249,9 @@ public class JNotepadPP extends JFrame {
     }
 
     private void createActions() {
-        setActionAttributes(newDocumentAction, "New", "control N", KeyEvent.VK_N, "New file");
+        // TODO
+        setActionAttributes(newDocumentAction, LocalizationProvider.getInstance().getString("login"), "control N",
+                KeyEvent.VK_N, "New file");
         setActionAttributes(openDocumentAction, "Open", "control O", KeyEvent.VK_O, "Open file");
         setActionAttributes(saveDocumentAction, "Save", "control S", KeyEvent.VK_S, "Save");
         setActionAttributes(saveAsDocumentAction, "Save As", "control alt S", KeyEvent.VK_A, "Save As");
@@ -316,6 +322,9 @@ public class JNotepadPP extends JFrame {
         private JLabel lineLabel;
         private JLabel colLabel;
         private JLabel selLabel;
+        private JLabel clockLabel;
+        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
+        private boolean stopClock = false;
 
         private CaretListener caretListener;
 
@@ -347,17 +356,38 @@ public class JNotepadPP extends JFrame {
             setColLabel(0);
             selLabel = new JLabel();
             setSelLabel(0);
+            clockLabel = new JLabel();
+            setTimeLabel();
 
-            add(Box.createHorizontalStrut(5));
+            add(Box.createRigidArea(new Dimension(10, 0)));
             add(lengthLabel);
-            add(Box.createHorizontalStrut(5));
+            add(Box.createRigidArea(new Dimension(10, 0)));
             add(new JSeparator(SwingConstants.VERTICAL));
             add(lineLabel);
-            add(Box.createHorizontalStrut(10));
+            add(Box.createRigidArea(new Dimension(10, 0)));
             add(colLabel);
-            add(Box.createHorizontalStrut(10));
+            add(Box.createRigidArea(new Dimension(10, 0)));
             add(selLabel);
-            add(Box.createHorizontalStrut(5));
+            add(Box.createRigidArea(new Dimension(10, 0)));
+            add(clockLabel);
+            add(Box.createRigidArea(new Dimension(5, 0)));
+
+            startClock();
+        }
+
+        private void startClock() {
+            Thread t = new Thread(() -> {
+                while (!stopClock) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ignored) {
+                    }
+                    SwingUtilities.invokeLater(this::setTimeLabel);
+                }
+            });
+
+            t.setDaemon(true);
+            t.start();
         }
 
         public void setLengthLabel(int length) {
@@ -374,6 +404,14 @@ public class JNotepadPP extends JFrame {
 
         public void setSelLabel(int length) {
             selLabel.setText("Sel: " + length);
+        }
+
+        public void stopClock() {
+            stopClock = true;
+        }
+
+        private void setTimeLabel() {
+            clockLabel.setText(formatter.format(LocalDateTime.now()));
         }
 
         public CaretListener getCaretListener() {
