@@ -4,6 +4,7 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.FormLocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJLabel;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJMenu;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
@@ -271,7 +272,7 @@ public class JNotepadPP extends JFrame {
     }
 
     private void createActions() {
-        // TODO
+        // It is possible to localize the mnemonics as well, but we skip doing that here
         setActionAttributes(newDocumentAction, "control N", KeyEvent.VK_N);
         setActionAttributes(openDocumentAction, "control O", KeyEvent.VK_O);
         setActionAttributes(saveDocumentAction, "control S", KeyEvent.VK_S);
@@ -299,7 +300,7 @@ public class JNotepadPP extends JFrame {
     private void createMenus() {
         JMenuBar mb = new JMenuBar();
 
-        JMenu fileMenu = new JMenu("File");
+        JMenu fileMenu = new LJMenu("file", flp);
         mb.add(fileMenu);
         fileMenu.add(new JMenuItem(openDocumentAction));
         fileMenu.add(new JMenuItem(newDocumentAction));
@@ -309,18 +310,18 @@ public class JNotepadPP extends JFrame {
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem(exitAction));
 
-        JMenu editMenu = new JMenu("Edit");
+        JMenu editMenu = new LJMenu("edit", flp);
         mb.add(editMenu);
         editMenu.add(new JMenuItem(cutAction));
         editMenu.add(new JMenuItem(copyAction));
         editMenu.add(new JMenuItem(pasteAction));
 
-        JMenu viewMenu = new JMenu("View");
+        JMenu viewMenu = new LJMenu("view", flp);
         mb.add(viewMenu);
         viewMenu.add(new JMenuItem(statsAction));
 
 
-        JMenu languageMenu = new JMenu("Languages");
+        JMenu languageMenu = new LJMenu("languages", flp);
         mb.add(languageMenu);
 
         languageMenu.add(new JMenuItem(languageEnAction));
@@ -403,7 +404,6 @@ public class JNotepadPP extends JFrame {
         JButton button = new JButton(action);
         button.setHideActionText(true);
         button.setIcon(Util.loadIcon(location));
-        button.setText("");
         button.setFocusPainted(false);
 
         return button;
@@ -431,7 +431,8 @@ public class JNotepadPP extends JFrame {
     }
 
     private static class StatusBar extends JPanel {
-        private LJLabel lengthLabel;
+        private LJLabel lengthNameLabel;
+        private JLabel lengthLabel;
         private JLabel lineLabel;
         private JLabel colLabel;
         private JLabel selLabel;
@@ -462,7 +463,8 @@ public class JNotepadPP extends JFrame {
                 }
             };
 
-            lengthLabel = new LJLabel("new", lp);
+            lengthNameLabel = new LJLabel("length", lp);
+            lengthLabel = new JLabel();
             setLengthLabel(0);
             lineLabel = new JLabel();
             setLineLabel(0);
@@ -474,6 +476,7 @@ public class JNotepadPP extends JFrame {
             setTimeLabel();
 
             add(Box.createRigidArea(new Dimension(10, 0)));
+            add(lengthNameLabel);
             add(lengthLabel);
             add(Box.createRigidArea(new Dimension(10, 0)));
             add(new JSeparator(SwingConstants.VERTICAL));
@@ -505,8 +508,7 @@ public class JNotepadPP extends JFrame {
         }
 
         public void setLengthLabel(int length) {
-            String t = lengthLabel.getText();
-            lengthLabel.setText(lengthLabel.getText() + ": " + length);
+            lengthLabel.setText(": " + length);
         }
 
         public void setLineLabel(int length) {
