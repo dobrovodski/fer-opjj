@@ -7,12 +7,34 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Default implementation for {@link SingleDocumentModel}.
+ *
+ * @author matej
+ */
 public class DefaultSingleDocumentModel implements SingleDocumentModel {
+    /**
+     * Text component of the document.
+     */
     private JTextArea textComponent;
+    /**
+     * Path of the document.
+     */
     private Path filePath;
+    /**
+     * True if the document has been modified since it was last saved.
+     */
     private boolean modified;
+    /**
+     * List of listeners.
+     */
     private List<SingleDocumentListener> listeners;
 
+    /**
+     * Constructor
+     * @param filePath path to document
+     * @param content content of document
+     */
     public DefaultSingleDocumentModel(Path filePath, String content) {
         this.textComponent = new JTextArea(content);
 
@@ -79,12 +101,18 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
         listeners.remove(l);
     }
 
+    /**
+     * Notifies listeners when the modified flag changes.
+     */
     private void notifyModifiedChanged() {
         for (SingleDocumentListener l : listeners) {
             l.documentModifyStatusUpdated(this);
         }
     }
 
+    /**
+     * Notifies listeners when the file path changes.
+     */
     private void notifyFilePathChanged() {
         for (SingleDocumentListener l : listeners) {
             l.documentFilePathUpdated(this);

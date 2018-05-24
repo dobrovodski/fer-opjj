@@ -10,14 +10,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Default implementation for {@link MultipleDocumentModel}.
+ */
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel {
+    /**
+     * Saved file icon.
+     */
     private static final Icon SAVED = Util.loadIcon("icons/saved.png");
+    /**
+     * Unsaved file icon.
+     */
     private static final Icon UNSAVED = Util.loadIcon("icons/unsaved.png");
+    /**
+     * New document name.
+     */
+    // TODO
     private static final String newDocumentName = "new";
+    /**
+     * List of all single document models.
+     */
     private List<SingleDocumentModel> singleDocuments;
+    /**
+     * Current document.
+     */
     private SingleDocumentModel currentDocument;
+    /**
+     * Listeners.
+     */
     private List<MultipleDocumentListener> listeners;
 
+    /**
+     * Constructor.
+     */
     public DefaultMultipleDocumentModel() {
         singleDocuments = new ArrayList<>();
         listeners = new ArrayList<>();
@@ -104,6 +129,14 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         return model;
     }
 
+    /**
+     * Sets attributes of tab at given index.
+     *
+     * @param index index of tab
+     * @param name title of tab
+     * @param tooltip tooltip
+     * @param icon icon of tab
+     */
     private void setTabAttributes(int index, String name, String tooltip, Icon icon) {
         setTitleAt(index, name);
         setToolTipTextAt(index, tooltip);
@@ -123,6 +156,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         try {
             Files.write(newPath, model.getTextComponent().getText().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
+            // TODO
             JOptionPane.showMessageDialog(this,
                     "Could not save " + newPath.getFileName().toAbsolutePath() + ".",
                     "Error",
@@ -196,24 +230,38 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         return singleDocuments.iterator();
     }
 
+    /**
+     * Notifies listeners when the current document changes.
+     */
     private void notifyCurrentDocumentChanged(SingleDocumentModel prev, SingleDocumentModel current) {
         for (MultipleDocumentListener l : listeners) {
             l.currentDocumentChanged(prev, current);
         }
     }
 
+    /**
+     * Notifies listeners when a document has been added.
+     */
     private void notifyDocumentAdded(SingleDocumentModel document) {
         for (MultipleDocumentListener l : listeners) {
             l.documentAdded(document);
         }
     }
 
+    /**
+     * Notifies listeners when a document has been removed.
+     */
     private void notifyDocumentRemoved(SingleDocumentModel document) {
         for (MultipleDocumentListener l : listeners) {
             l.documentRemoved(document);
         }
     }
 
+    /**
+     * Adds a listener for when the status of the model has been changed so it can update the tab's icon and title.
+     *
+     * @param model model
+     */
     private void addAttributesListener(SingleDocumentModel model) {
         model.addSingleDocumentListener(new SingleDocumentListener() {
             @Override
@@ -231,7 +279,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
             @Override
             public void documentFilePathUpdated(SingleDocumentModel model) {
-                System.out.println("file path updated");
+                documentModifyStatusUpdated(model);
             }
         });
     }

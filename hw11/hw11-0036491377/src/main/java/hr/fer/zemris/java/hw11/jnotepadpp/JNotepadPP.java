@@ -55,6 +55,7 @@ public class JNotepadPP extends JFrame {
                 return;
             }
 
+            // TODO
             if (!Files.isReadable(filePath)) {
                 JOptionPane.showMessageDialog(JNotepadPP.this,
                         "File " + filePath.getFileName().toAbsolutePath() + " does not exist.",
@@ -91,6 +92,7 @@ public class JNotepadPP extends JFrame {
             }
 
             int choice = 1;
+            // TODO
             if (Files.exists(filePath)) {
                 choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
                         filePath.getFileName() + " already exists.\nDo you want to replace it?",
@@ -221,6 +223,7 @@ public class JNotepadPP extends JFrame {
             int characterCount = textArea.getText().length();
             int nonBlankCharacterCount = textArea.getText().replaceAll("\\s+", "").length();
 
+            // TODO
             JOptionPane.showMessageDialog(JNotepadPP.this,
                     String.format("Characters (without blanks): %d\n"
                                   + "Lines: %d\n"
