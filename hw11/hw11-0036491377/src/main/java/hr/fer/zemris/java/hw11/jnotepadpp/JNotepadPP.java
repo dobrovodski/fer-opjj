@@ -40,13 +40,18 @@ public class JNotepadPP extends JFrame {
      */
     private DefaultMultipleDocumentModel multipleDocumentModel;
     /**
+     * Private reference to localization provider.
+     */
+    private LocalizationProvider lp = LocalizationProvider.getInstance();
+    /**
      * Form localization provider.
      */
-    private FormLocalizationProvider flp = new FormLocalizationProvider(LocalizationProvider.getInstance(), this);
+    private FormLocalizationProvider flp = new FormLocalizationProvider(lp, this);
     /**
      * Reference to status bar.
      */
     private LJStatusBar statusBar;
+
 
     /**
      * Loads a document through a file chooser.
@@ -59,16 +64,16 @@ public class JNotepadPP extends JFrame {
 
 		@Override
         public void actionPerformed(ActionEvent e) {
-            Path filePath = chooseFile(LocalizationProvider.getInstance().getString("open"));
+            Path filePath = chooseFile(lp.getString("open"));
             if (filePath == null) {
                 return;
             }
 
             if (!Files.isReadable(filePath)) {
                 JOptionPane.showMessageDialog(JNotepadPP.this,
-                        String.format(LocalizationProvider.getInstance().getString("notExist")
+                        String.format(lp.getString("notExist")
                                 , filePath.getFileName().toAbsolutePath()),
-                        LocalizationProvider.getInstance().getString("error"),
+                        lp.getString("error"),
                         JOptionPane.ERROR_MESSAGE);
             }
 
@@ -103,7 +108,7 @@ public class JNotepadPP extends JFrame {
                 return;
             }
 
-            Path filePath = chooseFile(LocalizationProvider.getInstance().getString("saveAs"));
+            Path filePath = chooseFile(lp.getString("saveAs"));
             if (filePath == null) {
                 return;
             }
@@ -111,9 +116,9 @@ public class JNotepadPP extends JFrame {
             int choice = 1;
             if (Files.exists(filePath)) {
                 choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
-                        String.format(LocalizationProvider.getInstance().getString("replaceFileQuery"), filePath
+                        String.format(lp.getString("replaceFileQuery"), filePath
                                 .getFileName()),
-                        LocalizationProvider.getInstance().getString("confirmSaveAs"),
+                        lp.getString("confirmSaveAs"),
                         JOptionPane.YES_NO_OPTION);
             } else {
                 // If target file doesn't exist, create and save it
@@ -269,7 +274,7 @@ public class JNotepadPP extends JFrame {
             int nonBlankCharacterCount = textArea.getText().replaceAll("\\s+", "").length();
 
             JOptionPane.showMessageDialog(JNotepadPP.this,
-                    String.format(LocalizationProvider.getInstance().getString("statsSummary"),
+                    String.format(lp.getString("statsSummary"),
                             nonBlankCharacterCount, lineCount, characterCount),
                     "Summary", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -284,7 +289,7 @@ public class JNotepadPP extends JFrame {
     	private static final long serialVersionUID = 1L;
         @Override
         public void actionPerformed(ActionEvent e) {
-            LocalizationProvider.getInstance().setLanguage("hr");
+            lp.setLanguage("hr");
         }
     };
     /**
@@ -297,7 +302,7 @@ public class JNotepadPP extends JFrame {
     	private static final long serialVersionUID = 1L;
         @Override
         public void actionPerformed(ActionEvent e) {
-            LocalizationProvider.getInstance().setLanguage("de");
+            lp.setLanguage("de");
         }
     };
     /**
@@ -310,7 +315,7 @@ public class JNotepadPP extends JFrame {
     	private static final long serialVersionUID = 1L;
         @Override
         public void actionPerformed(ActionEvent e) {
-            LocalizationProvider.getInstance().setLanguage("en");
+            lp.setLanguage("en");
         }
     };
     /**
@@ -649,13 +654,13 @@ public class JNotepadPP extends JFrame {
      */
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
-        String name = path == null ? LocalizationProvider.getInstance().getString("newFileName")
+        String name = path == null ? lp.getString("newFileName")
                 : path.getFileName().toString();
 
         return JOptionPane.showConfirmDialog(
                 this,
-                String.format(LocalizationProvider.getInstance().getString("saveFileQuery"), name),
-                LocalizationProvider.getInstance().getString("save"),
+                String.format(lp.getString("saveFileQuery"), name),
+                lp.getString("save"),
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
@@ -672,7 +677,7 @@ public class JNotepadPP extends JFrame {
                 if (n == 0) {
                     Path path = m.getFilePath();
                     if (path == null) {
-                        path = chooseFile(LocalizationProvider.getInstance().getString("saveAs"));
+                        path = chooseFile(lp.getString("saveAs"));
                         if (path == null)
                             return false;
                     }
@@ -796,7 +801,7 @@ public class JNotepadPP extends JFrame {
         }
 
         Path path = model.getFilePath();
-        String name = path == null ? "new" : path.toString();
+        String name = path == null ? lp.getString("newFileName") : path.toString();
         setTitle(name + " - " + nameOfWindow);
     }
 }
