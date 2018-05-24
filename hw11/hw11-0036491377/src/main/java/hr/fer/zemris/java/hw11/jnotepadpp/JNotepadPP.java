@@ -20,12 +20,33 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.function.Function;
 
+/**
+ * A simplified Notepad++ clone. It provides semi-useful functions for text manipulation as well as i18n for 3 English,
+ * German and Croatian.
+ *
+ * @author matej
+ */
 public class JNotepadPP extends JFrame {
+    /**
+     * Name of the window.
+     */
     private final static String nameOfWindow = "JNotepad++";
+    /**
+     * Reference to the model which this frame tracks.
+     */
     private DefaultMultipleDocumentModel multipleDocumentModel;
+    /**
+     * Form localization provider.
+     */
     private FormLocalizationProvider flp = new FormLocalizationProvider(LocalizationProvider.getInstance(), this);
+    /**
+     * Reference to status bar.
+     */
     private LJStatusBar statusBar;
 
+    /**
+     * Loads a document through a file chooser.
+     */
     private Action openDocumentAction = new LocalizableAction("open", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -44,12 +65,18 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.loadDocument(filePath);
         }
     };
+    /**
+     * Creates a brand new document (not initially saved anywhere).
+     */
     private Action newDocumentAction = new LocalizableAction("new", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             multipleDocumentModel.createNewDocument();
         }
     };
+    /**
+     * Saves document through file chooser.
+     */
     private Action saveAsDocumentAction = new LocalizableAction("saveAs", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -79,6 +106,9 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
+    /**
+     * Saves document using associated path. If there is no path, it defers to saveAsDocumentAction.
+     */
     private Action saveDocumentAction = new LocalizableAction("save", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -96,6 +126,9 @@ public class JNotepadPP extends JFrame {
             multipleDocumentModel.saveDocument(doc, filePath);
         }
     };
+    /**
+     * Closes the current document.
+     */
     private Action closeDocumentAction = new LocalizableAction("close", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -119,6 +152,9 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
+    /**
+     * Exits the program after checking for any unsaved modifications.
+     */
     private Action exitAction = new LocalizableAction("exit", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -127,6 +163,9 @@ public class JNotepadPP extends JFrame {
             }
         }
     };
+    /**
+     * Copies selected area of text to clipboard.
+     */
     private Action copyAction = new LocalizableAction("copy", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -138,6 +177,9 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().copy();
         }
     };
+    /**
+     * Pastes the clipboard onto the position of the caret.
+     */
     private Action pasteAction = new LocalizableAction("paste", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -149,6 +191,9 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().paste();
         }
     };
+    /**
+     * Cuts selected text and copies it into the clipboard.
+     */
     private Action cutAction = new LocalizableAction("cut", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -160,6 +205,9 @@ public class JNotepadPP extends JFrame {
             doc.getTextComponent().cut();
         }
     };
+    /**
+     * Displays information box containing the summary of the current file.
+     */
     private Action statsAction = new LocalizableAction("stats", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -181,36 +229,54 @@ public class JNotepadPP extends JFrame {
                     "Summary", JOptionPane.INFORMATION_MESSAGE);
         }
     };
+    /**
+     * Switches the language to Croatian.
+     */
     private Action languageHrAction = new LocalizableAction("languageHr", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("hr");
         }
     };
+    /**
+     * Switches the language to German.
+     */
     private Action languageDeAction = new LocalizableAction("languageDe", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("de");
         }
     };
+    /**
+     * Switches the language to English.
+     */
     private Action languageEnAction = new LocalizableAction("languageEn", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             LocalizationProvider.getInstance().setLanguage("en");
         }
     };
+    /**
+     * Changes the case of the selected area to uppercase.
+     */
     private Action upperCaseAction = new LocalizableAction("uppercase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedCase(String::toUpperCase);
         }
     };
+    /**
+     * Changes the case of the selected area to lowercase.
+     */
     private Action lowerCaseAction = new LocalizableAction("lowercase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedCase(String::toLowerCase);
         }
     };
+    /**
+     * Inverts the case of the selected area.
+     */
     private Action invertCaseAction = new LocalizableAction("invertcase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -232,6 +298,9 @@ public class JNotepadPP extends JFrame {
             return new String(chars);
         }
     };
+    /**
+     * Sorts selected lines in an ascending order.
+     */
     private Action sortAscendingAction = new LocalizableAction("ascending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -241,6 +310,9 @@ public class JNotepadPP extends JFrame {
                           .toArray(String[]::new));
         }
     };
+    /**
+     * Sorts selected lines in a descending order.
+     */
     private Action sortDescendingAction = new LocalizableAction("descending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -250,6 +322,9 @@ public class JNotepadPP extends JFrame {
                           .toArray(String[]::new));
         }
     };
+    /**
+     * Removes non-unique lines from the selected ones.
+     */
     private Action uniqueLinesAction = new LocalizableAction("unique", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -257,6 +332,11 @@ public class JNotepadPP extends JFrame {
         }
     };
 
+    /**
+     * Used to manipulate selected rows of text using the given strategy, eg. sorting and removing non-unique lines.
+     *
+     * @param changeStrategy strategy used to manipulate selected rows
+     */
     private void changeSelectedText(Function<String[], String[]> changeStrategy) {
         SingleDocumentModel document = multipleDocumentModel.getCurrentDocument();
         if (document == null) {
@@ -287,6 +367,9 @@ public class JNotepadPP extends JFrame {
         }
     }
 
+    /**
+     * Constructor.
+     */
     public JNotepadPP() {
         multipleDocumentModel = new DefaultMultipleDocumentModel();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -296,19 +379,26 @@ public class JNotepadPP extends JFrame {
         initGUI();
     }
 
+    /**
+     * Entry point of the program.
+     *
+     * @param args not used
+     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException |
                 InstantiationException |
                 IllegalAccessException |
-                UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+                UnsupportedLookAndFeelException ignored) {
         }
 
         SwingUtilities.invokeLater(() -> new JNotepadPP().setVisible(true));
     }
 
+    /**
+     * Initializes the GUI.
+     */
     private void initGUI() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
@@ -355,11 +445,14 @@ public class JNotepadPP extends JFrame {
         statusBar = new LJStatusBar(flp);
         cp.add(statusBar, BorderLayout.SOUTH);
 
-        createToolbars();
+        createToolbar();
         createActions();
         createMenus();
     }
 
+    /**
+     * Sets all action attributes (keyStroke and mnemonic).
+     */
     private void createActions() {
         // It is possible to localize the mnemonics as well, but we skip doing that here
         setActionAttributes(newDocumentAction, "control N", KeyEvent.VK_N);
@@ -383,11 +476,21 @@ public class JNotepadPP extends JFrame {
         setActionAttributes(lowerCaseAction, "control U", KeyEvent.VK_H);
     }
 
+    /**
+     * Sets action's attributes.
+     *
+     * @param action action
+     * @param keyStroke keyStroke to use
+     * @param mnemonic mnemonic to use
+     */
     private void setActionAttributes(Action action, String keyStroke, int mnemonic) {
         action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(keyStroke));
         action.putValue(Action.MNEMONIC_KEY, mnemonic);
     }
 
+    /**
+     * Creates the menus for the GUI.
+     */
     private void createMenus() {
         JMenuBar mb = new JMenuBar();
 
@@ -434,7 +537,10 @@ public class JNotepadPP extends JFrame {
         this.setJMenuBar(mb);
     }
 
-    private void createToolbars() {
+    /**
+     * Creates the toolbar.
+     */
+    private void createToolbar() {
         JToolBar tb = new JToolBar();
         tb.setFloatable(true);
 
@@ -453,10 +559,18 @@ public class JNotepadPP extends JFrame {
         getContentPane().add(tb, BorderLayout.PAGE_START);
     }
 
+    /**
+     * Queries the user about an unsaved document.
+     *
+     * @param doc document
+     *
+     * @return user's choice (yes - 0, no - 1, cancel - 2)
+     */
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
         String name = path == null ? "new" : path.getFileName().toString();
 
+        // TODO localize
         return JOptionPane.showConfirmDialog(
                 this,
                 "Save file " + name + "?",
@@ -464,6 +578,11 @@ public class JNotepadPP extends JFrame {
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
+    /**
+     * Checks for unsaved documents and returns true if user hasn't cancelled the action.
+     *
+     * @return true if user hasn't aborted
+     */
     private boolean checkUnsavedDocuments() {
         for (SingleDocumentModel m : multipleDocumentModel) {
             if (m.isModified()) {
@@ -491,6 +610,13 @@ public class JNotepadPP extends JFrame {
         return true;
     }
 
+    /**
+     * Prompts user to select a file via a file chooser.
+     *
+     * @param dialogTitle title of the dialog
+     *
+     * @return path of the selected file or null if none have been selected
+     */
     private Path chooseFile(String dialogTitle) {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle(dialogTitle);
@@ -503,6 +629,14 @@ public class JNotepadPP extends JFrame {
         return fc.getSelectedFile().toPath();
     }
 
+    /**
+     * Creates a new action button.
+     *
+     * @param action action
+     * @param location location of the icon
+     *
+     * @return JButton which represents an action
+     */
     private JButton createActionButton(Action action, String location) {
         JButton button = new JButton(action);
         button.setHideActionText(true);
@@ -512,6 +646,11 @@ public class JNotepadPP extends JFrame {
         return button;
     }
 
+    /**
+     * Changes the case of the selected text using the given strategy (uppercase, lowercase...).
+     *
+     * @param caseStrategy strategy to use on each letter of the selected text
+     */
     private void changeSelectedCase(Function<String, String> caseStrategy) {
         SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
         if (current == null) {
@@ -539,6 +678,11 @@ public class JNotepadPP extends JFrame {
         }
     }
 
+    /**
+     * Force updates the caret. Used when the current document changes.
+     *
+     * @param model model
+     */
     private void updateCaret(SingleDocumentModel model) {
         model.getTextComponent().addCaretListener(statusBar.getCaretListener());
         statusBar.getCaretListener().caretUpdate(new CaretEvent(model.getTextComponent()) {
@@ -554,6 +698,11 @@ public class JNotepadPP extends JFrame {
         });
     }
 
+    /**
+     * Updates the window title using the given model.
+     *
+     * @param model model whose path will be used for the title
+     */
     private void updateTitle(SingleDocumentModel model) {
         if (model == null) {
             setTitle(nameOfWindow);

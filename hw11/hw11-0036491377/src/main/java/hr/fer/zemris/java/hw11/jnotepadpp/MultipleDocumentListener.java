@@ -9,6 +9,7 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 public interface MultipleDocumentListener {
     /**
      * Called when the current document has been changed.
+     *
      * @param previousModel previous current document
      * @param currentModel new current document
      */
@@ -17,12 +18,14 @@ public interface MultipleDocumentListener {
 
     /**
      * Called when a new document has been added.
+     *
      * @param model document model that has been added
      */
     void documentAdded(SingleDocumentModel model);
 
     /**
      * Called when a document has been removed.
+     *
      * @param model document which has been removed
      */
     void documentRemoved(SingleDocumentModel model);
