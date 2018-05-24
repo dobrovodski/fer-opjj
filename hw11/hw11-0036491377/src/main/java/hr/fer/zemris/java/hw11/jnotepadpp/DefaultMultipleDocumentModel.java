@@ -25,10 +25,6 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
      */
     private static final Icon UNSAVED = Util.loadIcon("icons/unsaved.png");
     /**
-     * New document name.
-     */
-    private static final String newDocumentName = LocalizationProvider.getInstance().getString("newFileName");
-    /**
      * List of all single document models.
      */
     private List<SingleDocumentModel> singleDocuments;
@@ -70,7 +66,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
         JScrollPane sp = new JScrollPane(newDocument.getTextComponent());
         int index = singleDocuments.indexOf(currentDocument);
-
+        String newDocumentName = LocalizationProvider.getInstance().getString("newFileName");
         addTab(newDocumentName, sp);
         setSelectedIndex(index);
         setTabAttributes(index, newDocumentName, newDocumentName, SAVED);
@@ -270,7 +266,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
                 int index = singleDocuments.indexOf(model);
                 Path path = model.getFilePath();
                 Icon icon = model.isModified() ? UNSAVED : SAVED;
-
+                String newDocumentName = LocalizationProvider.getInstance().getString("newFileName");
                 if (path != null) {
                     setTabAttributes(index, path.getFileName().toString(), path.toAbsolutePath().toString(), icon);
                 } else {

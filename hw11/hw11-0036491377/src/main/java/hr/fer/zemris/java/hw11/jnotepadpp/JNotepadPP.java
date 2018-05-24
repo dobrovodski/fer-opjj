@@ -225,9 +225,7 @@ public class JNotepadPP extends JFrame {
 
             // TODO
             JOptionPane.showMessageDialog(JNotepadPP.this,
-                    String.format("Characters (without blanks): %d\n"
-                                  + "Lines: %d\n"
-                                  + "Current document length: %d",
+                    String.format(LocalizationProvider.getInstance().getString("statsSummary"),
                             nonBlankCharacterCount, lineCount, characterCount),
                     "Summary", JOptionPane.INFORMATION_MESSAGE);
         }
