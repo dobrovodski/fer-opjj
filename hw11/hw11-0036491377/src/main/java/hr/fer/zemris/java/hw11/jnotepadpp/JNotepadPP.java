@@ -1,17 +1,13 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import hr.fer.zemris.java.hw11.jnotepadpp.local.FormLocalizationProvider;
-import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
-import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJLabel;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.JStatusBar;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJMenu;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -19,14 +15,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class JNotepadPP extends JFrame {
     private final static String nameOfWindow = "JNotepad++";
     private DefaultMultipleDocumentModel multipleDocumentModel;
     private FormLocalizationProvider flp = new FormLocalizationProvider(LocalizationProvider.getInstance(), this);
-    private StatusBar statusBar;
+    private JStatusBar statusBar;
 
     private Action openDocumentAction = new LocalizableAction("open", flp) {
         @Override
@@ -303,7 +297,7 @@ public class JNotepadPP extends JFrame {
             }
         });
 
-        statusBar = new StatusBar(flp);
+        statusBar = new JStatusBar(flp);
         cp.add(statusBar, BorderLayout.SOUTH);
 
         createToolbars();
@@ -485,111 +479,5 @@ public class JNotepadPP extends JFrame {
         Path path = model.getFilePath();
         String name = path == null ? "new" : path.toString();
         setTitle(name + " - " + nameOfWindow);
-    }
-
-    private static class StatusBar extends JPanel {
-        private LJLabel lengthNameLabel;
-        private JLabel lengthLabel;
-        private JLabel lineLabel;
-        private JLabel colLabel;
-        private JLabel selLabel;
-        private JLabel clockLabel;
-        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
-        private ILocalizationProvider lp;
-        private boolean stopClock = false;
-
-        private CaretListener caretListener;
-
-        public StatusBar(ILocalizationProvider lp) {
-            this.lp = lp;
-            setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-            setBorder(new BevelBorder(BevelBorder.LOWERED));
-
-            caretListener = e -> {
-                JTextArea area = (JTextArea) e.getSource();
-                setLengthLabel(area.getText().length());
-
-                int pos = area.getCaretPosition();
-                int line;
-                try {
-                    line = area.getLineOfOffset(pos);
-                    setLineLabel(line + 1);
-                    setColLabel(pos - area.getLineStartOffset(line) + 1);
-                    setSelLabel(Math.abs(e.getDot() - e.getMark()));
-                } catch (BadLocationException ignored) {
-                }
-            };
-
-            lengthNameLabel = new LJLabel("length", lp);
-            lengthLabel = new JLabel();
-            setLengthLabel(0);
-            lineLabel = new JLabel();
-            setLineLabel(0);
-            colLabel = new JLabel();
-            setColLabel(0);
-            selLabel = new JLabel();
-            setSelLabel(0);
-            clockLabel = new JLabel();
-            setTimeLabel();
-
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(lengthNameLabel);
-            add(lengthLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(new JSeparator(SwingConstants.VERTICAL));
-            add(lineLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(colLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(selLabel);
-            add(Box.createRigidArea(new Dimension(10, 0)));
-            add(clockLabel);
-            add(Box.createRigidArea(new Dimension(5, 0)));
-
-            startClock();
-        }
-
-        private void startClock() {
-            Thread t = new Thread(() -> {
-                while (!stopClock) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException ignored) {
-                    }
-                    SwingUtilities.invokeLater(this::setTimeLabel);
-                }
-            });
-
-            t.setDaemon(true);
-            t.start();
-        }
-
-        public void setLengthLabel(int length) {
-            lengthLabel.setText(": " + length);
-        }
-
-        public void setLineLabel(int length) {
-            lineLabel.setText("Ln: " + length);
-        }
-
-        public void setColLabel(int length) {
-            colLabel.setText("Col: " + length);
-        }
-
-        public void setSelLabel(int length) {
-            selLabel.setText("Sel: " + length);
-        }
-
-        public void stopClock() {
-            stopClock = true;
-        }
-
-        private void setTimeLabel() {
-            clockLabel.setText(formatter.format(LocalDateTime.now()));
-        }
-
-        public CaretListener getCaretListener() {
-            return caretListener;
-        }
     }
 }
