@@ -28,10 +28,10 @@ import java.util.function.Function;
  */
 public class JNotepadPP extends JFrame {
     /**
-	 * Default serial version UID
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
+     * Default serial version UID
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * Name of the window.
      */
     private final static String nameOfWindow = "JNotepad++";
@@ -58,11 +58,11 @@ public class JNotepadPP extends JFrame {
      */
     private Action openDocumentAction = new LocalizableAction("open", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
 
-		@Override
+        @Override
         public void actionPerformed(ActionEvent e) {
             Path filePath = chooseFile(lp.getString("open"));
             if (filePath == null) {
@@ -85,9 +85,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action newDocumentAction = new LocalizableAction("new", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             multipleDocumentModel.createNewDocument();
@@ -98,9 +99,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action saveAsDocumentAction = new LocalizableAction("saveAs", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -135,9 +137,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action saveDocumentAction = new LocalizableAction("save", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -159,9 +162,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action closeDocumentAction = new LocalizableAction("close", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
@@ -189,13 +193,15 @@ public class JNotepadPP extends JFrame {
      */
     private Action exitAction = new LocalizableAction("exit", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             if (checkUnsavedDocuments()) {
                 dispose();
+                statusBar.stop();
             }
         }
     };
@@ -204,9 +210,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action copyAction = new LocalizableAction("copy", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -222,9 +229,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action pasteAction = new LocalizableAction("paste", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -240,9 +248,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action cutAction = new LocalizableAction("cut", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
@@ -258,9 +267,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action statsAction = new LocalizableAction("stats", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
@@ -284,9 +294,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action languageHrAction = new LocalizableAction("languageHr", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             lp.setLanguage("hr");
@@ -297,9 +308,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action languageDeAction = new LocalizableAction("languageDe", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             lp.setLanguage("de");
@@ -310,9 +322,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action languageEnAction = new LocalizableAction("languageEn", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             lp.setLanguage("en");
@@ -323,9 +336,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action upperCaseAction = new LocalizableAction("uppercase", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedCase(String::toUpperCase);
@@ -336,9 +350,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action lowerCaseAction = new LocalizableAction("lowercase", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedCase(String::toLowerCase);
@@ -349,9 +364,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action invertCaseAction = new LocalizableAction("invertcase", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedCase(this::invertCase);
@@ -377,9 +393,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action sortAscendingAction = new LocalizableAction("ascending", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedText(s ->
@@ -393,9 +410,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action sortDescendingAction = new LocalizableAction("descending", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedText(s ->
@@ -409,9 +427,10 @@ public class JNotepadPP extends JFrame {
      */
     private Action uniqueLinesAction = new LocalizableAction("unique", flp) {
         /**
-    	 * Default serial version UID
-    	 */
-    	private static final long serialVersionUID = 1L;
+         * Default serial version UID
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void actionPerformed(ActionEvent e) {
             changeSelectedText(s -> Arrays.stream(s).distinct().toArray(String[]::new));
@@ -496,6 +515,7 @@ public class JNotepadPP extends JFrame {
             public void windowClosing(WindowEvent e) {
                 if (checkUnsavedDocuments()) {
                     dispose();
+                    statusBar.stop();
                 }
             }
         });
@@ -773,11 +793,11 @@ public class JNotepadPP extends JFrame {
         model.getTextComponent().addCaretListener(statusBar.getCaretListener());
         statusBar.getCaretListener().caretUpdate(new CaretEvent(model.getTextComponent()) {
             /**
-        	 * Default serial version UID
-        	 */
-        	private static final long serialVersionUID = 1L;
+             * Default serial version UID
+             */
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public int getDot() {
                 return model.getTextComponent().getCaret().getDot();
             }

@@ -11,9 +11,10 @@ import javax.swing.*;
  */
 public class LJMenu extends JMenu {
     /**
-	 * Default serial version UID
-	 */
-	private static final long serialVersionUID = 1L;
+     * Default serial version UID
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constructor for the localized JMenu.
      *

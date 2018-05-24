@@ -11,9 +11,10 @@ import javax.swing.*;
  */
 public abstract class LocalizableAction extends AbstractAction {
     /**
-	 * Default serial version UID
-	 */
-	private static final long serialVersionUID = 1L;
+     * Default serial version UID
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constructor for the localized AbstractAction.
      *

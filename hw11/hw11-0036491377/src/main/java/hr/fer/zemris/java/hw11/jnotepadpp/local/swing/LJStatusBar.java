@@ -19,9 +19,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class LJStatusBar extends JPanel {
     /**
-	 * Default serial version UID
-	 */
-	private static final long serialVersionUID = 1L;
+     * Default serial version UID
+     */
+    private static final long serialVersionUID = 1L;
     /**
      * Length of file label.
      */
@@ -115,7 +115,7 @@ public class LJStatusBar extends JPanel {
         Thread t = new Thread(() -> {
             while (!stopClock) {
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
                 }
                 SwingUtilities.invokeLater(this::setTimeLabel);
@@ -165,7 +165,7 @@ public class LJStatusBar extends JPanel {
     /**
      * Sets the flag for the clock to stop.
      */
-    public void stopClock() {
+    public void stop() {
         stopClock = true;
     }
 
