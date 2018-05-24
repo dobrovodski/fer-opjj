@@ -8,7 +8,19 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Utility class which provides methods for loading icons and reading files into strings.
+ *
+ * @author matej
+ */
 public class Util {
+    /**
+     * Loads icon from the given path and returns it.
+     *
+     * @param path path to the icon
+     *
+     * @return ImageIcon
+     */
     public static ImageIcon loadIcon(String path) {
         InputStream is = Util.class.getResourceAsStream(path);
         byte[] bytes;
@@ -28,6 +40,14 @@ public class Util {
         return new ImageIcon(bytes);
     }
 
+    /**
+     * Reads file into {@link String} and returns it. Displays error message on comp if something went wrong.
+     *
+     * @param path path from which to load the file
+     * @param comp component which will get an error message if something goes wrong
+     *
+     * @return string with text or null if file couldn't be read
+     */
     public static String readFile(Path path, Component comp) {
         byte[] bytes;
         try {
