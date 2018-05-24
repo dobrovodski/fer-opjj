@@ -17,6 +17,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.function.Function;
 
 public class JNotepadPP extends JFrame {
@@ -234,30 +235,57 @@ public class JNotepadPP extends JFrame {
     private Action sortAscendingAction = new LocalizableAction("ascending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeSelectedText(s ->
+                    Arrays.stream(s)
+                          .sorted((s1, s2) -> LocalizationProvider.getCollator().compare(s1, s2))
+                          .toArray(String[]::new));
         }
     };
     private Action sortDescendingAction = new LocalizableAction("descending", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeSelectedText(s ->
+                    Arrays.stream(s)
+                          .sorted((s1, s2) -> LocalizationProvider.getCollator().compare(s2, s1))
+                          .toArray(String[]::new));
         }
     };
     private Action uniqueLinesAction = new LocalizableAction("unique", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
-            JTextArea ta = doc.getTextComponent();
-            int offset;
-            try {
-                offset = ta.getLineOfOffset(ta.getCaretPosition());
-                int start = ta.getLineStartOffset(offset);
-                int end = ta.getLineEndOffset(offset);
-                String line = ta.getText(start, end);
-            } catch (BadLocationException ignored) {
-            }
+            changeSelectedText(s -> Arrays.stream(s).distinct().toArray(String[]::new));
         }
     };
+
+    private void changeSelectedText(Function<String[], String[]> changeStrategy) {
+        SingleDocumentModel document = multipleDocumentModel.getCurrentDocument();
+        if (document == null) {
+            return;
+        }
+
+        JTextArea ta = document.getTextComponent();
+        try {
+            int startPos = ta.getSelectionStart();
+            int endPos = ta.getSelectionEnd();
+
+            int startLine = ta.getLineOfOffset(startPos);
+            int endLine = ta.getLineOfOffset(endPos);
+
+            int start = ta.getLineStartOffset(startLine);
+            int end = ta.getLineEndOffset(endLine);
+            int len = Math.abs(end - start);
+
+            String text = ta.getText(start, len);
+            ta.getDocument().remove(start, len);
+
+            String[] rows = text.split("\\r?\\n");
+            rows = changeStrategy.apply(rows);
+            text = String.join("\n", rows) + "\n";
+
+            ta.getDocument().insertString(start, text, null);
+        } catch (BadLocationException ignored) {
+        }
+    }
 
     public JNotepadPP() {
         multipleDocumentModel = new DefaultMultipleDocumentModel();
