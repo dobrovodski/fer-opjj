@@ -2,12 +2,14 @@ package hr.fer.zemris.java.hw11.jnotepadpp;
 
 import hr.fer.zemris.java.hw11.jnotepadpp.local.FormLocalizationProvider;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
-import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.JStatusBar;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJMenu;
+import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LJStatusBar;
 import hr.fer.zemris.java.hw11.jnotepadpp.local.swing.LocalizableAction;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,12 +17,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class JNotepadPP extends JFrame {
     private final static String nameOfWindow = "JNotepad++";
     private DefaultMultipleDocumentModel multipleDocumentModel;
     private FormLocalizationProvider flp = new FormLocalizationProvider(LocalizationProvider.getInstance(), this);
-    private JStatusBar statusBar;
+    private LJStatusBar statusBar;
 
     private Action openDocumentAction = new LocalizableAction("open", flp) {
         @Override
@@ -198,19 +201,34 @@ public class JNotepadPP extends JFrame {
     private Action upperCaseAction = new LocalizableAction("uppercase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeSelectedCase(String::toUpperCase);
         }
     };
     private Action lowerCaseAction = new LocalizableAction("lowercase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            changeSelectedCase(String::toLowerCase);
         }
     };
     private Action invertCaseAction = new LocalizableAction("invertcase", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
+            changeSelectedCase(this::invertCase);
+        }
 
+        private String invertCase(String str) {
+            char[] chars = str.toCharArray();
+
+            for (int i = 0; i < chars.length; i++) {
+                char c = chars[i];
+                if (Character.isLowerCase(c)) {
+                    chars[i] = Character.toUpperCase(c);
+                } else if (Character.isUpperCase(c)) {
+                    chars[i] = Character.toLowerCase(c);
+                }
+            }
+
+            return new String(chars);
         }
     };
     private Action sortAscendingAction = new LocalizableAction("ascending", flp) {
@@ -228,7 +246,16 @@ public class JNotepadPP extends JFrame {
     private Action uniqueLinesAction = new LocalizableAction("unique", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            SingleDocumentModel doc = multipleDocumentModel.getCurrentDocument();
+            JTextArea ta = doc.getTextComponent();
+            int offset;
+            try {
+                offset = ta.getLineOfOffset(ta.getCaretPosition());
+                int start = ta.getLineStartOffset(offset);
+                int end = ta.getLineEndOffset(offset);
+                String line = ta.getText(start, end);
+            } catch (BadLocationException ignored) {
+            }
         }
     };
 
@@ -297,7 +324,7 @@ public class JNotepadPP extends JFrame {
             }
         });
 
-        statusBar = new JStatusBar(flp);
+        statusBar = new LJStatusBar(flp);
         cp.add(statusBar, BorderLayout.SOUTH);
 
         createToolbars();
@@ -453,6 +480,33 @@ public class JNotepadPP extends JFrame {
         button.setFocusPainted(false);
 
         return button;
+    }
+
+    private void changeSelectedCase(Function<String, String> caseStrategy) {
+        SingleDocumentModel current = multipleDocumentModel.getCurrentDocument();
+        if (current == null) {
+            return;
+        }
+        JTextArea editor = current.getTextComponent();
+        Document doc = editor.getDocument();
+
+        int len = Math.abs(editor.getCaret().getDot() - editor.getCaret().getMark());
+
+        int offset = 0;
+        if (len != 0) {
+            offset = Math.min(editor.getCaret().getDot(), editor.getCaret().getMark());
+        } else {
+            len = doc.getLength();
+        }
+
+        try {
+            String text = doc.getText(offset, len);
+            text = caseStrategy.apply(text);
+            doc.remove(offset, len);
+            doc.insertString(offset, text, null);
+        } catch (BadLocationException e1) {
+            e1.printStackTrace();
+        }
     }
 
     private void updateCaret(SingleDocumentModel model) {

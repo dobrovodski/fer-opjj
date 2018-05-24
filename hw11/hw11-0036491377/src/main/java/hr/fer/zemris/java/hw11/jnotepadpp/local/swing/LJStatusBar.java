@@ -11,21 +11,18 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class JStatusBar extends JPanel {
-    private LJLabel lengthNameLabel;
+public class LJStatusBar extends JPanel {
     private JLabel lengthLabel;
     private JLabel lineLabel;
     private JLabel colLabel;
     private JLabel selLabel;
     private JLabel clockLabel;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
-    private ILocalizationProvider lp;
     private boolean stopClock = false;
 
     private CaretListener caretListener;
 
-    public JStatusBar(ILocalizationProvider lp) {
-        this.lp = lp;
+    public LJStatusBar(ILocalizationProvider lp) {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBorder(new BevelBorder(BevelBorder.LOWERED));
 
@@ -44,7 +41,7 @@ public class JStatusBar extends JPanel {
             }
         };
 
-        lengthNameLabel = new LJLabel("length", lp);
+        LJLabel lengthNameLabel = new LJLabel("length", lp);
         lengthLabel = new JLabel();
         setLengthLabel(0);
         lineLabel = new JLabel();
@@ -88,19 +85,19 @@ public class JStatusBar extends JPanel {
         t.start();
     }
 
-    public void setLengthLabel(int length) {
+    private void setLengthLabel(int length) {
         lengthLabel.setText(": " + length);
     }
 
-    public void setLineLabel(int length) {
+    private void setLineLabel(int length) {
         lineLabel.setText("Ln: " + length);
     }
 
-    public void setColLabel(int length) {
+    private void setColLabel(int length) {
         colLabel.setText("Col: " + length);
     }
 
-    public void setSelLabel(int length) {
+    private void setSelLabel(int length) {
         selLabel.setText("Sel: " + length);
     }
 
