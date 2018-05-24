@@ -50,16 +50,16 @@ public class JNotepadPP extends JFrame {
     private Action openDocumentAction = new LocalizableAction("open", flp) {
         @Override
         public void actionPerformed(ActionEvent e) {
-            Path filePath = chooseFile("Open file");
+            Path filePath = chooseFile(LocalizationProvider.getInstance().getString("open"));
             if (filePath == null) {
                 return;
             }
 
-            // TODO
             if (!Files.isReadable(filePath)) {
                 JOptionPane.showMessageDialog(JNotepadPP.this,
-                        "File " + filePath.getFileName().toAbsolutePath() + " does not exist.",
-                        "Error",
+                        String.format(LocalizationProvider.getInstance().getString("notExist")
+                                , filePath.getFileName().toAbsolutePath()),
+                        LocalizationProvider.getInstance().getString("error"),
                         JOptionPane.ERROR_MESSAGE);
             }
 
@@ -86,17 +86,17 @@ public class JNotepadPP extends JFrame {
                 return;
             }
 
-            Path filePath = chooseFile("Save As");
+            Path filePath = chooseFile(LocalizationProvider.getInstance().getString("saveAs"));
             if (filePath == null) {
                 return;
             }
 
             int choice = 1;
-            // TODO
             if (Files.exists(filePath)) {
                 choice = JOptionPane.showConfirmDialog(JNotepadPP.this,
-                        filePath.getFileName() + " already exists.\nDo you want to replace it?",
-                        "Confirm Save As",
+                        String.format(LocalizationProvider.getInstance().getString("replaceFileQuery"), filePath
+                                .getFileName()),
+                        LocalizationProvider.getInstance().getString("confirmSaveAs"),
                         JOptionPane.YES_NO_OPTION);
             } else {
                 // If target file doesn't exist, create and save it
@@ -571,13 +571,13 @@ public class JNotepadPP extends JFrame {
      */
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
-        String name = path == null ? "new" : path.getFileName().toString();
+        String name = path == null ? LocalizationProvider.getInstance().getString("newFileName")
+                : path.getFileName().toString();
 
-        // TODO localize
         return JOptionPane.showConfirmDialog(
                 this,
-                "Save file " + name + "?",
-                "Save",
+                String.format(LocalizationProvider.getInstance().getString("saveFileQuery"), name),
+                LocalizationProvider.getInstance().getString("save"),
                 JOptionPane.YES_NO_CANCEL_OPTION);
     }
 
@@ -594,7 +594,7 @@ public class JNotepadPP extends JFrame {
                 if (n == 0) {
                     Path path = m.getFilePath();
                     if (path == null) {
-                        path = chooseFile("Save As");
+                        path = chooseFile(LocalizationProvider.getInstance().getString("saveAs"));
                         if (path == null)
                             return false;
                     }

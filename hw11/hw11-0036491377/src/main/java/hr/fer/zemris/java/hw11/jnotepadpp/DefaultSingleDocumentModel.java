@@ -98,7 +98,7 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
     @Override
     public void removeSingleDocumentListener(SingleDocumentListener l) {
-        // TODO: concurrent modification
+        // concurrent modification can occur, but due to the domain of the problem, it won't
         listeners.remove(l);
     }
 

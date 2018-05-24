@@ -1,8 +1,8 @@
 package hr.fer.zemris.java.hw11.jnotepadpp.local;
 
 /**
- * Decorator for some other {@link ILocalizationProvider} which provides two additional methods: connect and
- * disconnect. It also manages a connection status (does not allow multiple connections).
+ * Decorator for some other {@link ILocalizationProvider} which provides two additional methods: connect and disconnect.
+ * It also manages a connection status (does not allow multiple connections).
  *
  * @author matej
  */
@@ -22,6 +22,7 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
 
     /**
      * Constructor.
+     *
      * @param provider provider
      */
     public LocalizationProviderBridge(LocalizationProvider provider) {
@@ -31,8 +32,8 @@ public class LocalizationProviderBridge extends AbstractLocalizationProvider {
     }
 
     /**
-     * Connects if possible and adds a localization listener to the given provider and then notifies the listener of
-     * the change.
+     * Connects if possible and adds a localization listener to the given provider and then notifies the listener of the
+     * change.
      */
     public void connect() {
         if (connected) {

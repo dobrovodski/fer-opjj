@@ -36,6 +36,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
 
     /**
      * Returns reference to singleton object.
+     *
      * @return reference to singleton
      */
     public static LocalizationProvider getInstance() {
@@ -44,6 +45,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
 
     /**
      * Returns the Collator for the current locale.
+     *
      * @return Collator for current locale
      */
     public static Collator getCollator() {
@@ -52,6 +54,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
 
     /**
      * Sets the language to the given one and notifies all listeners.
+     *
      * @param language language to switch to.
      */
     public void setLanguage(String language) {

@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.hw11.jnotepadpp;
 
+import hr.fer.zemris.java.hw11.jnotepadpp.local.LocalizationProvider;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -25,8 +27,7 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     /**
      * New document name.
      */
-    // TODO
-    private static final String newDocumentName = "new";
+    private static final String newDocumentName = LocalizationProvider.getInstance().getString("newFileName");
     /**
      * List of all single document models.
      */
@@ -156,10 +157,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
         try {
             Files.write(newPath, model.getTextComponent().getText().getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            // TODO
             JOptionPane.showMessageDialog(this,
-                    "Could not save " + newPath.getFileName().toAbsolutePath() + ".",
-                    "Error",
+                    String.format(LocalizationProvider.getInstance().getString("saveFail"),
+                            newPath.getFileName().toAbsolutePath()),
+                    LocalizationProvider.getInstance().getString("error"),
                     JOptionPane.ERROR_MESSAGE);
         }
 
