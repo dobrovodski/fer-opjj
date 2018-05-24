@@ -17,6 +17,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
     public static LocalizationProvider getInstance() {
         return instance;
     }
+
     public static Collator getCollator() { return Collator.getInstance(locale); }
 
     public void setLanguage(String language) {

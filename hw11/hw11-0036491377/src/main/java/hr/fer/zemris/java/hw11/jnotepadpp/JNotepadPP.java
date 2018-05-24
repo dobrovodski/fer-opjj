@@ -373,12 +373,14 @@ public class JNotepadPP extends JFrame {
         setActionAttributes(copyAction, "control C", KeyEvent.VK_C);
         setActionAttributes(pasteAction, "control V", KeyEvent.VK_P);
 
-        setActionAttributes(statsAction, "control alt t", KeyEvent.VK_U);
+        setActionAttributes(statsAction, "control alt T", KeyEvent.VK_U);
 
+        setActionAttributes(languageEnAction, "control alt E", KeyEvent.VK_E);
+        setActionAttributes(languageDeAction, "control alt D", KeyEvent.VK_D);
+        setActionAttributes(languageHrAction, "control alt H", KeyEvent.VK_H);
 
-        setActionAttributes(languageEnAction, "control alt e", KeyEvent.VK_E);
-        setActionAttributes(languageDeAction, "control alt d", KeyEvent.VK_D);
-        setActionAttributes(languageHrAction, "control alt h", KeyEvent.VK_H);
+        setActionAttributes(upperCaseAction, "control shift U", KeyEvent.VK_D);
+        setActionAttributes(lowerCaseAction, "control U", KeyEvent.VK_H);
     }
 
     private void setActionAttributes(Action action, String keyStroke, int mnemonic) {
@@ -446,7 +448,7 @@ public class JNotepadPP extends JFrame {
         tb.add(createActionButton(copyAction, "icons/copy.png"));
         tb.add(createActionButton(pasteAction, "icons/paste.png"));
         tb.addSeparator();
-        tb.add(createActionButton(statsAction, "icons/paste.png"));
+        tb.add(createActionButton(statsAction, "icons/summary.png"));
 
         getContentPane().add(tb, BorderLayout.PAGE_START);
     }
