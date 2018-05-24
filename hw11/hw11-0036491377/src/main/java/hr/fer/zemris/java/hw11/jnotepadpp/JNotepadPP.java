@@ -286,7 +286,7 @@ public class JNotepadPP extends JFrame {
             JOptionPane.showMessageDialog(JNotepadPP.this,
                     String.format(lp.getString("statsSummary"),
                             nonBlankCharacterCount, lineCount, characterCount),
-                    "Summary", JOptionPane.INFORMATION_MESSAGE);
+                    lp.getString("stats"), JOptionPane.INFORMATION_MESSAGE);
         }
     };
     /**
