@@ -674,8 +674,7 @@ public class JNotepadPP extends JFrame {
      */
     private int queryForUnsavedDocument(SingleDocumentModel doc) {
         Path path = doc.getFilePath();
-        String name = path == null ? lp.getString("newFileName")
-                : path.getFileName().toString();
+        String name = path == null ? lp.getString("newFileName") : path.getFileName().toString();
 
         return JOptionPane.showConfirmDialog(
                 this,
@@ -698,8 +697,9 @@ public class JNotepadPP extends JFrame {
                     Path path = m.getFilePath();
                     if (path == null) {
                         path = chooseFile(lp.getString("saveAs"));
-                        if (path == null)
+                        if (path == null) {
                             return false;
+                        }
                     }
 
                     multipleDocumentModel.saveDocument(m, path);
@@ -779,8 +779,7 @@ public class JNotepadPP extends JFrame {
             text = caseStrategy.apply(text);
             doc.remove(offset, len);
             doc.insertString(offset, text, null);
-        } catch (BadLocationException e1) {
-            e1.printStackTrace();
+        } catch (BadLocationException ignored) {
         }
     }
 
