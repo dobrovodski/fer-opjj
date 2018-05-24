@@ -4,8 +4,18 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 
 import javax.swing.*;
 
+/**
+ * Localized version of {@link AbstractAction}.
+ *
+ * @author matej
+ */
 public abstract class LocalizableAction extends AbstractAction {
-
+    /**
+     * Constructor for the localized AbstractAction.
+     *
+     * @param key translation key
+     * @param lp localization provider
+     */
     public LocalizableAction(String key, ILocalizationProvider lp) {
         String translation = lp.getString(key);
         putValue(Action.NAME, translation);

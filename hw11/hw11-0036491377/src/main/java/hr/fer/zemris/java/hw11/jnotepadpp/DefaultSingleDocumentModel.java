@@ -32,6 +32,7 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
     /**
      * Constructor
+     *
      * @param filePath path to document
      * @param content content of document
      */

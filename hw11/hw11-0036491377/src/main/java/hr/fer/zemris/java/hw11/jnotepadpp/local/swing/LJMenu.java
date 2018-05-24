@@ -4,7 +4,18 @@ import hr.fer.zemris.java.hw11.jnotepadpp.local.ILocalizationProvider;
 
 import javax.swing.*;
 
+/**
+ * Localized {@link JMenu}.
+ *
+ * @author matej
+ */
 public class LJMenu extends JMenu {
+    /**
+     * Constructor for the localized JMenu.
+     *
+     * @param key translation key
+     * @param lp localization provider
+     */
     public LJMenu(String key, ILocalizationProvider lp) {
         String translation = lp.getString(key);
         setText(translation);

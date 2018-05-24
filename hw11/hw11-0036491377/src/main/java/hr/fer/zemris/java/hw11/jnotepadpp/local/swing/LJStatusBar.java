@@ -11,17 +11,51 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Status bar used to display information about current document (length, line, column, selected area) and the current
+ * time.
+ *
+ * @author matej
+ */
 public class LJStatusBar extends JPanel {
+    /**
+     * Length of file label.
+     */
     private JLabel lengthLabel;
+    /**
+     * Line number label.
+     */
     private JLabel lineLabel;
+    /**
+     * Column label.
+     */
     private JLabel colLabel;
+    /**
+     * Selected area label.
+     */
     private JLabel selLabel;
+    /**
+     * Clock label.
+     */
     private JLabel clockLabel;
+    /**
+     * Date time formatter.
+     */
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
+    /**
+     * Flag used to stop the clock.
+     */
     private boolean stopClock = false;
-
+    /**
+     * Caret listener.
+     */
     private CaretListener caretListener;
 
+    /**
+     * Constructor.
+     *
+     * @param lp localization provider
+     */
     public LJStatusBar(ILocalizationProvider lp) {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -70,6 +104,9 @@ public class LJStatusBar extends JPanel {
         startClock();
     }
 
+    /**
+     * Starts the clock on a separate thread.
+     */
     private void startClock() {
         Thread t = new Thread(() -> {
             while (!stopClock) {
@@ -85,30 +122,61 @@ public class LJStatusBar extends JPanel {
         t.start();
     }
 
+    /**
+     * Sets content of length label.
+     *
+     * @param length length
+     */
     private void setLengthLabel(int length) {
         lengthLabel.setText(": " + length);
     }
 
-    private void setLineLabel(int length) {
-        lineLabel.setText("Ln: " + length);
+    /**
+     * Sets content of line label.
+     *
+     * @param line line
+     */
+    private void setLineLabel(int line) {
+        lineLabel.setText("Ln: " + line);
     }
 
-    private void setColLabel(int length) {
-        colLabel.setText("Col: " + length);
+    /**
+     * Sets content of column label.
+     *
+     * @param col column
+     */
+    private void setColLabel(int col) {
+        colLabel.setText("Col: " + col);
     }
 
-    private void setSelLabel(int length) {
-        selLabel.setText("Sel: " + length);
+    /**
+     * Sets content of selected label.
+     *
+     * @param sel selected
+     */
+    private void setSelLabel(int sel) {
+        selLabel.setText("Sel: " + sel);
     }
 
+    /**
+     * Sets the flag for the clock to stop.
+     */
     public void stopClock() {
         stopClock = true;
     }
 
+    /**
+     * Sets content of time label.
+     */
     private void setTimeLabel() {
         clockLabel.setText(formatter.format(LocalDateTime.now()));
     }
 
+    /**
+     * Returns caret listener.
+     *
+     * @return caret listener
+     */
     public CaretListener getCaretListener() {
         return caretListener;
     }
