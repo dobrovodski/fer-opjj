@@ -223,7 +223,6 @@ public class JNotepadPP extends JFrame {
             int characterCount = textArea.getText().length();
             int nonBlankCharacterCount = textArea.getText().replaceAll("\\s+", "").length();
 
-            // TODO
             JOptionPane.showMessageDialog(JNotepadPP.this,
                     String.format(LocalizationProvider.getInstance().getString("statsSummary"),
                             nonBlankCharacterCount, lineCount, characterCount),
