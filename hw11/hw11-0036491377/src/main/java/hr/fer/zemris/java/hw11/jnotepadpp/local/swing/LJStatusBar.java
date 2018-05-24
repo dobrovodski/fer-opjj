@@ -19,6 +19,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class LJStatusBar extends JPanel {
     /**
+	 * Default serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+    /**
      * Length of file label.
      */
     private JLabel lengthLabel;

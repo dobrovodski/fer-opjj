@@ -17,6 +17,10 @@ import java.util.Objects;
  */
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel {
     /**
+	 * Default serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+    /**
      * Saved file icon.
      */
     private static final Icon SAVED = Util.loadIcon("icons/saved.png");

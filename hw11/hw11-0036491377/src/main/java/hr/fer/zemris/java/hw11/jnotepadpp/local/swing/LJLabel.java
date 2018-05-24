@@ -11,6 +11,10 @@ import javax.swing.*;
  */
 public class LJLabel extends JLabel {
     /**
+	 * Default serial version UID
+	 */
+	private static final long serialVersionUID = 1L;
+    /**
      * Constructor for the localized JLabel.
      *
      * @param key translation key
