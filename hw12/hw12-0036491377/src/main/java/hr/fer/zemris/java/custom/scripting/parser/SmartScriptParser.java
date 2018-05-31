@@ -139,8 +139,10 @@ public class SmartScriptParser {
                         Element endExpression = (Element) forParams.get(2);
                         Element stepExpression = forParams.size() == 4 ? (Element) forParams.get(3) : null;
 
-                        if (!(isValidForLoopParam(startExpression) && isValidForLoopParam(endExpression) &&
-                              isValidForLoopParam(stepExpression))) {
+                        if (!(
+                                isValidForLoopParam(startExpression) && isValidForLoopParam(endExpression) &&
+                                isValidForLoopParam(stepExpression)
+                        )) {
                             throw new SmartScriptParserException("For loop parameters aren't the correct type.");
                         }
 
