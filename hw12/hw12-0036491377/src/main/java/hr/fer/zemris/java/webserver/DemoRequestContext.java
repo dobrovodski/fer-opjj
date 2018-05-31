@@ -1,7 +1,7 @@
 package hr.fer.zemris.java.webserver;
 
-import hr.fer.zemris.java.webserver.RequestContext;
 import hr.fer.zemris.java.webserver.RequestContext.RCCookie;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -16,6 +16,7 @@ public class DemoRequestContext {
         demo1("primjer2.txt", "UTF-8");
         demo2("primjer3.txt", "UTF-8");
     }
+
     private static void demo1(String filePath, String encoding) throws IOException {
         OutputStream os = Files.newOutputStream(Paths.get(filePath));
         RequestContext rc = new RequestContext(os, new HashMap<String, String>(),
@@ -29,6 +30,7 @@ public class DemoRequestContext {
         rc.write("Čevapčići i Šiščevapčići.");
         os.close();
     }
+
     private static void demo2(String filePath, String encoding) throws IOException {
         OutputStream os = Files.newOutputStream(Paths.get(filePath));
         RequestContext rc = new RequestContext(os, new HashMap<String, String>(),

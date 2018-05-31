@@ -6,16 +6,16 @@ package hr.fer.zemris.java.custom.scripting.lexer;
  * @author matej
  */
 public enum LexerState {
-	/**
-	 * Default state while parsing TEXT
-	 */
-	BASIC,
-	/**
-	 *  State while entering a tag (when {$ is read)
-	 */
-	TAG_START,
-	/**
-	 *  State while parsing a tag
-	 */
-	TAG
+    /**
+     * Default state while parsing TEXT
+     */
+    BASIC,
+    /**
+     * State while entering a tag (when {$ is read)
+     */
+    TAG_START,
+    /**
+     * State while parsing a tag
+     */
+    TAG
 }
