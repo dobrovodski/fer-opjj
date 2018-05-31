@@ -18,6 +18,7 @@ public class RequestContext {
     private int statusCode = 200;
     private String statusText = "OK";
     private String mimeType = "text/html";
+    private Long contentLength;
     private Map<String, String> parameters;
     private Map<String, String> temporaryParameters;
     private Map<String, String> persistentParameters;
@@ -95,6 +96,12 @@ public class RequestContext {
         return write(data);
     }
 
+    public RequestContext write(byte[] data, int offset, int len) throws IOException {
+        createHeader();
+        outputStream.write(data, offset, len);
+        return this;
+    }
+
     public void setEncoding(String encoding) {
         if (headerGenerated) {
             throw new RuntimeException("Header has already been generated.");
@@ -123,6 +130,13 @@ public class RequestContext {
         this.mimeType = mimeType;
     }
 
+    public void setContentLength(Long contentLength) {
+        if (headerGenerated) {
+            throw new RuntimeException("Header has already been generated.");
+        }
+        this.contentLength = contentLength;
+    }
+
     public void addRCCookie(RCCookie cookie) {
         if (headerGenerated) {
             throw new RuntimeException("Header has already been generated.");
@@ -144,6 +158,10 @@ public class RequestContext {
             mimeType += "; charset=" + encoding;
         }
         sb.append(String.format("Content-Type: %s\r\n", mimeType));
+
+        if (contentLength != null) {
+            sb.append(String.format("Content-Length: %d", contentLength));
+        }
 
         if (outputCookies.size() > 0) {
             for (RCCookie cookie : outputCookies) {
