@@ -85,10 +85,12 @@ public class RequestContext {
     public RequestContext write(byte[] data) throws IOException {
         createHeader();
         outputStream.write(data);
-        return null;
+        return this;
     }
 
     public RequestContext write(String text) throws IOException {
+        // This is called here so that it can set the charset property before decoding the data
+        createHeader();
         byte[] data = text.getBytes(charset);
         return write(data);
     }
@@ -148,6 +150,8 @@ public class RequestContext {
                 sb.append(cookie.toString());
                 sb.append("\r\n");
             }
+        } else {
+            sb.append("\r\n");
         }
 
         byte[] headerBytes = sb.toString().getBytes(StandardCharsets.ISO_8859_1);
