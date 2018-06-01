@@ -2,7 +2,6 @@ package hr.fer.zemris.java.webserver;
 
 import hr.fer.zemris.java.custom.scripting.exec.SmartScriptEngine;
 import hr.fer.zemris.java.custom.scripting.parser.SmartScriptParser;
-import hr.fer.zemris.java.webserver.RequestContext.RCCookie;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -71,6 +71,8 @@ public class SmartHttpServer {
 
         workersMap = new HashMap<>();
         parseWorkers(Paths.get(prop.getProperty("server.workers")));
+
+        //startSessionCleanupThread();
 
         serverThread = new ServerThread();
         start();
@@ -171,7 +173,7 @@ public class SmartHttpServer {
         private Map<String, String> params = new HashMap<>();
         private Map<String, String> tempParams = new HashMap<>();
         private Map<String, String> permPrams = new HashMap<>();
-        private List<RequestContext.RCCookie> outputCookies = new ArrayList<RCCookie>();
+        private List<RequestContext.RCCookie> outputCookies = new ArrayList<>();
         private String SID;
         private RequestContext context;
 
@@ -182,12 +184,12 @@ public class SmartHttpServer {
 
         @Override
         public void run() {
-            List<String> request;
             try {
                 istream = new PushbackInputStream(csocket.getInputStream());
                 ostream = csocket.getOutputStream();
-                request = readRequest();
+                List<String> request = readRequest();
 
+                // This part checks for malformed requests
                 if (request == null || request.size() < 1) {
                     sendError(400, "Bad request");
                     return;
@@ -215,8 +217,14 @@ public class SmartHttpServer {
                     if (header.startsWith("Host:")) {
                         String[] host = header.substring(5).trim().split(":");
                         this.host = host[0];
+                        break;
                     }
                 }
+                if (host == null) {
+                    host = domainName;
+                }
+
+                checkSession(request);
 
                 String path;
                 String paramString;
@@ -236,6 +244,70 @@ public class SmartHttpServer {
                 } catch (IOException ignored) {
                 }
             }
+        }
+
+        private void checkSession(List<String> headers) {
+            // It has to be SmartHttpServer.this because otherwise 2 clients could access the map at the same time
+            synchronized (SmartHttpServer.this) {
+                String sidCandidate = null;
+                for (String header : headers) {
+                    if (!header.startsWith("Cookie:")) {
+                        continue;
+                    }
+
+                    String[] cookies = header.substring(7).split(";");
+                    for (String cookie : cookies) {
+                        String[] parts = cookie.split("=", 2);
+                        String name = parts[0].trim();
+                        String value = parts[1].replace("\"", "");
+                        if (name.equals("sid")) {
+                            sidCandidate = value;
+                        }
+                    }
+                }
+
+                SessionMapEntry entry = createSessionEntry();
+                if (sidCandidate == null) {
+                    sessions.put(entry.sid, entry);
+                    outputCookies.add(new RequestContext.RCCookie("sid", entry.sid, null, host, "/"));
+                }
+
+                if (sidCandidate != null) {
+                    entry = sessions.get(sidCandidate);
+                    if (entry == null || !entry.host.equals(this.host)) {
+                        entry = createSessionEntry();
+                        sessions.put(entry.sid, entry);
+                        outputCookies.add(new RequestContext.RCCookie("sid", entry.sid, null, host, "/"));
+                    } else if (entry.validUntil < System.currentTimeMillis()) {
+                        sessions.remove(sidCandidate);
+                        entry = createSessionEntry();
+                        sessions.put(entry.sid, entry);
+                        outputCookies.add(new RequestContext.RCCookie("sid", entry.sid, null, host, "/"));
+                    } else {
+                        entry.validUntil = System.currentTimeMillis() + sessionTimeout * 1000;
+                    }
+                }
+
+                permPrams = entry.map;
+            }
+        }
+
+        private SessionMapEntry createSessionEntry() {
+            SessionMapEntry entry = new SessionMapEntry();
+
+            StringBuilder randomSID = new StringBuilder();
+            for (int i = 0; i < 20; i++) {
+                randomSID.append((char) sessionRandom.nextInt(26) + 'A');
+            }
+
+            long current = System.currentTimeMillis();
+            long next = System.currentTimeMillis() + sessionTimeout * 1000;
+            entry.validUntil = System.currentTimeMillis() + sessionTimeout * 1000;
+            entry.map = new ConcurrentHashMap<>();
+            entry.sid = randomSID.toString();
+            entry.host = host;
+
+            return entry;
         }
 
         private List<String> readRequest() throws IOException {

@@ -241,6 +241,7 @@ public class RequestContext {
             if (maxAge != null) {
                 sb.append(String.format("; Max-Age=%s", maxAge));
             }
+            sb.append("; HttpOnly");
 
             return sb.toString();
         }
