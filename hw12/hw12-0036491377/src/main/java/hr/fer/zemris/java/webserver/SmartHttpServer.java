@@ -336,7 +336,7 @@ public class SmartHttpServer {
 
         @Override
         public void dispatchRequest(String urlPath) throws Exception {
-
+            internalDispatchRequest(urlPath, false);
         }
 
         public void internalDispatchRequest(String urlPath, boolean directCall) throws IOException {
@@ -345,6 +345,11 @@ public class SmartHttpServer {
 
             if (!requestedFile.startsWith(documentRoot)) {
                 sendError(403, "Forbidden");
+                return;
+            }
+
+            if (urlPath.equals("/private") || ((urlPath.startsWith("/private/")) && directCall)) {
+                sendError(404, "File not found");
                 return;
             }
 
