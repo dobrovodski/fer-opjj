@@ -181,10 +181,8 @@ public class RequestContext {
                 sb.append("\r\n");
             }
         }
-        
-        if (!sb.toString().endsWith("\r\n")) {
-            sb.append("\r\n");
-        }
+
+        sb.append("\r\n");
 
         byte[] headerBytes = sb.toString().getBytes(StandardCharsets.US_ASCII);
         write(headerBytes);
