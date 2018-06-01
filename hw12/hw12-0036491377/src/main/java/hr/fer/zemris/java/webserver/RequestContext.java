@@ -41,6 +41,8 @@ public class RequestContext {
         this.parameters = parameters;
         this.persistentParameters = persistentParameters;
         this.outputCookies = outputCookies;
+        this.temporaryParameters = new HashMap<>();
+
     }
 
     public String getParameter(String name) {
@@ -67,7 +69,7 @@ public class RequestContext {
         persistentParameters.remove(name);
     }
 
-    public String getTempoeraryParameter(String name) {
+    public String getTemporaryParameter(String name) {
         return temporaryParameters.get(name);
     }
 
@@ -160,7 +162,7 @@ public class RequestContext {
         sb.append(String.format("Content-Type: %s\r\n", mimeType));
 
         if (contentLength != null) {
-            sb.append(String.format("Content-Length: %d", contentLength));
+            sb.append(String.format("Content-Length: %d\r\n", contentLength));
         }
 
         if (outputCookies.size() > 0) {
@@ -168,12 +170,10 @@ public class RequestContext {
                 sb.append(cookie.toString());
                 sb.append("\r\n");
             }
-        } else {
-            sb.append("\r\n");
         }
 
         byte[] headerBytes = sb.toString().getBytes(StandardCharsets.ISO_8859_1);
-        outputStream.write(headerBytes);
+        write(headerBytes);
     }
 
     public static class RCCookie {
