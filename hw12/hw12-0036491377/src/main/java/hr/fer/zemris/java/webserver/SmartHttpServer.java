@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,6 +37,8 @@ public class SmartHttpServer {
     private ExecutorService threadPool;
     private Path documentRoot;
     private Map<String, IWebWorker> workersMap;
+    private Map<String, SessionMapEntry> sessions = new HashMap<String, SmartHttpServer.SessionMapEntry>();
+    private Random sessionRandom = new Random();
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -310,11 +313,23 @@ public class SmartHttpServer {
         private void parseParameters(String paramString) {
             String[] params = paramString.split("&");
             for (String p : params) {
-                String[] parts = p.split("=");
-                if (parts.length != 2) {
-                    throw new IllegalArgumentException("Could not parse parameter.");
+                if (p.startsWith("=")) {
+                    continue;
                 }
-                this.params.put(parts[0], parts[1]);
+                String[] parts = p.split("=");
+                String left = parts[0];
+                String right;
+                if (parts.length == 1) {
+                    if (p.contains("=")) {
+                        right = "";
+                    } else {
+                        right = null;
+                    }
+                } else {
+                    right = parts[1];
+                }
+
+                this.params.put(left, right);
             }
         }
 
@@ -412,4 +427,10 @@ public class SmartHttpServer {
 
     }
 
+    private static class SessionMapEntry {
+        String sid;
+        String host;
+        long validUntil;
+        Map<String, String> map;
+    }
 }
