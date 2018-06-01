@@ -322,8 +322,6 @@ public class SmartHttpServer {
                 randomSID.append((char) sessionRandom.nextInt(26) + 'A');
             }
 
-            long current = System.currentTimeMillis();
-            long next = System.currentTimeMillis() + sessionTimeout * 1000;
             entry.validUntil = System.currentTimeMillis() + sessionTimeout * 1000;
             entry.map = new ConcurrentHashMap<>();
             entry.sid = randomSID.toString();
@@ -518,7 +516,6 @@ public class SmartHttpServer {
             context.write(fileData);
             ostream.flush();
         }
-
     }
 
     private static class SessionMapEntry {

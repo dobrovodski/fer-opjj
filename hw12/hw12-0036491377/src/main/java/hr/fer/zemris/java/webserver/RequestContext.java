@@ -180,7 +180,9 @@ public class RequestContext {
                 sb.append(cookie.toString());
                 sb.append("\r\n");
             }
-        } else {
+        }
+        
+        if (!sb.toString().endsWith("\r\n")) {
             sb.append("\r\n");
         }
 
