@@ -1,5 +1,7 @@
 package hr.fer.zemris.java.webserver;
 
+import hr.fer.zemris.java.custom.scripting.exec.SmartScriptEngine;
+import hr.fer.zemris.java.custom.scripting.parser.SmartScriptParser;
 import hr.fer.zemris.java.webserver.RequestContext.RCCookie;
 
 import java.io.ByteArrayOutputStream;
@@ -33,6 +35,7 @@ public class SmartHttpServer {
     private ServerThread serverThread;
     private ExecutorService threadPool;
     private Path documentRoot;
+    private Map<String, IWebWorker> workersMap;
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -63,8 +66,38 @@ public class SmartHttpServer {
         Path mimePropertiesPath = Paths.get(prop.getProperty("server.mimeConfig"));
         initMimeTypes(mimePropertiesPath);
 
+        workersMap = new HashMap<>();
+        parseWorkers(Paths.get(prop.getProperty("server.workers")));
+
         serverThread = new ServerThread();
         start();
+    }
+
+    private void parseWorkers(Path path) {
+        String workers;
+        try {
+            workers = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("Could not read workers file.");
+            return;
+        }
+
+        String[] lines = workers.split("\n");
+        for (String worker : lines) {
+            String[] split = worker.split("=");
+            String pathToWorker = split[0].trim();
+            String fqcn = split[1].trim();
+            Class<?> referenceToClass = null;
+            try {
+                referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
+                Object newObject = referenceToClass.newInstance();
+                IWebWorker iww = (IWebWorker) newObject;
+                workersMap.put(pathToWorker, iww);
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                System.out.println("Could not create web worker.");
+                return;
+            }
+        }
     }
 
     private void initMimeTypes(Path path) {
@@ -137,6 +170,7 @@ public class SmartHttpServer {
         private Map<String, String> permPrams = new HashMap<>();
         private List<RequestContext.RCCookie> outputCookies = new ArrayList<RCCookie>();
         private String SID;
+        private RequestContext context;
 
         public ClientWorker(Socket csocket) {
             super();
@@ -314,6 +348,33 @@ public class SmartHttpServer {
                 return;
             }
 
+            if (context == null) {
+                context = new RequestContext(ostream, params, permPrams, outputCookies, this, tempParams);
+            }
+
+            if (urlPath.startsWith("/ext/")) {
+                try {
+                    String fqcn = "hr.fer.zemris.java.webserver.workers." + urlPath.substring(5);
+                    Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
+                    Object newObject = null;
+                    newObject = referenceToClass.newInstance();
+                    IWebWorker iww = (IWebWorker) newObject;
+                    iww.processRequest(context);
+                } catch (Exception e) {
+                    System.out.println("Could not create web worker.");
+                }
+                return;
+            }
+
+            if (workersMap.containsKey(urlPath)) {
+                try {
+                    workersMap.get(urlPath).processRequest(context);
+                } catch (Exception e) {
+                    System.out.println("Could not process request with worker.");
+                }
+                return;
+            }
+
             if (!Files.isRegularFile(requestedFile) || !Files.isReadable(requestedFile)) {
                 sendError(404, "File not found");
                 return;
@@ -326,14 +387,21 @@ public class SmartHttpServer {
             if (i > p) {
                 extension = fileName.substring(i + 1);
             }
+
             String mimeType = mimeTypes.getOrDefault(extension, "application/octet-stream");
 
-            RequestContext rc = new RequestContext(ostream, params, permPrams, outputCookies);
-            rc.setMimeType(mimeType);
-            rc.setStatusCode(200);
+            // Special case when it is a script file
+            if (extension.equals("smscr")) {
+                String documentBody = new String(Files.readAllBytes(requestedFile), StandardCharsets.UTF_8);
+                context.setMimeType("text/html");
+                new SmartScriptEngine(new SmartScriptParser(documentBody).getDocumentNode(), context).execute();
+                return;
+            }
+
+            context.setMimeType(mimeType);
             byte[] fileData = Files.readAllBytes(requestedFile);
-            rc.setContentLength((long) fileData.length);
-            rc.write(fileData);
+            context.setContentLength((long) fileData.length);
+            context.write(fileData);
             ostream.flush();
         }
 
