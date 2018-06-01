@@ -72,7 +72,7 @@ public class SmartHttpServer {
         workersMap = new HashMap<>();
         parseWorkers(Paths.get(prop.getProperty("server.workers")));
 
-        //startSessionCleanupThread();
+        startSessionCleanupThread();
 
         serverThread = new ServerThread();
         start();
@@ -130,6 +130,28 @@ public class SmartHttpServer {
     protected synchronized void stop() {
         threadPool.shutdown();
         serverThread.stopThread();
+    }
+
+    private void startSessionCleanupThread() {
+        final int PERIOD = 5 * 60000;
+        Thread t = new Thread(() -> {
+            while (true) {
+                synchronized (SmartHttpServer.this) {
+                    for (Map.Entry<String, SessionMapEntry> kv : sessions.entrySet()) {
+                        SessionMapEntry entry = kv.getValue();
+                        if (entry.validUntil < System.currentTimeMillis()) {
+                            sessions.remove(entry.sid);
+                        }
+                    }
+                }
+                try {
+                    Thread.sleep(PERIOD);
+                } catch (InterruptedException ignored) {
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();
     }
 
     protected class ServerThread extends Thread {
