@@ -24,6 +24,7 @@ public class RequestContext {
     private Map<String, String> persistentParameters;
     private List<RCCookie> outputCookies;
     private boolean headerGenerated = false;
+    private IDispatcher dispatcher;
 
     public RequestContext(OutputStream outputStream, Map<String, String> parameters, Map<String, String>
             persistentParameters, List<RCCookie> outputCookies) {
@@ -42,7 +43,16 @@ public class RequestContext {
         this.persistentParameters = persistentParameters;
         this.outputCookies = outputCookies;
         this.temporaryParameters = new HashMap<>();
+    }
 
+    public RequestContext(OutputStream outputStream, Map<String, String> parameters, Map<String, String>
+            persistentParameters, List<RCCookie> outputCookies, IDispatcher dispatcher, Map<String, String>
+            temporaryParameters) {
+        this(outputStream, parameters, persistentParameters, outputCookies);
+        Objects.requireNonNull(dispatcher, "Dispatcher cannot be null.");
+        Objects.requireNonNull(temporaryParameters, "Temporary parameters cannot be null.");
+        this.dispatcher = dispatcher;
+        this.temporaryParameters = temporaryParameters;
     }
 
     public String getParameter(String name) {
@@ -170,10 +180,16 @@ public class RequestContext {
                 sb.append(cookie.toString());
                 sb.append("\r\n");
             }
+        } else {
+            sb.append("\r\n");
         }
 
-        byte[] headerBytes = sb.toString().getBytes(StandardCharsets.ISO_8859_1);
+        byte[] headerBytes = sb.toString().getBytes(StandardCharsets.US_ASCII);
         write(headerBytes);
+    }
+
+    public IDispatcher getDispatcher() {
+        return dispatcher;
     }
 
     public static class RCCookie {

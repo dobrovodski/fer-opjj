@@ -15,7 +15,7 @@ import java.util.Map;
 public class SmartScriptEngineDemo {
     public static void main(String[] args) {
         String path = "C:\\Users\\marvin\\Desktop\\FER\\6. semestar\\java\\homework\\hw12\\hw12-0036491377\\src\\main"
-                      + "\\resources\\osnovni.smscr";
+                      + "\\resources\\fibonaccih.smscr";
         String documentBody;
         try {
             documentBody = new String(Files.readAllBytes(Paths.get(path)));
