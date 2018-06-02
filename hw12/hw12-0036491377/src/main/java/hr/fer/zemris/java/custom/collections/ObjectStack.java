@@ -6,8 +6,10 @@ package hr.fer.zemris.java.custom.collections;
  * @author matej
  */
 public class ObjectStack {
-
-    ArrayIndexedCollection array;
+    /**
+     * Used to keep track of objects.
+     */
+    private ArrayIndexedCollection array;
 
     /**
      * Default constructor for ObjectStack.

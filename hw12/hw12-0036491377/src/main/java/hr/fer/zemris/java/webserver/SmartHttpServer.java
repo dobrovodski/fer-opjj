@@ -465,16 +465,7 @@ public class SmartHttpServer {
             }
 
             if (urlPath.startsWith("/ext/")) {
-                try {
-                    String fqcn = "hr.fer.zemris.java.webserver.workers." + urlPath.substring(5);
-                    Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
-                    Object newObject = null;
-                    newObject = referenceToClass.newInstance();
-                    IWebWorker iww = (IWebWorker) newObject;
-                    iww.processRequest(context);
-                } catch (Exception e) {
-                    System.out.println("Could not create web worker.");
-                }
+                runWorker(urlPath, context);
                 return;
             }
 
@@ -492,21 +483,12 @@ public class SmartHttpServer {
                 return;
             }
 
-            String fileName = requestedFile.toAbsolutePath().toString();
-            String extension = "";
-            int i = fileName.lastIndexOf('.');
-            int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-            if (i > p) {
-                extension = fileName.substring(i + 1);
-            }
-
+            String extension = getExtension(requestedFile);
             String mimeType = mimeTypes.getOrDefault(extension, "application/octet-stream");
 
             // Special case when it is a script file
             if (extension.equals("smscr")) {
-                String documentBody = new String(Files.readAllBytes(requestedFile), StandardCharsets.UTF_8);
-                context.setMimeType("text/html");
-                new SmartScriptEngine(new SmartScriptParser(documentBody).getDocumentNode(), context).execute();
+                runScript(requestedFile, context);
                 return;
             }
 
@@ -516,6 +498,36 @@ public class SmartHttpServer {
             context.write(fileData);
             ostream.flush();
         }
+    }
+
+    private void runWorker(String urlPath, RequestContext context) {
+        try {
+            String fqcn = "hr.fer.zemris.java.webserver.workers." + urlPath.substring(5);
+            Class<?> referenceToClass = this.getClass().getClassLoader().loadClass(fqcn);
+            Object newObject = null;
+            newObject = referenceToClass.newInstance();
+            IWebWorker iww = (IWebWorker) newObject;
+            iww.processRequest(context);
+        } catch (Exception e) {
+            System.out.println("Could not create web worker.");
+        }
+    }
+
+    private String getExtension(Path path) {
+        String fileName = path.toAbsolutePath().toString();
+        String extension = "";
+        int i = fileName.lastIndexOf('.');
+        int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        if (i > p) {
+            extension = fileName.substring(i + 1);
+        }
+        return extension;
+    }
+
+    private void runScript(Path path, RequestContext context) throws IOException {
+        String documentBody = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+        context.setMimeType("text/html");
+        new SmartScriptEngine(new SmartScriptParser(documentBody).getDocumentNode(), context).execute();
     }
 
     private static class SessionMapEntry {

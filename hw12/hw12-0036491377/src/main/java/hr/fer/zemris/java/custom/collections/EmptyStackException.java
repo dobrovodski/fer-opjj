@@ -6,7 +6,9 @@ package hr.fer.zemris.java.custom.collections;
  * @author matej
  */
 public class EmptyStackException extends RuntimeException {
-
+    /**
+     * Default serialVersionUID.
+     */
     private static final long serialVersionUID = 1L;
 
     /**

@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent constant doubles.
  */
 public class ElementConstantDouble extends Element {
-    // Value of the double
+    /**
+     * Value of the double.
+     */
     private double value;
 
     /**

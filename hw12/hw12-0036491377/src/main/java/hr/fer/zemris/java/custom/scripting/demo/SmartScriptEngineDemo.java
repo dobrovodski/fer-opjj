@@ -12,10 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is a demo program for the {@link SmartScriptEngine}. It reads a pre-set fibonaccih.smscr file and executes the
+ * engine. The expected output is an html file with fibonacci numbers in a table written to the standard output.
+ *
+ * @author matej
+ */
 public class SmartScriptEngineDemo {
+    /**
+     * Entry point.
+     *
+     * @param args not used
+     */
     public static void main(String[] args) {
-        String path = "C:\\Users\\marvin\\Desktop\\FER\\6. semestar\\java\\homework\\hw12\\hw12-0036491377\\src\\main"
-                      + "\\resources\\fibonaccih.smscr";
+        String path = "webroot/scripts/fibonaccih.smscr";
         String documentBody;
         try {
             documentBody = new String(Files.readAllBytes(Paths.get(path)));

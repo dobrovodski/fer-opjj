@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent operators.
  */
 public class ElementOperator extends Element {
-    // String representation of operator
+    /**
+     * String representation of operator.
+     */
     private String symbol;
 
     /**

@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent variables.
  */
 public class ElementVariable extends Element {
-    // Name of the variable
+    /**
+     * Name of the variable.
+     */
     private String name;
 
     /**

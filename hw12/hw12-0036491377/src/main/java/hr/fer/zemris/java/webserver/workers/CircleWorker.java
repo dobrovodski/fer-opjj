@@ -9,6 +9,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+/**
+ * {@link IWebWorker} which simply generates a png image of a circle and writes it to the given {@link RequestContext},
+ *
+ * @author matej
+ */
 public class CircleWorker implements IWebWorker {
     @Override
     public void processRequest(RequestContext context) {

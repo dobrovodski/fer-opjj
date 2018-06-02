@@ -28,11 +28,17 @@ import java.util.Arrays;
  * @author matej
  */
 public class SmartScriptParser {
-    // Lexer object used to tokenize input
+    /**
+     * Lexer object used to tokenize input.
+     */
     private Lexer lexer;
-    // Initial tree node for parsing tree
+    /**
+     * Initial tree node for parsing tree.
+     */
     private DocumentNode documentNode;
-    // Stack used for turning tokens into tree
+    /**
+     * Stack used for turning tokens into tree.
+     */
     private ObjectStack stack;
 
     /**

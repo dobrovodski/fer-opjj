@@ -8,11 +8,21 @@ import java.util.Arrays;
  * @author matej
  */
 public class ArrayIndexedCollection extends Collection {
-
+    /**
+     * Default capacity.
+     */
     private final static int DEFAULT_INITIAL_CAPACITY = 16;
-
+    /**
+     * Current size.
+     */
     private int size;
+    /**
+     * Current capacity.
+     */
     private int capacity;
+    /**
+     * Array of objects kept in collection.
+     */
     private Object[] elements;
 
     /**

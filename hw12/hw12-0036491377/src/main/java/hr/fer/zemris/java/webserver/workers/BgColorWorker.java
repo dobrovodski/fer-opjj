@@ -7,6 +7,12 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * {@link IWebWorker} used to notify about the update of index2.html's background color. It also provides a link to
+ * return to index2.html.
+ *
+ * @author matej
+ */
 public class BgColorWorker implements IWebWorker {
     @Override
     public void processRequest(RequestContext context) {

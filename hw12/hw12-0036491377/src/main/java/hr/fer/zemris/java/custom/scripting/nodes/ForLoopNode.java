@@ -9,13 +9,21 @@ import hr.fer.zemris.java.custom.scripting.elems.ElementVariable;
  * @author matej
  */
 public class ForLoopNode extends Node {
-    // Variable of for loop
+    /**
+     * Variable of for loop.
+     */
     private ElementVariable variable;
-    // Start expression
+    /**
+     * Start expression.
+     */
     private Element startExpression;
-    // End expression
+    /**
+     * End expression.
+     */
     private Element endExpression;
-    // Step expression
+    /**
+     * Step expression.
+     */
     private Element stepExpression;
 
     /**

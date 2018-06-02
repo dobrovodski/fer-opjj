@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent strings.
  */
 public class ElementString extends Element {
-    // Value of string
+    /**
+     * Value of string.
+     */
     private String value;
 
     /**

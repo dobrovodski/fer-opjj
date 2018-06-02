@@ -6,15 +6,25 @@ package hr.fer.zemris.java.custom.scripting.lexer;
  * @author matej
  */
 public class Lexer {
-    // Data given to the lexer to tokenize
+    /**
+     * Data given to the lexer to tokenize.
+     */
     private char[] data;
-    // Current position in data
+    /**
+     * Current position in data.
+     */
     private int index;
-    // Latest generated token
+    /**
+     * Latest generated token.
+     */
     private Token token;
-    // Current state of the lexer
+    /**
+     * Current state of the lexer.
+     */
     private LexerState state;
-    // Keeps track whether the tokenization process has finished
+    /**
+     * Keeps track whether the tokenization process has finished
+     */
     private boolean end;
 
     /**

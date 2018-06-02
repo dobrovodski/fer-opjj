@@ -6,10 +6,13 @@ package hr.fer.zemris.java.custom.scripting.lexer;
  * @author matej
  */
 public class Token {
-
-    // Type of the token
+    /**
+     * Type of the token.
+     */
     private TokenType type;
-    // Value of the token
+    /**
+     * Value of the token.
+     */
     private Object value;
 
     /**

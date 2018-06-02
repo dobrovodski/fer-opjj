@@ -6,6 +6,11 @@ import hr.fer.zemris.java.webserver.RequestContext;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * {@link IWebWorker} which simply displays all the parameters it received through its {@link RequestContext}.
+ *
+ * @author matej
+ */
 public class EchoParams implements IWebWorker {
     @Override
     public void processRequest(RequestContext context) {

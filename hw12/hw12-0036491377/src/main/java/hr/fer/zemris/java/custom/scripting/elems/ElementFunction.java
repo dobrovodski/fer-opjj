@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent functions.
  */
 public class ElementFunction extends Element {
-    // Name of the function
+    /**
+     * Name of the function.
+     */
     private String name;
 
     /**

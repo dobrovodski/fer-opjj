@@ -4,7 +4,9 @@ package hr.fer.zemris.java.custom.scripting.elems;
  * Class used to represent constant integers.
  */
 public class ElementConstantInteger extends Element {
-    // Value of the integer
+    /**
+     * Value of the integer.
+     */
     private int value;
 
     /**

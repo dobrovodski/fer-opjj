@@ -23,11 +23,28 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Engine used to execute scripts written using SmartScript. It provides a variety of built-in functions such as decfmt
+ * and sin.
+ *
+ * @author matej
+ */
 public class SmartScriptEngine {
+    /**
+     * Document node.
+     */
     private DocumentNode documentNode;
+    /**
+     * Request context.
+     */
     private RequestContext requestContext;
+    /**
+     * Object multistack.
+     */
     private ObjectMultistack multistack = new ObjectMultistack();
-
+    /**
+     * Visitor which visits all the nodes of the script file and executes them.
+     */
     private INodeVisitor visitor = new INodeVisitor() {
         @Override
         public void visitTextNode(TextNode node) {
@@ -57,6 +74,12 @@ public class SmartScriptEngine {
             multistack.pop(variableName);
         }
 
+        /**
+         * Converts given {@link Element} into a {@link Number} if it is possible, otherwise throws
+         * {@link IllegalArgumentException}.
+         * @param e element to convert
+         * @return converted to number
+         */
         private Number convertNumberElement(Element e) {
             if (e instanceof ElementConstantInteger) {
                 return Integer.parseInt(e.asText());
@@ -106,6 +129,10 @@ public class SmartScriptEngine {
             visitChildNodes(node);
         }
 
+        /**
+         * Visits all child nodes of parent.
+         * @param parent parent whose child nodes to visit
+         */
         private void visitChildNodes(Node parent) {
             for (int i = 0, n = parent.numberOfChildren(); i < n; i++) {
                 parent.getChild(i).accept(this);
@@ -113,6 +140,9 @@ public class SmartScriptEngine {
         }
     };
 
+    /**
+     * Keeps track of all functions provided by the engine.
+     */
     private Map<String, Consumer<ObjectStack>> functions = new HashMap<>();
 
     {
@@ -217,6 +247,12 @@ public class SmartScriptEngine {
         });
     }
 
+    /**
+     * Constructor for {@link SmartScriptEngine}.
+     *
+     * @param documentNode document node of the script
+     * @param requestContext request context to use to execute script
+     */
     public SmartScriptEngine(DocumentNode documentNode, RequestContext requestContext) {
         Objects.requireNonNull(documentNode, "Document node cannot be null.");
         Objects.requireNonNull(requestContext, "Request context cannot be null.");
@@ -224,8 +260,10 @@ public class SmartScriptEngine {
         this.requestContext = requestContext;
     }
 
+    /**
+     * Starts the execution of the script.
+     */
     public void execute() {
         documentNode.accept(visitor);
     }
-
 }

@@ -6,7 +6,9 @@ package hr.fer.zemris.java.custom.scripting.nodes;
  * @author matej
  */
 public class TextNode extends Node {
-    // Textual data stored in node
+    /**
+     * Textual data stored in node.
+     */
     private String text;
 
     /**

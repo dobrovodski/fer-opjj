@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * {@link IWebWorker} which displays the time at which the request was processed as well as counts the number of letters
+ * in the provided name parameter.
+ */
 public class HelloWorker implements IWebWorker {
     @Override
     public void processRequest(RequestContext context) {

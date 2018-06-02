@@ -9,7 +9,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * Demo program for {@link RequestContext} and different encodings.
+ */
 public class DemoRequestContext {
     public static void main(String[] args) throws IOException {
         demo1("primjer1.txt", "ISO-8859-2");
@@ -17,6 +19,14 @@ public class DemoRequestContext {
         demo2("primjer3.txt", "UTF-8");
     }
 
+    /**
+     * Creates simple context without cookies and writes it to the given filePath.
+     *
+     * @param filePath file path to write to
+     * @param encoding encoding to use
+     *
+     * @throws IOException if couldn't be written to output
+     */
     private static void demo1(String filePath, String encoding) throws IOException {
         OutputStream os = Files.newOutputStream(Paths.get(filePath));
         RequestContext rc = new RequestContext(os, new HashMap<String, String>(),
@@ -31,6 +41,14 @@ public class DemoRequestContext {
         os.close();
     }
 
+    /**
+     * Creates context as well as cookies and writes it to the given filePath.
+     *
+     * @param filePath file path to write to
+     * @param encoding encoding to use
+     *
+     * @throws IOException if couldn't be written to output
+     */
     private static void demo2(String filePath, String encoding) throws IOException {
         OutputStream os = Files.newOutputStream(Paths.get(filePath));
         RequestContext rc = new RequestContext(os, new HashMap<String, String>(),

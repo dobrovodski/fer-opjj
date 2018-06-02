@@ -12,7 +12,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Demo program for {@link INodeVisitor} which creates a {@link WriterVisitor} that simply writes the provided script to
+ * the standard output.
+ *
+ * @author matej
+ */
 public class TreeWriter {
+    /**
+     * Entry point.
+     *
+     * @param args requires one argument - the path to the script file
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Program accepts one argument");
@@ -30,6 +41,11 @@ public class TreeWriter {
         p.getDocumentNode().accept(visitor);
     }
 
+    /**
+     * This visitor goes through all the nodes of the script file and writes them to the standard output.
+     *
+     * @author matej
+     */
     private static class WriterVisitor implements INodeVisitor {
 
         @Override

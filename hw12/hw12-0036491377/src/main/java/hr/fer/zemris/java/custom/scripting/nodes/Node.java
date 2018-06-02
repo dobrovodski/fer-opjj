@@ -8,9 +8,10 @@ import hr.fer.zemris.java.custom.collections.ArrayIndexedCollection;
  * @author matej
  */
 public class Node {
-
-    // Array of children nodes of this node
-    ArrayIndexedCollection children;
+    /**
+     * Array of children nodes of this node.
+     */
+    private ArrayIndexedCollection children;
 
     /**
      * Adds child node to this node.
