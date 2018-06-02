@@ -196,7 +196,7 @@ public class SmartScriptEngine {
             Object a = stack.pop();
             Object b = stack.pop();
             stack.push(a);
-            stack.push(a);
+            stack.push(b);
         });
 
         functions.put("@setMimeType", stack -> {

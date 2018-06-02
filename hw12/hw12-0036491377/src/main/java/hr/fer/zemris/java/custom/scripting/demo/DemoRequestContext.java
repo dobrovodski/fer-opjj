@@ -14,6 +14,13 @@ import java.util.HashMap;
  * Demo program for {@link RequestContext} and different encodings.
  */
 public class DemoRequestContext {
+    /**
+     * Entry point for demo.
+     *
+     * @param args not used
+     *
+     * @throws IOException if couldn't read file
+     */
     public static void main(String[] args) throws IOException {
         demo1("primjer1.txt", "ISO-8859-2");
         demo1("primjer2.txt", "UTF-8");

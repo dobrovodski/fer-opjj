@@ -78,6 +78,13 @@ public class Node {
         return false;
     }
 
+    /**
+     * Method called when {@link INodeVisitor} visits this node. Default implementation throws exception.
+     *
+     * @param visitor reference to the visitor
+     *
+     * @throws UnsupportedOperationException if method not implemented
+     */
     public void accept(INodeVisitor visitor) {
         throw new UnsupportedOperationException("Operation not implemented");
     }
