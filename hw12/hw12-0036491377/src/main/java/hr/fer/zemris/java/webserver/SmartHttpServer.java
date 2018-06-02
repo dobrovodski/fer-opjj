@@ -176,7 +176,7 @@ public class SmartHttpServer {
             }
 
         } catch (IOException e) {
-            System.out.println("Could not open mine type file.");
+            System.out.println("Could not open mime type file.");
         }
     }
 
