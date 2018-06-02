@@ -1,5 +1,6 @@
-package hr.fer.zemris.java.webserver;
+package hr.fer.zemris.java.custom.scripting.demo;
 
+import hr.fer.zemris.java.webserver.RequestContext;
 import hr.fer.zemris.java.webserver.RequestContext.RCCookie;
 
 import java.io.IOException;
