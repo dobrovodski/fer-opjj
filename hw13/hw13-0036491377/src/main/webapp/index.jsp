@@ -18,6 +18,8 @@
         Broj stranica:<br><input type="number" name="n" min="1" max="5" step="1" value="1"><br>
         <input type="submit" value="Excel"><input type="reset" value="Reset">
     </form><br>
-    <a href="appinfo.jsp">Server stats</a>
+    <a href="appinfo.jsp">Server stats</a><br>
+    <a href="glasanje">Glasanje</a>
+
 </body>
 </html>

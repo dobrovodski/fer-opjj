@@ -4,12 +4,14 @@
 	<style> body {	background-color: ${bgColor};}</style>
 	<%
             long uptime = new Date().getTime() - (long)getServletContext().getAttribute("serverStartTime");
-            long sec = (long)(uptime / 1000) % 60;
-            long minutes = (long)((uptime / (1000*60)) % 60);
-            long hours = (long)((uptime / (1000*60*60)) % 24);
+            long secs = (long) (uptime / 1000) % 60;
+            long minutes = (long) (secs / 60) % 60;
+            long hours = (long) (minutes / 60) % 24;
+            long days = (long) (hours / 24);
             %>
    <body>
-        <p> <%=hours%> hours, <%=minutes%> minutes, <%=sec%> seconds </p>
+        <h1> Server uptime </h1>
+        <p> <%=days%> days, <%=hours%> hours, <%=minutes%> minutes, <%=secs%> seconds </p><br>
         <a href="index.jsp">MAIN PAGE</a>
    </body>
 </html>
