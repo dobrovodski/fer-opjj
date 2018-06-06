@@ -10,5 +10,6 @@
         <input type="submit" value="Table"><input type="reset" value="Reset">
     </form><br>
     <a href="story">Funny_story.exe</a>
+	<a href="report.jsp">OS Usage report</a><br>
 </body>
 </html>
