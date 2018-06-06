@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns={"/reportImage"})
+@WebServlet(urlPatterns = {"/reportImage"})
 public class UsageImageServlet extends HttpServlet {
     private static DefaultPieDataset dataset = new DefaultPieDataset();
 
