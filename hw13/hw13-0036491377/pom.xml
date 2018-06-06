@@ -18,9 +18,22 @@
         <maven.compiler.target>9</maven.compiler.target>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
     </properties>
-    
+
     <build>
         <finalName>webapp2</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.10.v20180503</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/webapp2</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
 
@@ -31,7 +44,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- servlet/jsp api support: -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -45,7 +58,7 @@
             <version>2.3.1</version>
             <scope>provided</scope>
         </dependency>
-    
+
         <!-- jstl support: -->
         <dependency>
             <groupId>javax.servlet.jsp.jstl</groupId>
