@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>hw13</name>
+    <name>webapp2</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
     </properties>
     
     <build>
-        <finalName>hw13</finalName>
+        <finalName>webapp2</finalName>
     </build>
 
 
