@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.servlets;
+package hr.fer.zemris.java.servlets.glasanje;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

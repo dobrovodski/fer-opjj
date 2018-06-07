@@ -5,7 +5,6 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ public class UsageImageServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         JFreeChart chart = ChartFactory.createPieChart("OS Usage", dataset, true, true, false);
         resp.setContentType("image/png");
         ChartUtils.writeChartAsPNG(resp.getOutputStream(), chart, 600, 600);
