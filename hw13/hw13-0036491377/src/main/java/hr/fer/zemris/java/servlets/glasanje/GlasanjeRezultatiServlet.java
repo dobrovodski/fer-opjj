@@ -15,18 +15,27 @@ public class GlasanjeRezultatiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<Integer, Band> bandMap = (Map<Integer, Band>) req.getSession().getAttribute("bandMap");
-
         List<Band> resultList = new ArrayList<>();
+        List<Band> bestList = new ArrayList<>();
+
         for (Map.Entry<Integer, Band> entry : bandMap.entrySet()) {
             Band b = entry.getValue();
             resultList.add(b);
         }
         resultList.sort((b1, b2) -> Integer.compare(b2.getVoteCount(), b1.getVoteCount()));
 
+        int votes = resultList.get(0).getVoteCount();
+        int index;
+        for (index = 0; index < resultList.size(); index++) {
+            Band b = resultList.get(index);
+            if (b.getVoteCount() < votes) {
+                break;
+            }
+        }
+        bestList = resultList.subList(0, index);
+
         req.getSession().setAttribute("resultList", resultList);
-        ArrayList<Integer> a = new ArrayList<>();
-        a.add(5);
-        req.getSession().setAttribute("a", a);
+        req.getSession().setAttribute("bestList", bestList);
         req.getRequestDispatcher("/WEB-INF/pages/glasanjeRez.jsp").forward(req, resp);
     }
 }

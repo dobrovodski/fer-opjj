@@ -23,12 +23,14 @@ public class ExcelServlet extends HttpServlet {
             b = Integer.parseInt(req.getParameter("b"));
             n = Integer.parseInt(req.getParameter("n"));
         } catch (NumberFormatException e) {
-            req.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(req, resp);
+            req.setAttribute("errorMsg", "couldn't parse parameters as numbers!");
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
             return;
         }
 
         if (a < -100 || a > 100 || b < -100 || b > 100 || n < 1 || n > 5) {
-            req.getRequestDispatcher("WEB-INF/pages/error.jsp").forward(req, resp);
+            req.setAttribute("errorMsg", "parameters are out of range!");
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
             return;
         }
 
