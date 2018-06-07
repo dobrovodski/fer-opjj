@@ -35,6 +35,6 @@ public class StoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Random rand = new Random();
         req.setAttribute("fontColor", colors.get(rand.nextInt(colors.size())));
-        req.getRequestDispatcher("WEB-INF/pages/stories/funny.jsp").forward(req, resp);
+        req.getRequestDispatcher("stories/funny.jsp").forward(req, resp);
     }
 }

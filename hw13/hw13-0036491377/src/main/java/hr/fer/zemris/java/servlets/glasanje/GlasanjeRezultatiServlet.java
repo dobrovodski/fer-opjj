@@ -40,7 +40,7 @@ public class GlasanjeRezultatiServlet extends HttpServlet {
         List<Band> bestList = resultList.subList(0, index);
 
         req.getSession().setAttribute("resultList", resultList);
-        req.getSession().setAttribute("bestList", bestList);
+        req.setAttribute("bestList", bestList);
         req.getRequestDispatcher("/WEB-INF/pages/glasanjeRez.jsp").forward(req, resp);
     }
 }
