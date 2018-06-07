@@ -2,6 +2,7 @@ package hr.fer.zemris.java.listeners;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * This listener implementation logs the time at which the server was started and forwards it to the {@link
@@ -9,6 +10,7 @@ import javax.servlet.ServletContextListener;
  *
  * @author matej
  */
+@WebListener
 public class ServerInformation implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {

@@ -10,10 +10,4 @@
     <description>
         Web application 2 electric boogaloo
     </description>
-
-
-    <listener>
-        <listener-class>hr.fer.zemris.java.listeners.ServerInformation</listener-class>
-    </listener>
-
 </web-app>
