@@ -12,6 +12,12 @@ import java.io.IOException;
 import java.util.List;
 
 
+/**
+ * Creates XLS file when called. The file is single-sheet with 4 columns: ID/Name/Vote count/Link to song. The bands are
+ * in order of the score they got.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/glasanje-xls"})
 public class GlasanjeXLSServlet extends HttpServlet {
     @Override
@@ -23,6 +29,13 @@ public class GlasanjeXLSServlet extends HttpServlet {
         hwb.write(resp.getOutputStream());
     }
 
+    /**
+     * Creates XLS table using given poll results.
+     *
+     * @param results results of the poll
+     *
+     * @return HSSFWorkbook made from the results
+     */
     private HSSFWorkbook createTable(List<Band> results) {
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("results");

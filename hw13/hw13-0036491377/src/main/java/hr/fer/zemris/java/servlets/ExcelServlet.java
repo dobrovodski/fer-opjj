@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Creates an XLS table with n powers of numbers in the range [a, b] which have all been chosen through the form in
+ * index.jsp. The number ranges are limited to [-100, 100] whereas the number n is limited to [1, 5].
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/powers"})
 public class ExcelServlet extends HttpServlet {
     @Override
@@ -46,6 +52,15 @@ public class ExcelServlet extends HttpServlet {
         hwb.write(resp.getOutputStream());
     }
 
+    /**
+     * Creates an XLS table using the given parameters.
+     *
+     * @param a lower boundary of range
+     * @param b upper boundary of range
+     * @param n number of sheets and also highest power
+     *
+     * @return newly created {@link HSSFWorkbook}
+     */
     private HSSFWorkbook createTable(int a, int b, int n) {
         HSSFWorkbook hwb = new HSSFWorkbook();
         for (int i = 0; i < n; i++) {

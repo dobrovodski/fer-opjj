@@ -9,8 +9,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Sets the session attribute "bgColor" to the one that was selected.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/setcolor"})
 public class ColorServlet extends HttpServlet {
+    /**
+     * Keeps track of colors to pick from.
+     */
     private static Map<String, String> colorTable = new HashMap<>();
 
     static {

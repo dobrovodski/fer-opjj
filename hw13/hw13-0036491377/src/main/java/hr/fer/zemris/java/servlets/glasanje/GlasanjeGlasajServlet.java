@@ -12,6 +12,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ * This servlet loads file with the current votes and updates the vote with whichever vote has been casted. Afterwards
+ * it redirects straight to the results page of the vote.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/glasanje-glasaj"})
 public class GlasanjeGlasajServlet extends HttpServlet {
     @Override
@@ -56,6 +62,7 @@ public class GlasanjeGlasajServlet extends HttpServlet {
             fw.flush();
             fw.close();
         }
+
         resp.sendRedirect(req.getContextPath() + "/glasanje-rezultati");
     }
 }

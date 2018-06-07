@@ -10,9 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * This servlet chooses a random font color from pre-defined ones to use while coloring the story in funny.jsp.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/story"})
 public class StoryServlet extends HttpServlet {
-
+    /**
+     * Keeps track of colors to randomize from.
+     */
     private static List<String> colors = new ArrayList<>();
 
     static {

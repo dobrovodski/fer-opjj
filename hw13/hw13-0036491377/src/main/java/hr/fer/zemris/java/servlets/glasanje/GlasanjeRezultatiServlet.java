@@ -10,13 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This servlet calculates the current results of the vote, sorts them and saves them in the current session variables
+ * resultList and bestList to be used for displaying tables.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/glasanje-rezultati"})
 public class GlasanjeRezultatiServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<Integer, Band> bandMap = (Map<Integer, Band>) req.getSession().getAttribute("bandMap");
         List<Band> resultList = new ArrayList<>();
-        List<Band> bestList = new ArrayList<>();
 
         for (Map.Entry<Integer, Band> entry : bandMap.entrySet()) {
             Band b = entry.getValue();
@@ -32,7 +37,7 @@ public class GlasanjeRezultatiServlet extends HttpServlet {
                 break;
             }
         }
-        bestList = resultList.subList(0, index);
+        List<Band> bestList = resultList.subList(0, index);
 
         req.getSession().setAttribute("resultList", resultList);
         req.getSession().setAttribute("bestList", bestList);

@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This servlet produces a very basic pie chart of the current votes and writes it to the response output stream in the
+ * form of a PNG image.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/glasanje-grafika"})
 public class GlasanjeGrafikaServlet extends HttpServlet {
     @Override

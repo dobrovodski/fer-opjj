@@ -12,6 +12,12 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * This servlet loads the file with the list of bands in the poll and creates a map of them according to their IDs to be
+ * used in the voting page.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/glasanje"})
 public class GlasanjeServlet extends HttpServlet {
     @Override

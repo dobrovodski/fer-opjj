@@ -11,8 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Creates and writes an image of a pie chart of OS usage using predefined data.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/reportImage"})
 public class UsageImageServlet extends HttpServlet {
+    /**
+     * Stores data about OS usage.
+     */
     private static DefaultPieDataset dataset = new DefaultPieDataset();
 
     static {
@@ -21,7 +29,6 @@ public class UsageImageServlet extends HttpServlet {
         dataset.setValue("Windows", 11.7);
         dataset.setValue("Others", 22);
     }
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
