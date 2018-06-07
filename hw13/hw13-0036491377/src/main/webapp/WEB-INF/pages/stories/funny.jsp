@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true"%>
 <html>
+   <link rel="stylesheet" type="text/css" href="style.css">
    <style> body {	background-color: ${bgColor};}
       p { color: ${fontColor}; }
    </style>
@@ -18,6 +19,6 @@
          ornare tortor. Proin iaculis imperdiet nibh. Maecenas tristique vulputate condimentum.
       </p>
       <br>
-      <a href="index.jsp">MAIN PAGE</a>
+      <a href="index.jsp">Click here to go back to the main page.</a>
    </body>
 </html>
