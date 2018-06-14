@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class VoteServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("pollID"));
         Poll poll = DAOProvider.getDao().getPoll(id);
         List<PollOption> pollOptions = DAOProvider.getDao().getPollOptionsInfo(id);
+        pollOptions.sort(Comparator.comparingInt(PollOption::getId));
         req.setAttribute("poll", poll);
         req.setAttribute("pollOptions", pollOptions);
         req.getRequestDispatcher("/WEB-INF/pages/glasanje.jsp").forward(req, resp);

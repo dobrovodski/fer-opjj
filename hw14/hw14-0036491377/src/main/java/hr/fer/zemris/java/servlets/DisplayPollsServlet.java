@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class DisplayPollsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         List<Poll> polls = DAOProvider.getDao().getPollsInfo();
+        polls.sort(Comparator.comparingInt(Poll::getId));
         req.setAttribute("polls", polls);
         req.getRequestDispatcher("/WEB-INF/pages/prikaz.jsp").forward(req, resp);
     }
