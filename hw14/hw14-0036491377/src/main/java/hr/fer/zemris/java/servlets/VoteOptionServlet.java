@@ -1,8 +1,6 @@
 package hr.fer.zemris.java.servlets;
 
-import hr.fer.zemris.java.dao.DAOProvider;
 import hr.fer.zemris.java.dao.sql.SQLConnectionProvider;
-import hr.fer.zemris.java.model.PollOption;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet(urlPatterns = {"/servleti/odabir"})
 public class VoteOptionServlet extends HttpServlet {
