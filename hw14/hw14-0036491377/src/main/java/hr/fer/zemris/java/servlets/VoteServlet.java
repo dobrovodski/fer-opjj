@@ -1,0 +1,26 @@
+package hr.fer.zemris.java.servlets;
+
+import hr.fer.zemris.java.dao.DAOProvider;
+import hr.fer.zemris.java.model.Poll;
+import hr.fer.zemris.java.model.PollOption;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(urlPatterns = {"/servleti/glasanje"})
+public class VoteServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        int id = Integer.parseInt(req.getParameter("pollID"));
+        Poll poll = DAOProvider.getDao().getPoll(id);
+        List<PollOption> pollOptions = DAOProvider.getDao().getPollOptionsInfo(id);
+        req.setAttribute("poll", poll);
+        req.setAttribute("pollOptions", pollOptions);
+        req.getRequestDispatcher("/WEB-INF/pages/glasanje.jsp").forward(req, resp);
+    }
+}
