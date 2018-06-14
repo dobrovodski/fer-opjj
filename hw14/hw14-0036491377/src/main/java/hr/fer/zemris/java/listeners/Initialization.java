@@ -179,11 +179,11 @@ public class Initialization implements ServletContextListener {
     }
 
     /**
-     *
-     * @param con
-     * @param title
-     * @param message
-     * @param pollOptions
+     * Populates a single poll and poll options table using the given title, message and polloptions.
+     * @param con connection
+     * @param title title
+     * @param message message
+     * @param pollOptions poll options
      */
     private void populatePoll(Connection con, String title, String message, PollOption[] pollOptions) {
         try {
