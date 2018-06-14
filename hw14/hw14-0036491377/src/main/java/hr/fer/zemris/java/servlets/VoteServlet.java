@@ -20,6 +20,11 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/servleti/glasanje"})
 public class VoteServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
+    private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         int id = Integer.parseInt(req.getParameter("pollID"));

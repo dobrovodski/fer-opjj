@@ -13,6 +13,9 @@ import java.io.IOException;
  */
 @WebServlet("/index.html")
 public class RedirectServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
     private static final long serialVersionUID = 1L;
 
     @Override

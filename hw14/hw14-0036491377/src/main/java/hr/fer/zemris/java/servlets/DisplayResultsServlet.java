@@ -18,6 +18,11 @@ import java.util.List;
  */
 @WebServlet("/servleti/rezultati")
 public class DisplayResultsServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
+    private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int pollId = Integer.parseInt(req.getParameter("pollID"));

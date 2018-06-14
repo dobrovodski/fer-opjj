@@ -22,6 +22,11 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/servleti/glasanje-xls"})
 public class XLSServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
+    private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<PollOption> resultList = DAOProvider.getDao().getPollOptions(Integer.parseInt(req.getParameter("pollID")));

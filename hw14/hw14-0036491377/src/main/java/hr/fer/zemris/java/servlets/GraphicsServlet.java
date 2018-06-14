@@ -22,6 +22,11 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/servleti/glasanje-grafika"})
 public class GraphicsServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
+    private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();

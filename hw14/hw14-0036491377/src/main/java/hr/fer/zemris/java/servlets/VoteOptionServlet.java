@@ -18,6 +18,11 @@ import java.sql.SQLException;
  */
 @WebServlet(urlPatterns = {"/servleti/odabir"})
 public class VoteOptionServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
+    private static final long serialVersionUID = 1L;
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int pollid = Integer.parseInt(req.getParameter("pollID"));
