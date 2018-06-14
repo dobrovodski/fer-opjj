@@ -1,0 +1,13 @@
+body {
+    font-family: "Gill Sans", sans-serif;
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+    padding: 2px 1px 0;
+}
+
+a:hover {
+    border-bottom: 1px solid;
+}

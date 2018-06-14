@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This servlet displays the vote options to the user for the selected poll.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/servleti/glasanje"})
 public class VoteServlet extends HttpServlet {
     @Override

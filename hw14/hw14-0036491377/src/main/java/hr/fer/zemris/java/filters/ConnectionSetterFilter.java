@@ -14,6 +14,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Filter for all servlets which gets a connection from the pool and sets it before passing on the request.
+ *
+ * @author matej
+ */
 @WebFilter(urlPatterns = {"/servleti/*"})
 public class ConnectionSetterFilter implements Filter {
 

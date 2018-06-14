@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This servlet is used to display the list of polls to the user to select.
+ *
+ * @author matej
+ */
 @WebServlet("/servleti/index.html")
 public class DisplayPollsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;

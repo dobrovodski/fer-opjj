@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This servlet is used to display the results of the polls to the user.
+ *
+ * @author matej
+ */
 @WebServlet("/servleti/rezultati")
 public class DisplayResultsServlet extends HttpServlet {
     @Override

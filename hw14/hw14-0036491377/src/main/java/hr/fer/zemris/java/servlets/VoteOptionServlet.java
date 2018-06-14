@@ -11,6 +11,11 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * This servlet takes care of processing a user vote and updating the database.
+ *
+ * @author matej
+ */
 @WebServlet(urlPatterns = {"/servleti/odabir"})
 public class VoteOptionServlet extends HttpServlet {
     @Override

@@ -19,13 +19,24 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+/**
+ * Listener for server initialization. Creates two database tables if required with some pre-filled data.
+ *
+ * @author matej
+ */
 @WebListener
 public class Initialization implements ServletContextListener {
+    /**
+     * SQL for creating the Poll table.
+     */
     private static final String POLL_CREATE_SQL = "CREATE TABLE POLLS"
                                                   + " (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                                                   + " title VARCHAR(150) NOT NULL,"
                                                   + " message CLOB(2048) NOT NULL"
                                                   + ")";
+    /**
+     * SQL for creating the PollOptions table.
+     */
     private static final String OPTIONS_CREATE_SQL = "CREATE TABLE POLLOPTIONS"
                                                      + " (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
                                                      + " optionTitle VARCHAR(100) NOT NULL,"
@@ -87,6 +98,11 @@ public class Initialization implements ServletContextListener {
         }
     }
 
+    /**
+     * Checks if tables are existent and that the poll table isn't empty. If they are, fill with pre-made data.
+     *
+     * @param cpds data source
+     */
     private void verifyTables(ComboPooledDataSource cpds) {
         Connection con;
         DatabaseMetaData dbmb;
@@ -135,14 +151,22 @@ public class Initialization implements ServletContextListener {
         }
     }
 
+    /**
+     * Populates both polls with pre-made data.
+     *
+     * @param con connection
+     */
     private void populatePolls(Connection con) {
         // Could also initialize through an external document, but it's not necessary
         populatePoll(con, "Glasanje za omiljeni bend:", "Koji vam je najdrazi bend? Kliknite link za glasanje!",
                 new PollOption[]{
                         new PollOption("The Beatles", "https://www.youtube.com/watch?v=UM99VOP-TvI", 150),
-                        new PollOption("The Beach Boys", "https://www.youtube.com/watch?v=w-0CS-T1HUQ", 149),
+                        new PollOption("The Beach Boys", "https://www.youtube.com/watch?v=w-0CS-T1HUQ", 153),
                         new PollOption("The Platters", "https://www.youtube.com/watch?v=H2di83WAOhU", 60),
-                        new PollOption("The Four Seasons", "https://www.youtube.com/watch?v=y8yvnqHmFds", 20)
+                        new PollOption("The Four Seasons", "https://www.youtube.com/watch?v=y8yvnqHmFds", 20),
+                        new PollOption("The Marcels", "https://www.youtube.com/watch?v=qoi3TH59ZEs", 13),
+                        new PollOption("The Everly Brothers", "https://www.youtube.com/watch?v=qoi3TH59ZEs", 25),
+                        new PollOption("The Mamas And The Papars", "https://www.youtube.com/watch?v=N-aK6JnyFmk", 1)
                 });
 
         populatePoll(con, "Glasajte ovdje za najbolji predmet na FER-u:", "Klik na link!",
@@ -154,6 +178,14 @@ public class Initialization implements ServletContextListener {
                 });
     }
 
+    /**
+     * Populates a single poll and poll options table using the given title, message and polloptions.
+     *
+     * @param con connection
+     * @param title title
+     * @param message message
+     * @param pollOptions poll options
+     */
     private void populatePoll(Connection con, String title, String message, PollOption[] pollOptions) {
         try {
             PreparedStatement pst = con.prepareStatement("insert into polls (title, message) values\n"
