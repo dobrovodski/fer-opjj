@@ -33,23 +33,9 @@ public class VoteOptionServlet extends HttpServlet {
             return;
         }
 
-        List<PollOption> resultList = DAOProvider.getDao().getPollOptions(pollid);
-        resultList.sort((b1, b2) -> Integer.compare(b2.getVoteCount(), b1.getVoteCount()));
-
-        int votes = resultList.get(0).getVoteCount();
-        int index;
-        for (index = 0; index < resultList.size(); index++) {
-            PollOption b = resultList.get(index);
-            if (b.getVoteCount() < votes) {
-                break;
-            }
-        }
-        List<PollOption> bestList = resultList.subList(0, index);
-
-
         req.setAttribute("pollID", pollid);
-        req.setAttribute("resultList", resultList);
-        req.setAttribute("bestList", bestList);
-        req.getRequestDispatcher("/WEB-INF/pages/rezultati.jsp").forward(req, resp);
+        req.setAttribute("optionID", optionId);
+        // This is so that you can't keep refreshing to vote
+        resp.sendRedirect(req.getContextPath() + "/servleti/rezultati?pollID=" + pollid + "&optionID=" + optionId);
     }
 }

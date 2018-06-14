@@ -176,41 +176,4 @@ public class SQLDAO implements DAO {
         }
         return pollOptionsList;
     }
-
-    @Override
-    public PollOption getPollOption(long pollId, long optionId) throws DAOException {
-        PollOption pollOption = new PollOption();
-        Connection con = SQLConnectionProvider.getConnection();
-        PreparedStatement pst;
-        try {
-            pst = con.prepareStatement("select pollid, id, optiontitle, optionlink, votescount where pollid=? and "
-                                       + "id=?");
-            pst.setLong(1, pollId);
-            pst.setLong(2, optionId);
-            try {
-                ResultSet rs = pst.executeQuery();
-                try {
-                    if (rs != null && rs.next()) {
-                        pollOption.setTitle(rs.getString(3));
-                        pollOption.setLink(rs.getString(4));
-                        pollOption.setVoteCount(rs.getInt(5));
-                    }
-                } finally {
-                    try {
-                        rs.close();
-                    } catch (Exception ignored) {
-                    }
-                }
-            } finally {
-                try {
-                    pst.close();
-                } catch (Exception ignored) {
-                }
-            }
-        } catch (Exception ex) {
-            throw new DAOException("Error while retrieving poll option.", ex);
-        }
-        return pollOption;
-    }
-
 }
