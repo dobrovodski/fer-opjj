@@ -19,6 +19,9 @@ import java.util.List;
  */
 @WebServlet("/servleti/index.html")
 public class DisplayPollsServlet extends HttpServlet {
+	/**
+	 * UID.
+	 */
     private static final long serialVersionUID = 1L;
 
     @Override
