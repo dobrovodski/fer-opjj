@@ -65,7 +65,7 @@ public class Initialization implements ServletContextListener {
         String port = properties.getProperty("port");
 
         if (dbName == null || user == null || password == null || host == null || port == null) {
-            throw new IllegalArgumentException("Missing properties. Required: name, user, password, host, port.");
+            throw new RuntimeException("Missing properties. Required: name, user, password, host, port.");
         }
 
         String template = "jdbc:derby://%s:%s/%s;user=%s;password=%s";
@@ -179,12 +179,11 @@ public class Initialization implements ServletContextListener {
     }
 
     /**
-     * Populates a single poll and poll options table using the given title, message and polloptions.
      *
-     * @param con connection
-     * @param title title
-     * @param message message
-     * @param pollOptions poll options
+     * @param con
+     * @param title
+     * @param message
+     * @param pollOptions
      */
     private void populatePoll(Connection con, String title, String message, PollOption[] pollOptions) {
         try {
