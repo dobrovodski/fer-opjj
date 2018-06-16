@@ -19,7 +19,12 @@ import java.io.IOException;
  */
 @WebServlet(urlPatterns = {"/powers"})
 public class ExcelServlet extends HttpServlet {
-    @Override
+    /**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int a;
         int b;

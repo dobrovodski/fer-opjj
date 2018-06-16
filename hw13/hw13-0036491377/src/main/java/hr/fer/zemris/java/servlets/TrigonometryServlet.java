@@ -17,7 +17,12 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/trigonometric"})
 public class TrigonometryServlet extends HttpServlet {
-    @Override
+    /**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int a, b;
         try {

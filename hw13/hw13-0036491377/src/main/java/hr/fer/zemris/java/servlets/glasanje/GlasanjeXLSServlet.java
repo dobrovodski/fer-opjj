@@ -20,9 +20,17 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/glasanje-xls"})
 public class GlasanjeXLSServlet extends HttpServlet {
+    /**
+     * Default serialVersionUID.
+     */
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<Band> resultList = (List<Band>) req.getSession().getAttribute("resultList");
+        String fileName = req.getServletContext().getRealPath("/WEB-INF/glasanje-rezultati.txt");
+        String bandsFileName = req.getServletContext().getRealPath("/WEB-INF/glasanje-definicija.txt");
+        List<Band> resultList = GlasanjeUtil.getListOfBands(bandsFileName, fileName);
+
         HSSFWorkbook hwb = createTable(resultList);
         resp.setContentType("application/octet-stream");
         resp.setHeader("Content-Disposition", "attachment; filename=\"rezultati_glasovanja.xls\"");

@@ -17,6 +17,10 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"/setcolor"})
 public class ColorServlet extends HttpServlet {
     /**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * Keeps track of colors to pick from.
      */
     private static Map<String, String> colorTable = new HashMap<>();

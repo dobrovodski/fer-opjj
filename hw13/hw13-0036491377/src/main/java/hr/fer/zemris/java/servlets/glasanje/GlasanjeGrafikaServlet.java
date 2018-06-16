@@ -5,7 +5,6 @@ import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +20,17 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/glasanje-grafika"})
 public class GlasanjeGrafikaServlet extends HttpServlet {
+    /**
+     * Default serialVersionUID.
+     */
+    private static final long serialVersionUID = 1L;
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();
-        List<Band> resultList = (List<Band>) req.getSession().getAttribute("resultList");
+        String fileName = req.getServletContext().getRealPath("/WEB-INF/glasanje-rezultati.txt");
+        String bandsFileName = req.getServletContext().getRealPath("/WEB-INF/glasanje-definicija.txt");
+        List<Band> resultList = GlasanjeUtil.getListOfBands(bandsFileName, fileName);
 
         for (Band b : resultList) {
             dataset.setValue(b.getName(), b.getVoteCount());

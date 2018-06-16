@@ -20,7 +20,7 @@
       <form action="powers" method="GET">
          Početni broj:<br><input type="number" name="a" min="-100" max="100" step="1" value="0"><br>
          Završni broj:<br><input type="number" name="b" min="-100" max="100" step="1" value="10"><br>
-         Broj stranica:<br><input type="number" name="n" min="1" max="8" step="1" value="1"><br>
+         Broj stranica:<br><input type="number" name="n" min="1" max="5" step="1" value="1"><br>
          <input type="submit" value="Excel"><input type="reset" value="Reset">
       </form>
       </p><br>

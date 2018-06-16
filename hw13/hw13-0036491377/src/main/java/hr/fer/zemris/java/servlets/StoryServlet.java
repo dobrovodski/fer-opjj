@@ -18,6 +18,10 @@ import java.util.Random;
 @WebServlet(urlPatterns = {"/story"})
 public class StoryServlet extends HttpServlet {
     /**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * Keeps track of colors to randomize from.
      */
     private static List<String> colors = new ArrayList<>();

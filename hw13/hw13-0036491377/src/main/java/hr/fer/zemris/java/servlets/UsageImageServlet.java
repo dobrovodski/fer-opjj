@@ -19,6 +19,10 @@ import java.io.IOException;
 @WebServlet(urlPatterns = {"/reportImage"})
 public class UsageImageServlet extends HttpServlet {
     /**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
      * Stores data about OS usage.
      */
     private static DefaultPieDataset dataset = new DefaultPieDataset();
