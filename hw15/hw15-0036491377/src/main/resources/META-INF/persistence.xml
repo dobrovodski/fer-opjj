@@ -19,7 +19,7 @@
             <!-- ============================== -->
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.hbm2ddl.auto"
-                      value="update"/> <!-- mogućnosti: create, create-drop, update, validate -->
+                      value="create-drop"/> <!-- mogućnosti: create, create-drop, update, validate -->
             <property name="hibernate.format_sql" value="true"/> <!-- kasnije na false -->
             <property name="hibernate.show_sql" value="true"/> <!-- kasnije na false -->
             <property name="hibernate.use_sql_comments" value="true"/>  <!-- kasnije staviti na false -->

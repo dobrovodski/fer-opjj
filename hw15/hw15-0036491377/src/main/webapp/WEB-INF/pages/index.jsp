@@ -66,7 +66,6 @@
   form {
     max-width: 500px;
     width: 100%;
-    height:900px;
     padding: 32px;
     margin-top:90px;
     background-color: white;

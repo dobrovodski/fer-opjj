@@ -143,9 +143,9 @@
 <body>
   <c:if test = "${not empty sessionScope['current.user.id']}">
   <form action="edit" method="POST">
-    <input type="text" name="title" placeholder="title" value=${entry.title}></input>
+    <input type="text" name="title" placeholder="title" value="${entry.title}"></input>
     <br>
-    ​<textarea name="text" rows="10" cols="70" placeholder="message content">${entry.text}</textarea>
+    ​<textarea name="content" rows="10" cols="70" placeholder="message content">${entry.text}</textarea>
     <br>
     <input type="hidden" value="${sessionScope['current.user.nick']}" name="creator" />
     <input type="hidden" value="${entry.id}" name="id" />

@@ -94,15 +94,16 @@ public class AuthorServlet extends HttpServlet {
             u.setComments(new ArrayList<>());
         }
 
-        BlogEntryForm uf = new BlogEntryForm(req.getParameter("title"), req.getParameter("text"));
+        BlogEntryForm uf = new BlogEntryForm(req.getParameter("title"), req.getParameter("content"));
         if (!uf.validate()) {
             req.setAttribute("message", uf.getMessage());
             req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req, resp);
             return;
         }
 
+        String t = req.getParameter("content");
         u.setLastModifiedAt(new Date());
-        u.setText(req.getParameter("text"));
+        u.setText(req.getParameter("content"));
         u.setTitle(req.getParameter("title"));
 
         DAOProvider.getDAO().addBlogEntry(u);
