@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This servlet takes care of the main logic of the application. It is called when a user wants to either view, edit or
@@ -52,6 +50,13 @@ public class AuthorServlet extends HttpServlet {
 
         if (path.length == 3) {
             if (path[2].equals("new") || path[2].equals("edit")) {
+
+                if (!nick.equals(req.getSession().getAttribute("current.user.nick"))) {
+                    req.setAttribute("message", "You cannot edit someone elses blog!");
+                    req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req, resp);
+                    return;
+                }
+
                 showBlogEntryEdit(req, resp);
                 return;
             }
@@ -101,7 +106,6 @@ public class AuthorServlet extends HttpServlet {
             return;
         }
 
-        String t = req.getParameter("content");
         u.setLastModifiedAt(new Date());
         u.setText(req.getParameter("content"));
         u.setTitle(req.getParameter("title"));
@@ -222,18 +226,5 @@ public class AuthorServlet extends HttpServlet {
         }
 
         req.getRequestDispatcher("/WEB-INF/pages/edit.jsp").forward(req, resp);
-    }
-
-    /**
-     * Returns true if provided email is valid.
-     *
-     * @param mail mail to check
-     *
-     * @return true if valid
-     */
-    private boolean validEmail(String mail) {
-        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = p.matcher(mail);
-        return matcher.find();
     }
 }

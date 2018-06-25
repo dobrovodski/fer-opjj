@@ -40,6 +40,7 @@ public class JPADAOImpl implements DAO {
         em.close();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<BlogEntry> getBlogEntries(String nick) throws DAOException {
         List<BlogEntry> entries = (List<BlogEntry>) JPAEMProvider.getEntityManager()
@@ -51,6 +52,7 @@ public class JPADAOImpl implements DAO {
         return entries;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public BlogUser getBlogUser(String nick) throws DAOException {
         List<BlogUser> users = (List<BlogUser>) JPAEMProvider.getEntityManager()
@@ -78,6 +80,7 @@ public class JPADAOImpl implements DAO {
         em.close();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<BlogUser> getRegisteredUsers() throws DAOException {
         return (List<BlogUser>) JPAEMProvider.getEntityManager().createQuery("from BlogUser").getResultList();
@@ -92,10 +95,6 @@ public class JPADAOImpl implements DAO {
 
     @Override
     public boolean blogExists(Long id) throws DAOException {
-        List<BlogEntry> f = (List<BlogEntry>) JPAEMProvider.getEntityManager()
-                                                           .createQuery("select c from BlogEntry as c where c.id=:id")
-                                                           .setParameter("id", id)
-                                                           .getResultList();
         return JPAEMProvider.getEntityManager().createQuery("select c from BlogEntry as c where c.id=:id")
                             .setParameter("id", id)
                             .getResultList().size() > 0;
