@@ -8,14 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
 public class Konzola {
     private static final String PROMPT = "Enter command > ";
     private static final String STOPWORD_PATH = "stop_rijeci.txt";
-    private static TreeSet<String> vocabulary;
-    private static TreeSet<String> stopWords;
+    private static Set<String> vocabulary;
+    private static Set<String> stopWords;
     private static double idf;
 
     public static void main(String[] args) {
@@ -58,10 +59,10 @@ public class Konzola {
         }
     }
 
-    private static TreeSet<String> buildVocabulary(String filepath) {
+    private static Set<String> buildVocabulary(String filepath) {
         Path path = Paths.get(filepath);
         Stream<Path> filePathStream;
-        TreeSet<String> vocabulary = new TreeSet<>();
+        Set<String> vocabulary = new TreeSet<>();
 
         try {
             filePathStream = Files.walk(path);
@@ -83,9 +84,9 @@ public class Konzola {
         return vocabulary;
     }
 
-    private static TreeSet<String> extractWords(Path path) throws IOException {
+    private static Set<String> extractWords(Path path) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path.toString()), "UTF-8"));
-        TreeSet<String> wordSet = new TreeSet<>();
+        Set<String> wordSet = new TreeSet<>();
 
         String line;
         while ((line = br.readLine()) != null) {
@@ -102,8 +103,8 @@ public class Konzola {
         return wordSet;
     }
 
-    private static TreeSet<String> buildStopWordSet(String filepath) throws IOException {
-        TreeSet<String> stopWords = new TreeSet<>();
+    private static Set<String> buildStopWordSet(String filepath) throws IOException {
+        Set<String> stopWords = new TreeSet<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), "UTF-8"));
         String line;
 
