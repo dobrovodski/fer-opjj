@@ -29,6 +29,11 @@ public class SearchEngine {
         stopWords = buildStopWordSet(STOPWORD_PATH);
         vocabulary = buildVocabulary(docPath);
         documents = buildDocuments(docPath, stopWords);
+
+        idf = buildIdf(documents);
+        for (Document doc : documents) {
+            doc.setIdf(idf);
+        }
     }
 
     private static double normTfidf(Map<String, Double> tfidf) {
@@ -127,6 +132,11 @@ public class SearchEngine {
 
         for (String word : vocabulary) {
             word = word.trim().toLowerCase();
+            int wordAppearance = wordAppearance(word, documents);
+            if (wordAppearance == 0) {
+                continue;
+            }
+
             double idfValue = Math.log(D * 1.0 / wordAppearance(word, documents));
             idf.put(word, idfValue);
         }
@@ -151,6 +161,7 @@ public class SearchEngine {
     }
 
     private double calculateSimilarity(Document queryDoc, Document existingDoc) {
+        queryDoc.setIdf(idf);
         double numerator = 0;
         Document shorter = queryDoc.getTfidf().size() < existingDoc.getTfidf().size() ? queryDoc : existingDoc;
         Document longer = queryDoc.getTfidf().size() <= existingDoc.getTfidf().size() ? existingDoc : queryDoc;
@@ -163,22 +174,23 @@ public class SearchEngine {
         }
 
         double denominator = normTfidf(shorter.getTfidf()) * normTfidf(longer.getTfidf());
+        if (denominator == 0) {
+            return 0;
+        }
 
         return numerator / denominator;
     }
 
     public void calculateSimilaritiesTo(List<String> words) {
         Document queryDoc = new Document(words, stopWords);
-        if (results == null) {
-            results = new ArrayList<>();
-        }
+        results = new ArrayList<>();
 
         for (Document doc : documents) {
             double sim = calculateSimilarity(queryDoc, doc);
             results.add(new Result(doc, sim));
         }
 
-        results.sort(Comparator.comparingDouble(Result::getSimilarity));
+        results.sort(Comparator.comparingDouble(Result::getSimilarity).reversed());
     }
 
     public List<Result> getResults() {
@@ -195,7 +207,7 @@ public class SearchEngine {
         }
 
         List<Result> top = new ArrayList<>();
-        n = results.size() < n ? results.size() : n;
+        n = results.size() <= n ? results.size() : n;
         for (int i = 0; i < n; i++) {
             Result r = results.get(i);
             if (r.getSimilarity() <= 0) {

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,8 +19,7 @@ public class Document {
     private String filepath;
 
     public Document(String filepath, Set<String> stopWords) throws IOException {
-        this.filepath = filepath;
-
+        this.filepath = Paths.get(filepath).toAbsolutePath().toString();
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), "UTF-8"));
         String line;
 
