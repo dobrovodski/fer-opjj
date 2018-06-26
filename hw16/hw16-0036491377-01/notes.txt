@@ -1,0 +1,15 @@
+- Vokabular čine sve rijeci koje se nalaze u svim dokumentima kolekcije dokumenata za koju treba provesti grupiranje
+- u vokabular ne ulaze stopwords
+- Kada odredimo koje se sve riječi nalaze u tekstnoj kolekciji, dokumente kolekcije predstavljamo kao vektore tih riječi
+- vektor -- tfidf (w, d)=tf (w,d)*idf (w, D)
+- prvo proći kroz sve dokumente i izgraditi vokabular
+- opet proći kroz sve dokumente, povaditi riječi i stvoriti vektore
+
+- vokabular je set riječi -- treba li imati ikakvo drugo svojstvo? svaka riječ može imati idf uz sebe
+- tf(w, d) je frekvencija pojavljivanja riječi w u dokumentu d
+- idf(w, D) je vektor vezan uz vokabular, log |D| / |d€D:w€d|
+
+1. povaditi stop words
+2. izgraditi vokabular tako da se prođe kroz sve dokumente iz foldera i izvade riječi koje nisu u stopwords
+3. usput izgraditi vektor idf(w, D)
+4. za svaki dokument, izgraditi vektor tf(w, d)
