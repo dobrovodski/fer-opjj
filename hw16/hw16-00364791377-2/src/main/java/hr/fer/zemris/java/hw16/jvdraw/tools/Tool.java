@@ -3,7 +3,7 @@ package hr.fer.zemris.java.hw16.jvdraw.tools;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-interface Tool {
+public interface Tool {
     public void mousePressed(MouseEvent e);
 
     public void mouseReleased(MouseEvent e);

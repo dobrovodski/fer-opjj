@@ -21,6 +21,7 @@ public class FilledCircle extends GeometricalObject {
 
     @Override
     public String toString() {
+        //TODO: color
         return String.format("Circle (%d,%d), %d, %s", (x1 + x2) / 2, (y1 + y2) / 2, (x1 + x2) / 2, "#FF0000");
     }
 }

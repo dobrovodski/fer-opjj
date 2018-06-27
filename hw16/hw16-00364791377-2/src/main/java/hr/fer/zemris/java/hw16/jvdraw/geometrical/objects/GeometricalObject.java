@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw16.jvdraw.geometrical.GeometricalObjectListener;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.editors.GeometricalObjectEditor;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.visitors.GeometricalObjectVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GeometricalObject {
@@ -12,7 +13,7 @@ public abstract class GeometricalObject {
     int y1;
     int x2;
     int y2;
-    private List<GeometricalObjectListener> listeners;
+    private List<GeometricalObjectListener> listeners = new ArrayList<>();
 
     public GeometricalObject(int x1, int y1, int x2, int y2) {
         this.x1 = x1;

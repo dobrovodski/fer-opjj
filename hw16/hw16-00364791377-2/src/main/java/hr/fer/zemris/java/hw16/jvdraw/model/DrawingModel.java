@@ -2,7 +2,7 @@ package hr.fer.zemris.java.hw16.jvdraw.model;
 
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.GeometricalObject;
 
-interface DrawingModel {
+public interface DrawingModel {
     int getSize();
 
     GeometricalObject getObject(int index);
