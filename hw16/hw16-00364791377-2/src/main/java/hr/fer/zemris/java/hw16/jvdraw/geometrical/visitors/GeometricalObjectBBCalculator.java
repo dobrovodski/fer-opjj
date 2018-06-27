@@ -1,23 +1,27 @@
-package hr.fer.zemris.java.hw16.jvdraw.geometricalobjects;
+package hr.fer.zemris.java.hw16.jvdraw.geometrical.visitors;
+
+import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.Circle;
+import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.FilledCircle;
+import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.Line;
 
 import java.awt.*;
 
 public class GeometricalObjectBBCalculator implements GeometricalObjectVisitor {
-    Rectangle boundingBox = new Rectangle();
+    private Rectangle boundingBox = new Rectangle();
 
     @Override
     public void visit(Line line) {
-        updateBoundingBox(0, 0, 0, 0);
+        updateBoundingBox(line.getX1(), line.getY1(), line.getX2(), line.getY2());
     }
 
     @Override
     public void visit(Circle circle) {
-        updateBoundingBox(0, 0, 0, 0);
+        updateBoundingBox(circle.getX1(), circle.getY1(), circle.getX2(), circle.getY2());
     }
 
     @Override
     public void visit(FilledCircle filledCircle) {
-        updateBoundingBox(0, 0, 0, 0);
+        updateBoundingBox(filledCircle.getX1(), filledCircle.getY1(), filledCircle.getX2(), filledCircle.getY2());
     }
 
     private void updateBoundingBox(int lowerX, int lowerY, int upperX, int upperY) {

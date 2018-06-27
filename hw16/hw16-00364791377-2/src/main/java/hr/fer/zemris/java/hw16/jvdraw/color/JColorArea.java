@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JColorArea extends JComponent implements IColorProvider {
+    private static final int WIDTH = 15;
+    private static final int HEIGHT = 15;
     private Color selectedColor;
     private List<ColorChangeListener> listeners = new ArrayList<>();
 
@@ -18,17 +20,21 @@ public class JColorArea extends JComponent implements IColorProvider {
             @Override
             public void mouseClicked(MouseEvent e) {
                 Color newColor = JColorChooser.showDialog(JColorArea.this, "Select a color", selectedColor);
-                for (ColorChangeListener l : listeners) {
-                    l.newColorSelected(JColorArea.this, selectedColor, newColor);
-                }
+                Color oldColor = JColorArea.this.selectedColor;
                 JColorArea.this.selectedColor = newColor;
+
+                for (ColorChangeListener l : listeners) {
+                    l.newColorSelected(JColorArea.this, oldColor, newColor);
+                }
+
+                //TODO: repaint(); ?
             }
         });
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(15, 15);
+        return new Dimension(WIDTH, HEIGHT);
     }
 
     @Override
