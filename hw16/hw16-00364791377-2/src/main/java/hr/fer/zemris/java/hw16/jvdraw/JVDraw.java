@@ -3,6 +3,9 @@ package hr.fer.zemris.java.hw16.jvdraw;
 import hr.fer.zemris.java.hw16.jvdraw.color.JColorArea;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModelImpl;
+import hr.fer.zemris.java.hw16.jvdraw.swing.JStatusBar;
+import hr.fer.zemris.java.hw16.jvdraw.tools.CircleTool;
+import hr.fer.zemris.java.hw16.jvdraw.tools.FilledCircleTool;
 import hr.fer.zemris.java.hw16.jvdraw.tools.LineTool;
 
 import javax.swing.*;
@@ -34,18 +37,44 @@ public class JVDraw extends JFrame {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
 
+        DrawingModel model = new DrawingModelImpl();
+        JDrawingCanvas canvas = new JDrawingCanvas(model);
+        model.addDrawingModelListener(canvas);
+        cp.add(canvas, BorderLayout.CENTER);
+
         JToolBar tb = new JToolBar();
 
-        JColorArea fg = new JColorArea(Color.CYAN);
-        JColorArea bg = new JColorArea(Color.CYAN);
-        tb.add(fg);
+        JColorArea bg = new JColorArea(Color.WHITE);
+        JColorArea fg = new JColorArea(Color.BLACK);
         tb.add(bg);
+        tb.addSeparator(new Dimension(5, 0));
+        tb.add(fg);
+
         tb.addSeparator();
 
         ButtonGroup buttonGroup = new ButtonGroup();
         JToggleButton lineButton = new JToggleButton("Line");
         JToggleButton circleButton = new JToggleButton("Circle");
         JToggleButton fillCircleButton = new JToggleButton("Fill Circle");
+
+        lineButton.addActionListener(e -> {
+            JToggleButton b = (JToggleButton) e.getSource();
+            if (b.isSelected()) {
+                canvas.setCurrentState(new LineTool(model, fg));
+            }
+        });
+        circleButton.addActionListener(e -> {
+            JToggleButton b = (JToggleButton) e.getSource();
+            if (b.isSelected()) {
+                canvas.setCurrentState(new CircleTool(model, fg));
+            }
+        });
+        fillCircleButton.addActionListener(e -> {
+            JToggleButton b = (JToggleButton) e.getSource();
+            if (b.isSelected()) {
+                canvas.setCurrentState(new FilledCircleTool(model, fg, bg));
+            }
+        });
 
         buttonGroup.add(lineButton);
         buttonGroup.add(circleButton);
@@ -56,11 +85,7 @@ public class JVDraw extends JFrame {
 
         cp.add(tb, BorderLayout.NORTH);
 
-        DrawingModel model = new DrawingModelImpl();
-        JDrawingCanvas canvas = new JDrawingCanvas(model);
-        canvas.setCurrentState(new LineTool(model, fg));
-        model.addDrawingModelListener(canvas);
-        cp.add(canvas, BorderLayout.CENTER);
+        cp.add(new JStatusBar(fg, bg), BorderLayout.SOUTH);
         canvas.repaint();
     }
 }

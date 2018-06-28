@@ -5,6 +5,7 @@ import hr.fer.zemris.java.hw16.jvdraw.geometrical.GeometricalObjectListener;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.editors.GeometricalObjectEditor;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.visitors.GeometricalObjectVisitor;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public abstract class GeometricalObject {
     int y1;
     int x2;
     int y2;
+    private Color color = Color.BLACK;
     private List<GeometricalObjectListener> listeners = new ArrayList<>();
 
     public GeometricalObject(int x1, int y1, int x2, int y2) {
@@ -33,6 +35,14 @@ public abstract class GeometricalObject {
     public void removeGeometricalObjectListener(GeometricalObjectListener l) {
         //TODO: concurrent modification
         listeners.remove(l);
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public int getX1() {

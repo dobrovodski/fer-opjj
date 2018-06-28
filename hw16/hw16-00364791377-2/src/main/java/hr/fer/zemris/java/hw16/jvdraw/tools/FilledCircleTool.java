@@ -7,19 +7,15 @@ import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class FilledCircleTool implements Tool {
+public class FilledCircleTool extends AbstractTool implements Tool {
     private DrawingModel model;
-    private IColorProvider colorProvider;
-    private boolean drawing = false;
+    private IColorProvider fgColorProvider;
+    private IColorProvider bgColorProvider;
 
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
-
-    public FilledCircleTool(DrawingModel model, IColorProvider colorProvider) {
+    public FilledCircleTool(DrawingModel model, IColorProvider fgColorProvider, IColorProvider bgColorProvider) {
         this.model = model;
-        this.colorProvider = colorProvider;
+        this.fgColorProvider = fgColorProvider;
+        this.bgColorProvider = bgColorProvider;
     }
 
     @Override
@@ -29,28 +25,25 @@ public class FilledCircleTool implements Tool {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        drawing = !drawing;
+
+        if (!drawing) {
+            FilledCircle fc = new FilledCircle(startX, startY, endX, endY);
+            fc.setColor(fgColorProvider.getCurrentColor());
+            fc.setFillColor(bgColorProvider.getCurrentColor());
+            model.add(fc);
+        }
+
+        super.mouseReleased(e);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        drawing = !drawing;
-
-        if (!drawing) {
-            model.add(new FilledCircle(startX, startY, e.getX(), e.getY()));
-            endX = e.getX();
-            endY = e.getY();
-        } else {
-            startX = e.getX();
-            startY = e.getY();
-        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (drawing) {
-            endX = e.getX();
-            endY = e.getY();
-        }
+        super.mouseMoved(e);
     }
 
     @Override
@@ -60,8 +53,18 @@ public class FilledCircleTool implements Tool {
 
     @Override
     public void paint(Graphics2D g2d) {
-        int r = (endX - startX);
-        g2d.setColor(colorProvider.getCurrentColor());
-        g2d.fillOval(startX, startY, r, r);
+        int r = Math.min(Math.abs(endX - startX), Math.abs(endY - startY));
+        int x = startX < endX ? startX : endX;
+        if (x < startX - r)
+            x = startX - r;
+
+        int y = startY < endY ? startY : endY;
+        if (y < startY - r)
+            y = startY - r;
+        g2d.setColor(fgColorProvider.getCurrentColor());
+        g2d.drawOval(x, y, r, r);
+
+        g2d.setColor(bgColorProvider.getCurrentColor());
+        g2d.fillOval(x + 1, y + 1, r - 1, r - 1);
     }
 }

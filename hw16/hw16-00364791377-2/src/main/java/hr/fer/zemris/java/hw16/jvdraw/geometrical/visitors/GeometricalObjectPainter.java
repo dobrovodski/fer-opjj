@@ -16,20 +16,45 @@ public class GeometricalObjectPainter implements GeometricalObjectVisitor {
 
     @Override
     public void visit(Line line) {
-        g2d.drawOval(50, 50, 100, 100);
+        g2d.setColor(line.getColor());
         g2d.drawLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
     }
 
     @Override
     public void visit(Circle circle) {
-        int r = (circle.getX2() - circle.getX1());
-        //TODO: this is probably broken so come back to fix it when you notice
-        g2d.drawOval(circle.getX1(), circle.getY1(), r, r);
+        g2d.setColor(circle.getColor());
+        int startX = circle.getX1(), endX = circle.getX2();
+        int startY = circle.getY1(), endY = circle.getY2();
+        int r = Math.min(Math.abs(startX - endX), Math.abs(startY - endY));
+
+        int x = startX < endX ? startX : endX;
+        if (x < startX - r)
+            x = startX - r;
+
+        int y = startY < endY ? startY : endY;
+        if (y < startY - r)
+            y = startY - r;
+        g2d.drawOval(x, y, r, r);
     }
 
     @Override
     public void visit(FilledCircle filledCircle) {
-        int r = (filledCircle.getX2() - filledCircle.getX1());
-        g2d.fillOval(filledCircle.getX1(), filledCircle.getY1(), r, r);
+        int startX = filledCircle.getX1(), endX = filledCircle.getX2();
+        int startY = filledCircle.getY1(), endY = filledCircle.getY2();
+        int r = Math.min(Math.abs(startX - endX), Math.abs(startY - endY));
+
+        int x = startX < endX ? startX : endX;
+        if (x < startX - r)
+            x = startX - r;
+
+        int y = startY < endY ? startY : endY;
+        if (y < startY - r)
+            y = startY - r;
+
+        g2d.setColor(filledCircle.getColor());
+        g2d.drawOval(x, y, r, r);
+
+        g2d.setColor(filledCircle.getFillColor());
+        g2d.fillOval(x + 1, y + 1, r - 1, r - 1);
     }
 }

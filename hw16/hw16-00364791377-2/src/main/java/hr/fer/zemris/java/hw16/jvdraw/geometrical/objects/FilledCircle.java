@@ -4,9 +4,21 @@ import hr.fer.zemris.java.hw16.jvdraw.geometrical.editors.FilledCircleEditor;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.editors.GeometricalObjectEditor;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.visitors.GeometricalObjectVisitor;
 
+import java.awt.*;
+
 public class FilledCircle extends GeometricalObject {
+    private Color fillColor;
+
     public FilledCircle(int x0, int y0, int x1, int y1) {
         super(x0, y0, x1, y1);
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
     }
 
     @Override

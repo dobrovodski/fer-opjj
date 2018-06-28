@@ -7,15 +7,9 @@ import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class CircleTool implements Tool {
+public class CircleTool extends AbstractTool implements Tool {
     private DrawingModel model;
     private IColorProvider colorProvider;
-    private boolean drawing = false;
-
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
 
     public CircleTool(DrawingModel model, IColorProvider colorProvider) {
         this.model = model;
@@ -29,29 +23,25 @@ public class CircleTool implements Tool {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        drawing = !drawing;
 
+        if (!drawing) {
+            Circle c = new Circle(startX, startY, endX, endY);
+            c.setColor(colorProvider.getCurrentColor());
+            model.add(c);
+        }
+
+        super.mouseReleased(e);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        drawing = !drawing;
 
-        if (!drawing) {
-            model.add(new Circle(startX, startY, e.getX(), e.getY()));
-            endX = e.getX();
-            endY = e.getY();
-        } else {
-            startX = e.getX();
-            startY = e.getY();
-        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (drawing) {
-            endX = e.getX();
-            endY = e.getY();
-        }
+        super.mouseMoved(e);
     }
 
     @Override
@@ -61,8 +51,16 @@ public class CircleTool implements Tool {
 
     @Override
     public void paint(Graphics2D g2d) {
-        int r = (endX - startX);
         g2d.setColor(colorProvider.getCurrentColor());
-        g2d.fillOval(startX, startY, r, r);
+        int r = Math.min(Math.abs(endX - startX), Math.abs(endY - startY));
+        int x = startX < endX ? startX : endX;
+        if (x < startX - r)
+            x = startX - r;
+
+        int y = startY < endY ? startY : endY;
+        if (y < startY - r)
+            y = startY - r;
+
+        g2d.drawOval(x, y, r, r);
     }
 }

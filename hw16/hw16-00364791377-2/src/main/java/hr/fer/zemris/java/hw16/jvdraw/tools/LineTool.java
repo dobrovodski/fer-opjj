@@ -7,15 +7,9 @@ import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class LineTool implements Tool {
+public class LineTool extends AbstractTool implements Tool {
     private DrawingModel model;
     private IColorProvider colorProvider;
-    private boolean drawing = false;
-
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
 
     public LineTool(DrawingModel model, IColorProvider colorProvider) {
         this.model = model;
@@ -24,7 +18,6 @@ public class LineTool implements Tool {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override
@@ -32,11 +25,12 @@ public class LineTool implements Tool {
         drawing = !drawing;
 
         if (!drawing) {
-            model.add(new Line(startX, startY, e.getX(), e.getY()));
+            Line l = new Line(startX, startY, endX, endY);
+            l.setColor(colorProvider.getCurrentColor());
+            model.add(l);
         }
 
-        startX = e.getX();
-        startY = e.getY();
+        super.mouseReleased(e);
     }
 
     @Override
@@ -45,15 +39,11 @@ public class LineTool implements Tool {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (drawing) {
-            endX = e.getX();
-            endY = e.getY();
-        }
+        super.mouseMoved(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
     }
 
     @Override

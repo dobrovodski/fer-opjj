@@ -15,6 +15,12 @@ public class JColorArea extends JComponent implements IColorProvider {
 
     public JColorArea(Color selectedColor) {
         this.selectedColor = selectedColor;
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+
+        setOpaque(true);
+        setBackground(selectedColor);
+        addColorChangeListener((source, oldColor, newColor) -> setBackground(newColor));
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -26,8 +32,6 @@ public class JColorArea extends JComponent implements IColorProvider {
                 for (ColorChangeListener l : listeners) {
                     l.newColorSelected(JColorArea.this, oldColor, newColor);
                 }
-
-                //TODO: repaint(); ?
             }
         });
     }
@@ -51,5 +55,11 @@ public class JColorArea extends JComponent implements IColorProvider {
     public void removeColorChangeListener(ColorChangeListener l) {
         //TODO: concurrent modification exception?
         listeners.remove(l);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(selectedColor);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 }

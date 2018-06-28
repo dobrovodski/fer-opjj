@@ -22,11 +22,20 @@ public class JDrawingCanvas extends JComponent implements DrawingModelListener {
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (currentState == null) {
+                    return;
+                }
+
                 currentState.mouseReleased(e);
+                repaint();
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
+                if (currentState == null) {
+                    return;
+                }
+
                 currentState.mouseMoved(e);
                 repaint();
             }
@@ -61,6 +70,11 @@ public class JDrawingCanvas extends JComponent implements DrawingModelListener {
 
     @Override
     public void paintComponent(Graphics g) {
+        if (currentState == null) {
+            return;
+        }
+
+        g.clearRect(0, 0, getWidth(), getHeight());
         painter.setG2d((Graphics2D) g);
 
         for (int i = 0; i < source.getSize(); i++) {
