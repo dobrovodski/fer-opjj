@@ -1,6 +1,7 @@
 package hr.fer.zemris.java.hw16.jvdraw;
 
 import hr.fer.zemris.java.hw16.jvdraw.color.JColorArea;
+import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.GeometricalObject;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModelImpl;
 import hr.fer.zemris.java.hw16.jvdraw.swing.JObjectList;
@@ -12,15 +13,22 @@ import hr.fer.zemris.java.hw16.jvdraw.tools.LineTool;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Womp womp :( stisli ispiti, bit će bolje idući put :)
+ * (zadaća nije dovršena)
+ */
 public class JVDraw extends JFrame {
     private Path currentPath;
+    private DrawingModel model;
     /**
      * Loads a document through a file chooser.
      */
-    private Action openDocumentAction = new AbstractAction("open") {
+    private Action openDocumentAction = new AbstractAction("Open") {
         /**
          * Default serial version UID
          */
@@ -34,20 +42,33 @@ public class JVDraw extends JFrame {
             }
 
             if (!Files.isReadable(filePath)) {
-                JOptionPane.showMessageDialog(JNotepadPP.this,
-                        String.format(lp.getString("notExist")
-                                , filePath.getFileName().toAbsolutePath()),
-                        lp.getString("error"),
+                JOptionPane.showMessageDialog(JVDraw.this,
+                        String.format("File does not exist %s", filePath.getFileName().toAbsolutePath()),
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
 
-            multipleDocumentModel.loadDocument(filePath);
+            for (int i = model.getSize() - 1; i >= 0; i--) {
+                model.remove(model.getObject(i));
+            }
+
+            try {
+                String[] f = new String(Files.readAllBytes(filePath)).split("\n");
+                for (String s : f) {
+                    GeometricalObject o = GeometricalObject.fromString(s.trim());
+                    model.add(o);
+                }
+            } catch (IOException ignored) {
+            }
+
+            //Force update
+            model.changeOrder(model.getObject(0), 0);
         }
     };
     /**
      * Saves document through file chooser.
      */
-    private Action saveAsDocumentAction = new AbstractAction("saveAs") {
+    private Action saveAsDocumentAction = new AbstractAction("Save As") {
         /**
          * Default serial version UID
          */
@@ -60,6 +81,7 @@ public class JVDraw extends JFrame {
                 return;
             }
 
+            currentPath = filePath;
             int choice = 1;
             if (Files.exists(filePath)) {
                 choice = JOptionPane.showConfirmDialog(JVDraw.this,
@@ -69,18 +91,46 @@ public class JVDraw extends JFrame {
                         JOptionPane.YES_NO_OPTION);
             } else {
                 // If target file doesn't exist, create and save it
-                multipleDocumentModel.saveDocument(doc, filePath);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0, n = model.getSize(); i < n; i++) {
+                    sb.append(model.getObject(i).saveFormat());
+                    sb.append("\n");
+                }
+
+                try {
+                    Files.write(filePath, sb.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(JVDraw.this,
+                            String.format("Save Failed: %s",
+                                    currentPath.toAbsolutePath()),
+                            "Error ",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
 
             if (choice == 0) {
-                multipleDocumentModel.saveDocument(doc, filePath);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0, n = model.getSize(); i < n; i++) {
+                    sb.append(model.getObject(i).saveFormat());
+                    sb.append("\n");
+                }
+
+                try {
+                    Files.write(filePath, sb.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(JVDraw.this,
+                            String.format("Save Failed: %s",
+                                    currentPath.toAbsolutePath()),
+                            "Error ",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     };
     /**
      * Saves document using associated path. If there is no path, it defers to saveAsDocumentAction.
      */
-    private Action saveDocumentAction = new AbstractAction("save") {
+    private Action saveDocumentAction = new AbstractAction("Save") {
         /**
          * Default serial version UID
          */
@@ -93,7 +143,21 @@ public class JVDraw extends JFrame {
                 return;
             }
 
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, n = model.getSize(); i < n; i++) {
+                sb.append(model.getObject(i).saveFormat());
+                sb.append("\n");
+            }
 
+            try {
+                Files.write(currentPath, sb.toString().getBytes(StandardCharsets.UTF_8));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(JVDraw.this,
+                        String.format("Save Failed: %s",
+                                currentPath.toAbsolutePath()),
+                        "Error ",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     };
 
@@ -121,7 +185,7 @@ public class JVDraw extends JFrame {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
 
-        DrawingModel model = new DrawingModelImpl();
+        model = new DrawingModelImpl();
         JDrawingCanvas canvas = new JDrawingCanvas(model);
         model.addDrawingModelListener(canvas);
         cp.add(canvas, BorderLayout.CENTER);
@@ -180,6 +244,7 @@ public class JVDraw extends JFrame {
         fileMenu.add(new JMenuItem(openDocumentAction));
         fileMenu.add(new JMenuItem(saveDocumentAction));
         fileMenu.add(new JMenuItem(saveAsDocumentAction));
+        setJMenuBar(mb);
 
         canvas.repaint();
     }

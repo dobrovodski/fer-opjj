@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.hw16.jvdraw.geometrical.editors;
 
+import hr.fer.zemris.java.hw16.jvdraw.Util;
 import hr.fer.zemris.java.hw16.jvdraw.color.JColorArea;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.FilledCircle;
 
@@ -41,7 +42,7 @@ public class FilledCircleEditor extends GeometricalObjectEditor {
 
     @Override
     public void checkEditing() {
-        newValues = super.checkParsable(new String[]{
+        newValues = Util.checkParsable(new String[]{
                 fieldx.getText(),
                 fieldy.getText(),
                 fieldr.getText()});

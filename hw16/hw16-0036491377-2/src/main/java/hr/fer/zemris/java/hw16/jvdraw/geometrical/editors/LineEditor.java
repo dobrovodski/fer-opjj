@@ -1,5 +1,6 @@
 package hr.fer.zemris.java.hw16.jvdraw.geometrical.editors;
 
+import hr.fer.zemris.java.hw16.jvdraw.Util;
 import hr.fer.zemris.java.hw16.jvdraw.color.JColorArea;
 import hr.fer.zemris.java.hw16.jvdraw.geometrical.objects.Line;
 
@@ -41,7 +42,7 @@ public class LineEditor extends GeometricalObjectEditor {
 
     @Override
     public void checkEditing() {
-        newValues = super.checkParsable(new String[]{
+        newValues = Util.checkParsable(new String[]{
                 fieldx1.getText(),
                 fieldy1.getText(),
                 fieldx2.getText(),

@@ -64,7 +64,6 @@ public class DrawingModelImpl implements DrawingModel {
         }
 
         objects.remove(object);
-        //TODO: might be wrong
         objects.add(index + offset, object);
 
         for (DrawingModelListener l : listeners) {

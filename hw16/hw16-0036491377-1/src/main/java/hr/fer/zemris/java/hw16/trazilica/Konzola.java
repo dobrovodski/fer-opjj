@@ -5,9 +5,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Console application used to check the similarity of documents. The program requires one argument: a folder with text
+ * files that it will use as a database for comparisons. The command "query (words)" finds the top 10 best results which
+ * match the given query. The command "type (number)" then lists the n-th best result. "Results" lists the results once
+ * again, and "exit" exits the application.
+ *
+ * @author marvin
+ */
 public class Konzola {
+    /**
+     * Prompt shown to user.
+     */
     private static final String PROMPT = "Enter command > ";
+    /**
+     * Delimiter.
+     */
     private static final String DELIMITER = "----------------------------------------------------------------";
+    /**
+     * Number of top results.
+     */
     private static final int TOP_N = 10;
 
     public static void main(String[] args) throws IOException {
@@ -29,7 +46,7 @@ public class Konzola {
         while (true) {
             System.out.print(PROMPT);
             String[] in = sc.nextLine().trim().split(" ", 2);
-            String command = in[0].trim();
+            String command = in[0].toLowerCase().trim();
 
             if (command.equals("query")) {
                 List<String> words = Arrays.asList(in[1].replaceAll("\\s+", " ").split(" "));
@@ -82,8 +99,13 @@ public class Konzola {
                 System.out.println("Unknown command.");
             }
         }
+
+        sc.close();
     }
 
+    /**
+     * Prints the results from the given list of {@link SearchEngine.Result}s.
+     */
     private static void printResults(List<SearchEngine.Result> results) {
         int count = 0;
 
