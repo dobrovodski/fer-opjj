@@ -47,9 +47,9 @@ public class DrawingModelImpl implements DrawingModel {
 
     @Override
     public void remove(GeometricalObject object) {
+        int index = objects.indexOf(object);
         objects.remove(object);
 
-        int index = objects.indexOf(object);
         for (DrawingModelListener l : listeners) {
             l.objectsRemoved(this, index, index);
         }
@@ -58,10 +58,11 @@ public class DrawingModelImpl implements DrawingModel {
     @Override
     public void changeOrder(GeometricalObject object, int offset) {
         int index = objects.indexOf(object);
-        if (index < 0) {
-            //TODO: what do here?
+
+        if (!(index + offset >= 0 && index + offset < objects.size()) || index < 0) {
             return;
         }
+
         objects.remove(object);
         //TODO: might be wrong
         objects.add(index + offset, object);

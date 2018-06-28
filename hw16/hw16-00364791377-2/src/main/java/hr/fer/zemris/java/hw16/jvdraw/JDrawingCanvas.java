@@ -27,7 +27,6 @@ public class JDrawingCanvas extends JComponent implements DrawingModelListener {
                 }
 
                 currentState.mouseReleased(e);
-                repaint();
             }
 
             @Override

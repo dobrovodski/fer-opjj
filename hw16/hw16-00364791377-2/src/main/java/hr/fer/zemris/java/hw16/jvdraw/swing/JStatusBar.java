@@ -35,6 +35,9 @@ public class JStatusBar extends JPanel {
     private void setLabelText(JLabel label) {
         Color fg = currentFg.getCurrentColor();
         Color bg = currentBg.getCurrentColor();
+        if (fg == null || bg == null) {
+            return;
+        }
         String s = String.format("Foreground color: (%d, %d, %d), background color: (%d, %d, %d)",
                 fg.getRed(), fg.getGreen(), fg.getBlue(), bg.getRed(), bg.getGreen(), bg.getBlue());
         label.setText(s);

@@ -3,6 +3,7 @@ package hr.fer.zemris.java.hw16.jvdraw;
 import hr.fer.zemris.java.hw16.jvdraw.color.JColorArea;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModel;
 import hr.fer.zemris.java.hw16.jvdraw.model.DrawingModelImpl;
+import hr.fer.zemris.java.hw16.jvdraw.swing.JObjectList;
 import hr.fer.zemris.java.hw16.jvdraw.swing.JStatusBar;
 import hr.fer.zemris.java.hw16.jvdraw.tools.CircleTool;
 import hr.fer.zemris.java.hw16.jvdraw.tools.FilledCircleTool;
@@ -43,6 +44,7 @@ public class JVDraw extends JFrame {
         cp.add(canvas, BorderLayout.CENTER);
 
         JToolBar tb = new JToolBar();
+        tb.setFloatable(false);
 
         JColorArea bg = new JColorArea(Color.WHITE);
         JColorArea fg = new JColorArea(Color.BLACK);
@@ -84,6 +86,8 @@ public class JVDraw extends JFrame {
         tb.add(fillCircleButton);
 
         cp.add(tb, BorderLayout.NORTH);
+
+        cp.add(new JScrollPane(new JObjectList(model)), BorderLayout.EAST);
 
         cp.add(new JStatusBar(fg, bg), BorderLayout.SOUTH);
         canvas.repaint();

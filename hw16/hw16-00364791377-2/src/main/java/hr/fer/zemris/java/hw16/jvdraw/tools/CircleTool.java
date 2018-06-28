@@ -51,16 +51,18 @@ public class CircleTool extends AbstractTool implements Tool {
 
     @Override
     public void paint(Graphics2D g2d) {
-        g2d.setColor(colorProvider.getCurrentColor());
         int r = Math.min(Math.abs(endX - startX), Math.abs(endY - startY));
         int x = startX < endX ? startX : endX;
-        if (x < startX - r)
+        if (x < startX - r) {
             x = startX - r;
+        }
 
         int y = startY < endY ? startY : endY;
-        if (y < startY - r)
+        if (y < startY - r) {
             y = startY - r;
+        }
 
+        g2d.setColor(colorProvider.getCurrentColor());
         g2d.drawOval(x, y, r, r);
     }
 }

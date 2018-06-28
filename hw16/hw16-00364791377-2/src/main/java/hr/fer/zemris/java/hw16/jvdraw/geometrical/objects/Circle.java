@@ -21,6 +21,6 @@ public class Circle extends GeometricalObject {
 
     @Override
     public String toString() {
-        return String.format("Circle (%d,%d), %d", (x1 + x2) / 2, (y1 + y2) / 2, (x1 + x2) / 2);
+        return String.format("Circle (%d,%d), %d", (x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2);
     }
 }
