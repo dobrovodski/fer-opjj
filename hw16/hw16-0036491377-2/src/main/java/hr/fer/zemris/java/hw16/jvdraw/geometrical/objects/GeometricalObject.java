@@ -76,4 +76,6 @@ public abstract class GeometricalObject {
     public void setY2(int y2) {
         this.y2 = y2;
     }
+
+    public abstract String saveFormat();
 }

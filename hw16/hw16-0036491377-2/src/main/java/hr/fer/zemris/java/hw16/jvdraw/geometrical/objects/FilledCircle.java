@@ -32,9 +32,17 @@ public class FilledCircle extends GeometricalObject {
     }
 
     @Override
+    public String saveFormat() {
+        return String.format("FCIRCLE %d %d %d %d %d %d %d %d %d",
+                Math.abs(x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2,
+                getColor().getRed(), getColor().getGreen(), getColor().getBlue(),
+                getFillColor().getRed(), getFillColor().getBlue(), getFillColor().getGreen());
+    }
+
+    @Override
     public String toString() {
-        //TODO: color
-        return String.format("Circle (%d,%d), %d, %s", (x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2,
-                String.format("#%02x%02x%02x", fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+        String color = String.format("#%02x%02x%02x", fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue());
+        return String.format("Circle (%d,%d), %d, %s",
+                (x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2, color.toUpperCase());
     }
 }

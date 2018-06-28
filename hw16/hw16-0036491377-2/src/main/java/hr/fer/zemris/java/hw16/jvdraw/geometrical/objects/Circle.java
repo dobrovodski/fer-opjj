@@ -20,7 +20,14 @@ public class Circle extends GeometricalObject {
     }
 
     @Override
+    public String saveFormat() {
+        return String.format("CIRCLE %d %d %d %d %d %d",
+                Math.abs(x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2,
+                getColor().getRed(), getColor().getGreen(), getColor().getBlue());
+    }
+
+    @Override
     public String toString() {
-        return String.format("Circle (%d,%d), %d", (x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2);
+        return String.format("Circle (%d,%d), %d", Math.abs(x1 + x2) / 2, (y1 + y2) / 2, Math.abs(x1 - x2) / 2);
     }
 }

@@ -20,6 +20,13 @@ public class Line extends GeometricalObject {
     }
 
     @Override
+    public String saveFormat() {
+        return String.format("LINE %d %d %d %d %d %d %d",
+                x1, y1, x2, y2,
+                getColor().getRed(), getColor().getGreen(), getColor().getBlue());
+    }
+
+    @Override
     public String toString() {
         return String.format("Line (%d,%d)-(%d,%d)", x1, y1, x2, y2);
     }
