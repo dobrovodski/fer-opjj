@@ -1,0 +1,75 @@
+00.jpg
+Sleeping cat
+animal, cat
+01.jpg
+A cat and a dog
+animal, cat, dog
+02.jpg
+People walking across a bridge
+people, street
+03.jpg
+Dog in front of an American flag
+animal, dog
+04.jpg
+Funky yellow ara
+animal, bird, parrot
+05.jpg
+Funky red ara
+animal, bird, parrot
+06.jpg
+Dog in front of a store
+animal, dog, street
+07.jpg
+Friendly dolphin
+animal, dolphin
+08.jpg
+A posing great egret
+animal, bird
+09.jpg
+Sleepy puppy
+animal, dog
+10.jpg
+A sloping street
+street
+11.jpg
+Green-eyed cat
+animal, cat
+12.jpg
+Dolphins looking for food
+animal, dolphin
+13.jpg
+Cat observing people
+animal, cat
+14.jpg
+Dogs going for a walk
+animal, dog, street
+15.jpg
+People walking down a sidewalk
+street, people
+16.jpg
+Kitty hiding under a blanket
+animal, cat
+17.jpg
+Top-down view on a street
+street, people
+18.jpg
+Japanese side street at night
+street
+19.jpg
+Dolphins hanging out
+animal, dolphin
+20.jpg
+ANOTHER DOGGIE BIRTHDAY!
+animal, dog, birthday
+21.jpg
+Another doggie birthday
+animal, dog, birthday
+22.jpg
+Doggie birthday
+animal, dog, birthday
+23.jpg
+Cute cat Mei looking at the camera.
+animal, cat
+24.jpg
+Random birthday picture
+birthday
