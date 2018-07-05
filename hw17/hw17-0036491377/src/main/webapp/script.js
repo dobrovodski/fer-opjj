@@ -26,20 +26,16 @@ function getThumbnails(tag) {
             },
             success: function (data) {
                 let images = data;
-                if (images.length == 0) {
-                    let = 'No thumbnails found!';
-                } else {
-                    $("#thumbnails").empty();
-                    let div = $("<div>");
-                    for (let i = 0; i < images.length; i++) {
-                        let img = $("<img>")
-                            .attr('src', "data:image/png;base64," + images[i].base64)
-                            .click((e) => getImage(images[i].id));
+                $("#thumbnails").empty();
+                let div = $("<div>");
+                for (let i = 0; i < images.length; i++) {
+                    let img = $("<img>")
+                        .attr('src', "data:image/png;base64," + images[i].base64)
+                        .click((e) => getImage(images[i].id));
 
-                        div.append(img);
-                    }
-                    div.appendTo('#thumbnails');
+                    div.append(img);
                 }
+                div.appendTo('#thumbnails');
             }
         }
     )
