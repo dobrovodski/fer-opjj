@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>hr.fer.zemris.java.jmbag0036491377.webapps</groupId>
+    <groupId>hr.fer.zemris.jmbag0036491377.webapps</groupId>
     <artifactId>galerija</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
